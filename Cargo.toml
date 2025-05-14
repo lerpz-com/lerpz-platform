@@ -1,0 +1,52 @@
+[workspace]
+resolver = "3"
+members = ["lerpz-*"]
+
+[workspace.package]
+version = "0.1.0"
+
+[workspace.dependencies]
+# Leptos + utilities
+leptos = "0.8"
+leptos_axum = "0.8"
+leptos_meta = "0.8"
+leptos_router = "0.8"
+tailwind_fuse = "0.3.2"
+# Axum, Tokio and Tower
+axum = "0.8"
+tokio = "1.45"
+tower = "0.5"
+tower-http = "0.6"
+# WASM & Other web
+console_error_panic_hook = "0.1"
+console_log = "1.0"
+wasm-bindgen = "0.2"
+web-sys = "0.3"
+# Tracing
+tracing = "0.1"
+tracing-subscriber = "0.3"
+# Macro
+quote = "1.0"
+syn = "2.0"
+# Serde
+serde = "1.0"
+serde_json = "1.0"
+# Utilities
+anyhow = "1.0"
+cfg-if = "1.0"
+chrono = "0.4"
+dotenvy = "0.15"
+jsonwebtoken = "9.3"
+rand = "0.9"
+regex = "1.11"
+strum = "0.27"
+thiserror = "2.0"
+uuid = "1.11"
+validator = "0.20"
+
+[profile.wasm-release]
+inherits = "release"
+opt-level = 'z'
+lto = true
+codegen-units = 1
+panic = "abort"

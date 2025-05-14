@@ -1,0 +1,146 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    restart: always
+    hostname: postgres
+    domainname: postgres.lerpz.local
+    environment:
+      - POSTGRES_USER=lerpz
+      - POSTGRES_PASSWORD=#Password123!
+      - POSTGRES_DB=primary
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      lerpz-network:
+        aliases:
+          - postgres.lerpz.local
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lerpz -d primary"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly
+    container_name: dragonfly
+    restart: always
+    hostname: dragonfly
+    domainname: dragonfly.lerpz.local
+    ulimits:
+      memlock: -1
+    ports:
+      - "6379:6379"
+    volumes:
+      - dragonfly_data:/data
+    networks:
+      lerpz-network:
+        aliases:
+          - dragonfly.lerpz.local
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  traefik:
+    image: traefik:v3.4
+    container_name: traefik
+    restart: always
+    hostname: postgres
+    domainname: lerpz.local
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=lerpz-network"
+      - "--providers.file.directory=/run/secrets"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    secrets:
+      - cert.pem
+      - key.pem
+    networks:
+      lerpz-network:
+          aliases:
+            - lerpz.local
+
+  lerpz-frontend:
+    container_name: lerpz-frontend
+    restart: always
+    init: true
+    build:
+      context: .
+      dockerfile: lerpz-frontend/Dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.lerpz-frontend.rule=Host(`lerpz.local`)"
+      - "traefik.http.routers.lerpz-frontend.entrypoints=websecure"
+      - "traefik.http.routers.lerpz-frontend.tls=true"
+      # - "traefik.http.routers.whoami-http.rule=Host(`lerpz.local`)"
+      # - "traefik.http.routers.whoami-http.entrypoints=web"
+      # - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      # - "traefik.http.routers.whoami-http.middlewares=redirect-to-https"
+    hostname: lerpz-frontend
+    domainname: server.lerpz.local
+    env_file: lerpz-frontend/.env
+    ports:
+      - '3000:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      dragonfly:
+        condition: service_healthy
+    networks:
+      lerpz-network:
+        aliases:
+          - frontend.lerpz.local
+
+  lerpz-server:
+    container_name: lerpz-server
+    restart: always
+    init: true
+    build:
+      context: .
+      dockerfile: lerpz-server/Dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.lerpz-server.rule=Host(`lerpz.local`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.lerpz-server.entrypoints=websecure"
+      - "traefik.http.routers.lerpz-server.tls=true"
+    hostname: lerpz-server
+    domainname: server.lerpz.local
+    env_file: lerpz-server/.env
+    ports:
+      - '4000:4000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      dragonfly:
+        condition: service_healthy
+    networks:
+      lerpz-network:
+        aliases:
+          - server.lerpz.local
+
+secrets:
+  cert.pem:
+    file: ./certs/cert.pem
+  key.pem:
+    file: ./certs/key.pem
+
+volumes:
+  postgres_data:
+  dragonfly_data:
+
+networks:
+  lerpz-network:
+    driver: bridge

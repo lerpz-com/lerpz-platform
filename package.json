@@ -1,0 +1,14 @@
+{
+	"scripts": {
+		"build": "pnpx tailwindcss -i ./lerpz-frontend/tailwind.css -o ./tailwind-output.css",
+		"watch": "pnpx tailwindcss -i ./lerpz-frontend/tailwind.css -o ./tailwind-output.css --watch"
+	},
+	"packageManager": "pnpm@10.9.0",
+	"dependencies": {
+		"tailwindcss": "^4.1.5",
+		"tailwindcss-animate": "^1.0.7"
+	},
+	"devDependencies": {
+		"@tailwindcss/cli": "^4.1.5"
+	}
+}

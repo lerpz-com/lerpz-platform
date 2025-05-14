@@ -1,0 +1,17 @@
+# Rust
+/target
+
+# Npm 
+/node_modules
+
+# Environment files
+.env
+!.env.docker
+!.env.example
+
+# Secrets
+/certs/*
+/keys/*
+
+# Gitkeep
+!**/.gitkeep

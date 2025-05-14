@@ -1,0 +1,71 @@
+[package]
+name = "lerpz-frontend"
+edition = "2024"
+version.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# Internal
+lerpz-ui = { path = "../lerpz-ui" }
+lerpz-utils = { path = "../lerpz-utils" }
+# General
+axum = { workspace = true, features = ["tokio"], optional = true }
+console_error_panic_hook = { workspace = true }
+console_log = { workspace = true }
+dotenvy = { workspace = true, optional = true }
+leptos = { workspace = true, features = ["tracing", "islands", "islands-router"] }
+leptos_axum = { workspace = true, features = ["islands-router"], optional = true }
+leptos_meta = { workspace = true }
+leptos_router = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+tailwind_fuse = { workspace = true }
+tokio = { workspace = true, features = ["full"], optional =  true }
+tower = { workspace = true, optional = true }
+tower-http = { workspace = true, optional = true } 
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true, features = ["env-filter"] }
+wasm-bindgen = { workspace = true }
+web-sys = { workspace = true }
+
+[features]
+hydrate = ["leptos/hydrate"]
+ssr = [
+    "dep:axum",
+    "dep:tower",
+    "dep:tower-http",
+    "dep:tokio",
+    "dep:leptos_axum",
+    "leptos/ssr",
+    "leptos_meta/ssr",
+    "leptos_router/ssr",
+]
+
+[package.metadata.cargo-all-features]
+denylist = ["axum", "tower", "tower-http", "tokio", "sqlx", "leptos_axum"]
+skip_feature_sets = [["csr", "ssr"], ["csr", "hydrate"], ["ssr", "hydrate"], []]
+
+[package.metadata.leptos]
+# Build
+output-name = "portfolio-rs"
+site-root = "target/site"
+site-pkg-dir = "pkg"
+assets-dir = "public"
+# Environment
+site-addr = "0.0.0.0:3000"
+reload-port = 3001
+browserquery = "defaults"
+env = "DEV"
+# Server Side Rendering
+bin-features = ["ssr"]
+bin-default-features = false
+# Hydration 
+lib-features = ["hydrate"]
+lib-default-features = false
+lib-profile-release = "wasm-release"
+# Tailwindcss
+tailwind-input-file = "tailwind.css"
+
+
