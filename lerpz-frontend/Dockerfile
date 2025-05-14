@@ -30,8 +30,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 
 COPY . .
 
-RUN --mount=type=cache,target=/build/target \
-    cargo leptos build --release
+RUN cargo leptos build --release
 
 
 FROM debian:bookworm-slim AS runtime

@@ -25,8 +25,7 @@ RUN --mount=type=cache,target=/build/target \
 
 COPY . .
 
-RUN --mount=type=cache,target=/build/target \
-    cargo build --release --bin lerpz-server
+RUN cargo build --release --bin lerpz-server
 
 
 FROM debian:bookworm-slim AS runtime
