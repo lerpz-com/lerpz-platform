@@ -1241,8 +1241,9 @@ dependencies = [
  "leptos_axum",
  "leptos_meta",
  "leptos_router",
- "lerpz-ui",
  "lerpz-utils",
+ "strum",
+ "tailwind_fuse",
  "tokio",
  "tower",
  "tower-http",
@@ -1269,15 +1270,6 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "uuid",
-]
-
-[[package]]
-name = "lerpz-ui"
-version = "0.1.0"
-dependencies = [
- "leptos",
- "strum",
- "tailwind_fuse",
 ]
 
 [[package]]

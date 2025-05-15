@@ -1,3 +1,6 @@
+use crate::components::*;
+use crate::pages::*;
+
 use leptos::config::LeptosOptions;
 use leptos::prelude::*;
 use leptos_router::{
@@ -11,7 +14,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
         <html
             lang="en"
             dir="ltr"
-            class="dark scrollbar-thin scrollbar-track-transparent
+            class="scrollbar-thin scrollbar-track-transparent
             scrollbar-thumb-slate-500 dark:scrollbar-thumb-slate-600
             hover:scrollbar-thumb-slate-400"
         >
@@ -42,10 +45,20 @@ pub fn App() -> impl IntoView {
     view! {
         <Router>
             <main class="my-8">
-                <Routes fallback=|| view! { <div>"loading"</div> } transition=true>
-                    <Route path=path!("/") view=|| view! { <div>"Test"</div> }/>
+                <Routes fallback=Fallback transition=true>
+                    <Route path=path!("/") view=|| view! { <Home /> }/>
                 </Routes>
             </main>
         </Router>
+    }
+}
+
+#[component]
+pub fn Fallback() -> impl IntoView {
+    view! {
+        <div class="flex flex-col items-center justify-center h-screen">
+            <Text size="xl" weight="bold">"404"</Text>
+            <Text size="lg" weight="medium">"Not Found"</Text>
+        </div>
     }
 }

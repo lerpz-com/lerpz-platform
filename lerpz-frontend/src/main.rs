@@ -1,9 +1,10 @@
 mod shutdown;
 
+use lerpz_frontend::app::{App, shell};
+
 use axum::Router;
 use leptos::prelude::*;
 use leptos_axum::{LeptosRoutes, generate_route_list};
-use lerpz_frontend::app::{App, shell};
 use shutdown::shutdown_signal;
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
 
