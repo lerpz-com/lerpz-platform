@@ -1,5 +1,5 @@
-use crate::components::*;
-use crate::pages::*;
+use crate::components::Text;
+use crate::pages::{Dashboard, Home};
 use crate::theme::provide_theme_context;
 
 use leptos::config::LeptosOptions;
@@ -13,15 +13,9 @@ use leptos_router::{
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
         <!DOCTYPE html>
-        <html
-            lang="en"
-            dir="ltr"
-            class="scrollbar-thin scrollbar-track-transparent
-            scrollbar-thumb-slate-500 dark:scrollbar-thumb-slate-600
-            hover:scrollbar-thumb-slate-400"
-        >
+        <html lang="en" dir="ltr" class="dark">
             <head>
-                <title>"Lerpz"</title>
+                <title>"Lerpz - Identity Platform"</title>
                 <meta charset="utf-8"/>
                 <meta name="description" content="Lerpz website, created using Leptos!"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -49,9 +43,10 @@ pub fn App() -> impl IntoView {
 
     view! {
         <Router>
-            <main class="my-8">
+            <main>
                 <Routes fallback=Fallback transition=true>
                     <Route path=path!("/") view=|| view! { <Home /> }/>
+                    <Route path=path!("/dashboard") view=|| view! { <Dashboard /> }/>
                 </Routes>
             </main>
         </Router>

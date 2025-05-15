@@ -7,7 +7,7 @@ use tailwind_fuse::*;
 #[derive(TwVariant, EnumString)]
 #[strum(serialize_all = "lowercase")]
 pub enum Size {
-    #[tw(default, class = "h-9 px-4 py-2")]
+    #[tw(class = "h-9 px-4 py-2", default)]
     Md,
     #[tw(class = "h-8 px-3")]
     Sm,

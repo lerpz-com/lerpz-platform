@@ -1,6 +1,5 @@
-use std::str::FromStr;
-
-use leptos::prelude::{provide_context, use_context};
+use leptos::prelude::*;
+use leptos_meta::Html;
 use strum::EnumString;
 
 #[derive(EnumString, Clone, Default)]
@@ -15,6 +14,7 @@ impl ThemeContext {
     pub fn new() -> Self {
         cfg_if::cfg_if! {
             if #[cfg(feature = "hydrate")] {
+                use std::str::FromStr;
                 use leptos::web_sys::window;
 
                 let theme = window()
@@ -48,4 +48,17 @@ pub fn use_theme() -> ThemeContext {
     use_context::<ThemeContext>().unwrap_or_else(|| {
         panic!("ThemeContext not found. Did you forget to call `provide_theme_context()`?")
     })
+}
+
+#[component]
+pub fn Theme() -> impl IntoView {
+    let theme = use_theme();
+    let theme_class = match theme {
+        ThemeContext::Light => "light",
+        ThemeContext::Dark => "dark",
+    };
+
+    view! {
+        <Html {..} data-theme=theme_class />
+    }
 }

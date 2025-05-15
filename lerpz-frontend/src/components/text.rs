@@ -7,7 +7,7 @@ use tailwind_fuse::*;
 #[derive(TwVariant, EnumString)]
 #[strum(serialize_all = "lowercase")]
 pub enum Variant {
-    #[tw(default, class = "text-slate-900 dark:text-slate-100")]
+    #[tw(class = "text-slate-900 dark:text-slate-100", default)]
     Default,
     #[tw(class = "text-slate-500 dark:text-slate-400")]
     Dimmed,
@@ -18,18 +18,30 @@ pub enum Variant {
 pub enum Size {
     #[tw(class = "text-sm")]
     Sm,
-    #[tw(default, class = "text-md")]
+    #[tw(class = "text-md", default)]
     Md,
     #[tw(class = "text-lg")]
     Lg,
     #[tw(class = "text-xl")]
     Xl,
     #[tw(class = "text-2xl")]
-    XXl,
+    #[strum(serialize = "2xl")]
+    Xl2,
     #[tw(class = "text-3xl")]
-    XXXl,
+    #[strum(serialize = "3xl")]
+    Xl3,
     #[tw(class = "text-4xl")]
-    XXXXl,
+    #[strum(serialize = "4xl")]
+    Xl4,
+    #[tw(class = "text-5xl")]
+    #[strum(serialize = "5xl")]
+    Xl5,
+    #[tw(class = "text-6xl")]
+    #[strum(serialize = "6xl")]
+    Xl6,
+    #[tw(class = "text-7xl")]
+    #[strum(serialize = "7xl")]
+    Xl7,
 }
 
 #[derive(TwVariant, EnumString)]
@@ -41,7 +53,7 @@ pub enum TextWeight {
     Extralight,
     #[tw(class = "font-light")]
     Light,
-    #[tw(default, class = "font-normal")]
+    #[tw(class = "font-normal", default)]
     Normal,
     #[tw(class = "font-medium")]
     Medium,

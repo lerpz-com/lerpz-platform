@@ -7,7 +7,7 @@ use tailwind_fuse::*;
 #[derive(TwVariant, EnumString)]
 #[strum(serialize_all = "lowercase")]
 pub enum Variant {
-    #[tw(default, class = "bg-paper-light dark:bg-paper-dark rounded-2xl p-8")]
+    #[tw(class = "bg-paper-light dark:bg-paper-dark rounded-2xl p-8", default)]
     Default,
     #[tw(class = "border-slate-200 dark:border-slate-800 rounded-2xl p-8 border-[1px] ")]
     Outlined,
@@ -18,7 +18,7 @@ pub enum Variant {
 pub enum Shadow {
     #[tw(class = "shadow-none")]
     None,
-    #[tw(default, class = "shadow-md")]
+    #[tw(class = "shadow-md", default)]
     Md,
     #[tw(class = "shadow-lg")]
     Lg,
