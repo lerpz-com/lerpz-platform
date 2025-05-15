@@ -10,7 +10,7 @@ services:
       - POSTGRES_PASSWORD=#Password123!
       - POSTGRES_DB=primary
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -82,18 +82,16 @@ services:
       dockerfile: lerpz-frontend/Dockerfile
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.lerpz-frontend.rule=Host(`lerpz.local`)"
-      - "traefik.http.routers.lerpz-frontend.entrypoints=websecure"
-      - "traefik.http.routers.lerpz-frontend.tls=true"
-      # - "traefik.http.routers.whoami-http.rule=Host(`lerpz.local`)"
-      # - "traefik.http.routers.whoami-http.entrypoints=web"
-      # - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      # - "traefik.http.routers.whoami-http.middlewares=redirect-to-https"
+      - "traefik.http.routers.lerpz-frontend-http.rule=Host(`lerpz.local`)"
+      - "traefik.http.routers.lerpz-frontend-http.entrypoints=web"
+      - "traefik.http.routers.lerpz-frontend-https.rule=Host(`lerpz.local`)"
+      - "traefik.http.routers.lerpz-frontend-https.entrypoints=websecure"
+      - "traefik.http.routers.lerpz-frontend-https.tls=true"
     hostname: lerpz-frontend
     domainname: frontend.lerpz.local
     env_file: lerpz-frontend/.env
     ports:
-      - '3000:3000'
+      - "3000:3000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -113,14 +111,16 @@ services:
       dockerfile: lerpz-backend/Dockerfile
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.lerpz-backend.rule=Host(`lerpz.local`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.lerpz-backend.entrypoints=websecure"
-      - "traefik.http.routers.lerpz-backend.tls=true"
+      - "traefik.http.routers.lerpz-backend-http.rule=Host(`lerpz.local`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.lerpz-backend-http.entrypoints=web"
+      - "traefik.http.routers.lerpz-backend-https.rule=Host(`lerpz.local`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.lerpz-backend-https.entrypoints=websecure"
+      - "traefik.http.routers.lerpz-backend-https.tls=true"
     hostname: lerpz-backend
     domainname: backend.lerpz.local
     env_file: lerpz-backend/.env
     ports:
-      - '4000:4000'
+      - "4000:4000"
     depends_on:
       postgres:
         condition: service_healthy
