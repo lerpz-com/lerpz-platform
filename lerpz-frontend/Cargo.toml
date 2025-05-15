@@ -11,6 +11,7 @@ crate-type = ["cdylib", "rlib"]
 lerpz-utils = { path = "../lerpz-utils", optional = true }
 # General
 axum = { workspace = true, features = ["tokio"], optional = true }
+cfg-if = { workspace = true, optional = true }
 console_error_panic_hook = { workspace = true, optional = true }
 console_log = { workspace = true, optional = true }
 dotenvy = { workspace = true, optional = true }
@@ -36,10 +37,11 @@ tracing-subscriber = { workspace = true, features = [
     "env-filter",
 ], optional = true }
 wasm-bindgen = { workspace = true, optional = true }
-web-sys = { workspace = true, optional = true }
+web-sys = { workspace = true, features = ["Storage"], optional = true }
 
 [features]
 hydrate = [
+    "dep:cfg-if",
     "dep:console_error_panic_hook",
     "dep:console_log",
     "dep:leptos_meta",
@@ -52,6 +54,7 @@ hydrate = [
     "leptos/hydrate",
 ]
 ssr = [
+    "dep:cfg-if",
     "dep:axum",
     "dep:dotenvy",
     "dep:tracing",

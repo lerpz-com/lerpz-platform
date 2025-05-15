@@ -25,7 +25,7 @@ RUN --mount=type=cache,target=/build/target \
 
 COPY . .
 
-RUN cargo build --release --bin lerpz-server
+RUN cargo build --release --bin lerpz-backend
 
 
 FROM debian:bookworm-slim AS runtime
@@ -35,10 +35,10 @@ RUN groupadd -r server && \
     useradd -r -g server -s /usr/sbin/nologin -c "The docker user" docker && \
     chown -R docker:server /var/app
 
-COPY --chown=docker:server --from=builder /build/target/release/lerpz-server ./
+COPY --chown=docker:server --from=builder /build/target/release/lerpz-backend ./
 
 USER docker
 
 EXPOSE 4000
 
-ENTRYPOINT ["/var/app/lerpz-server"]
+ENTRYPOINT ["/var/app/lerpz-backend"]

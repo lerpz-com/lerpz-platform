@@ -1,7 +1,7 @@
 use std::net::Ipv4Addr;
 
 use axum::Router;
-use lerpz_server::shutdown::shutdown_signal;
+use lerpz_backend::{error::HandlerResult, shutdown::shutdown_signal};
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
 
 #[tokio::main]
@@ -18,7 +18,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    let app = Router::new().route("/api/v1", axum::routing::get(async || "Hello, World!"));
+    let app = Router::new().route("/api/v1", axum::routing::get(endpoint));
 
     let addr = std::net::SocketAddr::from((Ipv4Addr::UNSPECIFIED, 4000));
     let listener = tokio::net::TcpListener::bind(addr).await?;
@@ -29,5 +29,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_graceful_shutdown(shutdown_signal())
         .await?;
 
+    Ok(())
+}
+
+#[axum::debug_handler]
+async fn endpoint() -> HandlerResult<()> {
+    "abc".parse::<u32>()?;
     Ok(())
 }

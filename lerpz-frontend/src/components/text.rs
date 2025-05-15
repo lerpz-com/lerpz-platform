@@ -24,6 +24,12 @@ pub enum Size {
     Lg,
     #[tw(class = "text-xl")]
     Xl,
+    #[tw(class = "text-2xl")]
+    XXl,
+    #[tw(class = "text-3xl")]
+    XXXl,
+    #[tw(class = "text-4xl")]
+    XXXXl,
 }
 
 #[derive(TwVariant, EnumString)]

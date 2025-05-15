@@ -1,8 +1,10 @@
 use crate::components::*;
 use crate::pages::*;
+use crate::theme::provide_theme_context;
 
 use leptos::config::LeptosOptions;
 use leptos::prelude::*;
+use leptos_meta::provide_meta_context;
 use leptos_router::{
     components::{Route, Router, Routes},
     path,
@@ -42,6 +44,9 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
 
 #[component]
 pub fn App() -> impl IntoView {
+    provide_meta_context();
+    provide_theme_context();
+
     view! {
         <Router>
             <main class="my-8">

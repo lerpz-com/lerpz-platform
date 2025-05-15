@@ -90,7 +90,7 @@ services:
       # - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
       # - "traefik.http.routers.whoami-http.middlewares=redirect-to-https"
     hostname: lerpz-frontend
-    domainname: server.lerpz.local
+    domainname: frontend.lerpz.local
     env_file: lerpz-frontend/.env
     ports:
       - '3000:3000'
@@ -104,21 +104,21 @@ services:
         aliases:
           - frontend.lerpz.local
 
-  lerpz-server:
-    container_name: lerpz-server
+  lerpz-backend:
+    container_name: lerpz-backend
     restart: always
     init: true
     build:
       context: .
-      dockerfile: lerpz-server/Dockerfile
+      dockerfile: lerpz-backend/Dockerfile
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.lerpz-server.rule=Host(`lerpz.local`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.lerpz-server.entrypoints=websecure"
-      - "traefik.http.routers.lerpz-server.tls=true"
-    hostname: lerpz-server
-    domainname: server.lerpz.local
-    env_file: lerpz-server/.env
+      - "traefik.http.routers.lerpz-backend.rule=Host(`lerpz.local`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.lerpz-backend.entrypoints=websecure"
+      - "traefik.http.routers.lerpz-backend.tls=true"
+    hostname: lerpz-backend
+    domainname: backend.lerpz.local
+    env_file: lerpz-backend/.env
     ports:
       - '4000:4000'
     depends_on:
@@ -129,7 +129,7 @@ services:
     networks:
       lerpz-network:
         aliases:
-          - server.lerpz.local
+          - backend.lerpz.local
 
 secrets:
   cert.pem:
