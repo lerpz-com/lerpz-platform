@@ -8,36 +8,49 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 # Internal
-lerpz-ui = { path = "../lerpz-ui" }
-lerpz-utils = { path = "../lerpz-utils" }
+lerpz-ui = { path = "../lerpz-ui", optional = true }
+lerpz-utils = { path = "../lerpz-utils", optional = true }
 # General
 axum = { workspace = true, features = ["tokio"], optional = true }
-console_error_panic_hook = { workspace = true }
-console_log = { workspace = true }
+console_error_panic_hook = { workspace = true, optional = true }
+console_log = { workspace = true, optional = true }
 dotenvy = { workspace = true, optional = true }
-leptos = { workspace = true, features = ["tracing", "islands", "islands-router"] }
+leptos = { workspace = true, features = ["tracing", "islands", "islands-router"], optional = true }
 leptos_axum = { workspace = true, features = ["islands-router"], optional = true }
-leptos_meta = { workspace = true }
-leptos_router = { workspace = true }
-serde = { workspace = true, features = ["derive"] }
-serde_json = { workspace = true }
-tailwind_fuse = { workspace = true }
+leptos_meta = { workspace = true, optional = true }
+leptos_router = { workspace = true, optional = true }
+# serde = { workspace = true, features = ["derive"], optional = true }
+# serde_json = { workspace = true, optional = true }
 tokio = { workspace = true, features = ["full"], optional =  true }
 tower = { workspace = true, optional = true }
 tower-http = { workspace = true, optional = true } 
-tracing = { workspace = true }
-tracing-subscriber = { workspace = true, features = ["env-filter"] }
-wasm-bindgen = { workspace = true }
-web-sys = { workspace = true }
+tracing = { workspace = true, optional = true }
+tracing-subscriber = { workspace = true, features = ["env-filter"], optional = true }
+wasm-bindgen = { workspace = true, optional = true }
+web-sys = { workspace = true, optional = true }
 
 [features]
-hydrate = ["leptos/hydrate"]
+hydrate = [
+    "dep:console_error_panic_hook",
+    "dep:console_log",
+    "dep:wasm-bindgen",
+    "dep:web-sys",
+    "dep:leptos_router",
+    "leptos/hydrate"
+]
 ssr = [
     "dep:axum",
+    "dep:dotenvy",
+    "dep:tracing",
+    "dep:tracing-subscriber",
     "dep:tower",
     "dep:tower-http",
     "dep:tokio",
+    "dep:lerpz-utils",
     "dep:leptos_axum",
+    "dep:leptos_meta",
+    "dep:leptos_router",
+    "dep:leptos_router",
     "leptos/ssr",
     "leptos_meta/ssr",
     "leptos_router/ssr",
@@ -49,7 +62,7 @@ skip_feature_sets = [["csr", "ssr"], ["csr", "hydrate"], ["ssr", "hydrate"], []]
 
 [package.metadata.leptos]
 # Build
-output-name = "portfolio-rs"
+output-name = "lerpz-frontend"
 site-root = "target/site"
 site-pkg-dir = "pkg"
 assets-dir = "public"

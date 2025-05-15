@@ -16,16 +16,16 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
             hover:scrollbar-thumb-slate-400"
         >
             <head>
-                <title>"Kasper's portfolio"</title>
+                <title>"Lerpz"</title>
                 <meta charset="utf-8"/>
-                <meta name="description" content="Kasper's portfolio website, created using Leptos!"/>
+                <meta name="description" content="Lerpz website, created using Leptos!"/>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
                 <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
                 <link rel="manifest" href="/manifest.json"/>
                 // Fontawesome icons
                 <link rel="stylesheet" href="/fontawesome/css/all.min.css"/>
                 // Tailwind generated stylesheet
-                <link rel="stylesheet" id="leptos" href="/pkg/portfolio-rs.css"/>
+                <link rel="stylesheet" id="leptos" href="/pkg/lerpz-frontend.css"/>
                 // Leptos stuff
                 <AutoReload options=options.clone()/>
                 <HydrationScripts options=options islands=true islands_router=true/>
