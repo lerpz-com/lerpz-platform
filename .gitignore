@@ -15,3 +15,6 @@
 
 # Gitkeep
 !**/.gitkeep
+
+# Junk
+.DS_Store
