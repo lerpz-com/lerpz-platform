@@ -68,6 +68,7 @@ ssr = [
     "dep:lerpz-utils",
     "dep:strum",
     "dep:tailwind_fuse",
+    "dep:web-sys",
     "leptos/ssr",
     "leptos_meta/ssr",
     "leptos_router/ssr",

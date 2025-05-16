@@ -1,10 +1,9 @@
 use crate::components::Text;
-use crate::pages::{Dashboard, Home};
-use crate::theme::provide_theme_context;
+use crate::pages::{DashboardPage, HomePage};
+use crate::theme::Theme;
 
 use leptos::config::LeptosOptions;
 use leptos::prelude::*;
-use leptos_meta::provide_meta_context;
 use leptos_router::{
     components::{Route, Router, Routes},
     path,
@@ -13,7 +12,7 @@ use leptos_router::{
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
         <!DOCTYPE html>
-        <html lang="en" dir="ltr" class="dark">
+        <html lang="en" dir="ltr">
             <head>
                 <title>"Lerpz - Identity Platform"</title>
                 <meta charset="utf-8"/>
@@ -29,7 +28,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <AutoReload options=options.clone()/>
                 <HydrationScripts options=options islands=true islands_router=true/>
             </head>
-            <body class="bg-light dark:bg-dark mx-auto px-8 max-w-5xl min-h-screen">
+            <body class="bg-light dark:bg-dark">
                 <App />
             </body>
         </html>
@@ -38,15 +37,13 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
 
 #[component]
 pub fn App() -> impl IntoView {
-    provide_meta_context();
-    provide_theme_context();
-
     view! {
+        <Theme />
         <Router>
             <main>
                 <Routes fallback=Fallback transition=true>
-                    <Route path=path!("/") view=|| view! { <Home /> }/>
-                    <Route path=path!("/dashboard") view=|| view! { <Dashboard /> }/>
+                    <Route path=path!("/") view=|| view! { <HomePage /> }/>
+                    <Route path=path!("/dashboard") view=|| view! { <DashboardPage /> }/>
                 </Routes>
             </main>
         </Router>

@@ -2,12 +2,12 @@ pub mod dashboard;
 
 use leptos::prelude::*;
 
-pub use crate::pages::dashboard::Dashboard;
+pub use crate::pages::dashboard::DashboardPage;
 
 use crate::components::Text;
 
 #[component]
-pub fn Home() -> impl IntoView {
+pub fn HomePage() -> impl IntoView {
     view! {
         <Text weight="bold" size="2xl">
             "Lerpz"
