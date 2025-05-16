@@ -2,6 +2,8 @@ use leptos::{logging::debug_warn, prelude::*};
 use leptos_meta::{Html, provide_meta_context};
 use strum::EnumString;
 
+const THEME_STORAGE_KEY: &str = "theme";
+
 #[derive(EnumString, Clone, Default)]
 #[strum(serialize_all = "snake_case")]
 pub enum Theme {
@@ -9,8 +11,6 @@ pub enum Theme {
     Light,
     Dark,
 }
-
-const THEME_STORAGE_KEY: &str = "theme";
 
 impl Theme {
     pub fn new() -> Self {
