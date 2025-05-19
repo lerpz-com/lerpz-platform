@@ -29,7 +29,13 @@ impl Theme {
                     .unwrap_or_default()
                     .to_string();
 
-                Theme::from_str(&theme).unwrap_or_default()
+                Theme::from_str(&theme).unwrap_or_else(|_| {
+                    debug_warn!(
+                        "Theme not found in local storage.
+                        Defaulting to Light theme."
+                    );
+                    Theme::default()
+                })
             } else if #[cfg(feature = "ssr")] {
                 Theme::Dark
             }
@@ -86,7 +92,7 @@ pub fn ThemeProvider(children: Children) -> impl IntoView {
     let theme = theme_ctx.0;
 
     view! {
-        <Html {..} data-theme={theme.get().to_string()} />
+        <Html {..} data-theme={move || theme.get().to_string()} />
         {children()}
     }
 }
