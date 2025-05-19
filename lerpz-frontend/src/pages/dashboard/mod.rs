@@ -1,4 +1,7 @@
-use crate::components::Text;
+use crate::{
+    components::Text,
+    hooks::{ThemeCtx, use_theme},
+};
 
 use leptos::prelude::*;
 
@@ -14,44 +17,49 @@ struct Route {
     icon: &'static str,
 }
 
-const CATEGORIES: [Category; 1] = [
-    Category {
-        path: "/overview",
-        name: "Overview",
-        routes: &[
-            Route {
-                path: "",
-                name: "Dashboard",
-                icon: "icon-dashboard",
-            },
-            Route {
-                path: "/users",
-                name: "Dashboard",
-                icon: "icon-dashboard",
-            },
-            Route {
-                path: "/groups",
-                name: "Dashboard",
-                icon: "icon-dashboard",
-            }
-        ]
-    }
-];
+const CATEGORIES: &'static [Category] = &[Category {
+    path: "/overview",
+    name: "Overview",
+    routes: &[
+        Route {
+            path: "/dashboard",
+            name: "Dashboard",
+            icon: "fa-solid fa-gauge",
+        },
+        Route {
+            path: "/dashboard",
+            name: "Users",
+            icon: "fa-solid fa-users",
+        },
+        Route {
+            path: "/dashboard",
+            name: "Groups",
+            icon: "fa-solid fa-user-group",
+        },
+    ],
+}];
 
 #[component]
 pub fn DashboardPage() -> impl IntoView {
-
     view! {
-        <div>
+        <ThemeToggleButton />
+        <div class="px-4 py-8">
             {CATEGORIES.iter()
-            .map(|c| view! { <Category name=c.name routes=c.routes /> })
+            .map(|c| view! {
+                <DashboardCategory
+                    _path=c.path
+                    name=c.name
+                    routes=c.routes
+                />
+            })
             .collect_view()}
         </div>
     }
 }
 
 #[component]
-fn Category(
+fn DashboardCategory(
+    _path: &'static str,
     name: &'static str,
     routes: &'static [Route],
 ) -> impl IntoView {
@@ -61,19 +69,35 @@ fn Category(
                 {name}
             </Text>
             {routes.iter().map(|r| view! {
-                <Route name=r.name />
+                <DashboardRoute
+                    path=r.path
+                    icon=r.icon
+                    name=r.name
+                />
             }).collect_view()}
         </div>
     }
 }
 
 #[component]
-fn Route(
-    name: &'static str,
-) -> impl IntoView {
+fn DashboardRoute(path: &'static str, icon: &'static str, name: &'static str) -> impl IntoView {
     view! {
-        <Text size="xs">
-            {name}
-        </Text>
+        <a href=path class="px-2 py-4">
+            <Text size="xs">
+                <i class=format!("aspect-square mr-4 {}", icon) />
+                {name}
+            </Text>
+        </a>
+    }
+}
+
+#[island]
+fn ThemeToggleButton() -> impl IntoView {
+    let ThemeCtx(theme, set_theme) = use_theme();
+
+    view! {
+        <button on:click=move |_| set_theme.update(|theme| theme.toggle())>
+            {move || {format!("Toggle Theme {}", theme.get())}}
+        </button>
     }
 }
