@@ -16,7 +16,6 @@ console_error_panic_hook = { workspace = true, optional = true }
 console_log = { workspace = true, optional = true }
 dotenvy = { workspace = true, optional = true }
 leptos = { workspace = true, features = [
-    "tracing",
     "islands",
     "islands-router",
 ], optional = true }
@@ -37,7 +36,10 @@ tracing-subscriber = { workspace = true, features = [
     "env-filter",
 ], optional = true }
 wasm-bindgen = { workspace = true, optional = true }
-web-sys = { workspace = true, features = ["Storage"], optional = true }
+web-sys = { workspace = true, features = [
+    "Storage",
+    "HtmlDocument",
+], optional = true }
 
 [features]
 hydrate = [

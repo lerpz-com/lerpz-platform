@@ -1,70 +1,73 @@
 use leptos::{logging::debug_warn, prelude::*};
 use leptos_meta::{Html, provide_meta_context};
 use strum::{Display, EnumString};
-use web_sys::window;
+use wasm_bindgen::JsCast;
+use web_sys::{HtmlDocument, window};
 
 const THEME_STORAGE_KEY: &str = "Lerpz-Theme";
 
 #[derive(Clone, Default, Display, EnumString)]
 #[strum(serialize_all = "snake_case")]
-pub enum Theme {
+pub enum ThemeKind {
     #[default]
     Light,
     Dark,
 }
 
 #[derive(Clone)]
-pub struct ThemeCtx(pub ReadSignal<Theme>, pub WriteSignal<Theme>);
+pub struct Theme(pub ReadSignal<ThemeKind>, pub WriteSignal<ThemeKind>);
 
-impl Theme {
+impl ThemeKind {
     pub fn new() -> Self {
         cfg_if::cfg_if! {
             if #[cfg(feature = "hydrate")] {
                 use std::str::FromStr;
 
-                let theme = window()
-                    .and_then(|w| w.local_storage().ok())
-                    .and_then(|storage| storage?.get_item(THEME_STORAGE_KEY).ok())
-                    .flatten()
-                    .unwrap_or_default()
-                    .to_string();
+                let cookie_str = window()
+                    .and_then(|w| w.document())
+                    .and_then(|d| d.dyn_into::<HtmlDocument>().ok())
+                    .and_then(|d| d.cookie().ok());
 
-                Theme::from_str(&theme).unwrap_or_else(|_| {
-                    debug_warn!(
-                        "Theme not found in local storage.
-                        Defaulting to Light theme."
-                    );
-                    Theme::default()
-                })
+                match cookie_str {
+                    Some(cookie) => {
+                        cookie
+                            .split(';')
+                            .find(|c| c.trim().starts_with(THEME_STORAGE_KEY))
+                            .and_then(|c| c.split('=').nth(1))
+                            .and_then(|c| ThemeKind::from_str(c).ok())
+                            .unwrap_or_default()
+                    },
+                    None => ThemeKind::default(),
+                }
             } else if #[cfg(feature = "ssr")] {
-                Theme::Dark
+                ThemeKind::default()
             }
         }
     }
 
     pub fn toggle(&mut self) {
         *self = match self {
-            Theme::Light => Theme::Dark,
-            Theme::Dark => Theme::Light,
+            ThemeKind::Light => ThemeKind::Dark,
+            ThemeKind::Dark => ThemeKind::Light,
         };
     }
 }
 
-impl ThemeCtx {
+impl Theme {
     pub fn toggle(&self) {
         self.1.update(|theme| theme.toggle());
     }
 }
 
-pub fn use_theme() -> ThemeCtx {
-    match use_context::<ThemeCtx>() {
+pub fn use_theme() -> Theme {
+    match use_context::<Theme>() {
         None => {
             debug_warn!(
                 "ThemeContext was not found. Did you forget to add the
                 `<ThemeProvider />` component?"
             );
-            let (theme, set_theme) = signal(Theme::new());
-            let theme_ctx = ThemeCtx(theme, set_theme);
+            let (theme, set_theme) = signal(ThemeKind::new());
+            let theme_ctx = Theme(theme, set_theme);
             provide_context(theme_ctx.clone());
             theme_ctx
         }
@@ -76,20 +79,16 @@ pub fn use_theme() -> ThemeCtx {
 pub fn ThemeProvider(children: Children) -> impl IntoView {
     provide_meta_context();
 
-    let (theme, set_theme) = signal(Theme::new());
-    let theme_ctx = ThemeCtx(theme, set_theme);
+    let (theme, set_theme) = signal(ThemeKind::new());
+    let theme_ctx = Theme(theme, set_theme);
     provide_context(theme_ctx.clone());
 
     Effect::new(move || {
         window()
-            .and_then(|w| w.local_storage().ok())
-            .and_then(|storage| {
-                let theme = &theme.get().to_string();
-                storage?.set_item(THEME_STORAGE_KEY, theme).ok()
-            });
+            .and_then(|w| w.document())
+            .and_then(|d| d.dyn_into::<HtmlDocument>().ok())
+            .and_then(|d| d.set_cookie(&theme.get().to_string()).ok());
     });
-
-    let theme = theme_ctx.0;
 
     view! {
         <Html {..} data-theme={move || theme.get().to_string()} />
