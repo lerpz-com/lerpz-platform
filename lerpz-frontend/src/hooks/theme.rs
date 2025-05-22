@@ -1,4 +1,6 @@
-use cookie::{Cookie, time::OffsetDateTime};
+use std::str::FromStr;
+
+use cookie::Cookie;
 use leptos::{logging::debug_warn, prelude::*};
 use leptos_meta::{Html, provide_meta_context};
 use strum::{Display, EnumString};
@@ -22,29 +24,23 @@ impl ThemeKind {
     pub fn new() -> Self {
         cfg_if::cfg_if! {
             if #[cfg(feature = "hydrate")] {
-                use std::str::FromStr;
-
                 let cookie_str = window()
                     .and_then(|w| w.document())
                     .and_then(|d| d.dyn_into::<HtmlDocument>().ok())
                     .and_then(|d| d.cookie().ok())
                     .unwrap_or_default();
 
-                let cookie = Cookie::split_parse(cookie_str)
-                    .filter_map(|c| c.ok())
-                    .find(|c| c.name() == THEME_STORAGE_KEY);
-
-                if let Some(cookie) = cookie {
-                    ThemeKind::from_str(cookie.value()).unwrap_or_default()
-                } else {
-                    ThemeKind::default()
-                }
+                theme_from_cookie_str(&cookie_str)
             } else if #[cfg(feature = "ssr")] {
-                // use axum::extract::Cookie;
-                // use leptos_axum::extract;
+                let cookie_str = use_context::<axum::http::request::Parts>()
+                    .and_then(|p| {
+                        p.headers.get("Cookie")
+                            .and_then(|c| c.to_str().ok())
+                            .map(String::from)
+                    })
+                    .unwrap_or_default();
 
-                // let (Cookie, query): (Cookie) = extract().await?;
-                ThemeKind::default()
+                theme_from_cookie_str(&cookie_str)
             }
         }
     }
@@ -54,6 +50,19 @@ impl ThemeKind {
             ThemeKind::Light => ThemeKind::Dark,
             ThemeKind::Dark => ThemeKind::Light,
         };
+    }
+}
+
+#[inline]
+fn theme_from_cookie_str(cookie_str: &str) -> ThemeKind {
+    let cookie = Cookie::split_parse(cookie_str)
+        .filter_map(|c| c.ok())
+        .find(|c| c.name() == THEME_STORAGE_KEY);
+
+    if let Some(cookie) = cookie {
+        ThemeKind::from_str(cookie.value()).unwrap_or_default()
+    } else {
+        ThemeKind::default()
     }
 }
 
@@ -92,8 +101,6 @@ pub fn ThemeProvider(children: Children) -> impl IntoView {
         let cookie = Cookie::build((THEME_STORAGE_KEY, theme.to_string()))
             // .expires(OffsetDateTime::now_utc())
             .build();
-
-        debug_warn!("Setting theme cookie: {:?}", &cookie);
 
         window()
             .and_then(|w| w.document())

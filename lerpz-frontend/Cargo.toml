@@ -11,6 +11,7 @@ crate-type = ["cdylib", "rlib"]
 lerpz-utils = { path = "../lerpz-utils", optional = true }
 # General
 axum = { workspace = true, features = ["tokio"], optional = true }
+axum-extra = { workspace = true, features = ["cookie"] }
 cfg-if = { workspace = true, optional = true }
 console_error_panic_hook = { workspace = true, optional = true }
 console_log = { workspace = true, optional = true }
@@ -41,6 +42,7 @@ web-sys = { workspace = true, features = [
     "HtmlDocument",
 ], optional = true }
 cookie = { workspace = true, optional = true }
+http = { workspace = true, optional = true }
 
 [features]
 hydrate = [
@@ -62,6 +64,7 @@ ssr = [
     "dep:cfg-if",
     "dep:cookie",
     "dep:dotenvy",
+    "dep:http",
     "dep:tracing",
     "dep:tracing-subscriber",
     "dep:tower",
@@ -79,9 +82,6 @@ ssr = [
     "leptos_meta/ssr",
     "leptos_router/ssr",
 ]
-
-[package.metadata.cargo-all-features]
-skip_feature_sets = [["csr", "ssr"], ["csr", "hydrate"], ["ssr", "hydrate"], []]
 
 [package.metadata.leptos]
 # Build
