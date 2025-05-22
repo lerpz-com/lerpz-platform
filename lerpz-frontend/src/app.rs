@@ -1,6 +1,6 @@
 use crate::components::Text;
-use crate::pages::{DashboardPage, HomePage};
 use crate::hooks::ThemeProvider;
+use crate::pages::{DashboardPage, HomePage};
 
 use leptos::config::LeptosOptions;
 use leptos::prelude::*;

@@ -1,7 +1,4 @@
-use crate::{
-    components::Text,
-    hooks::{Theme, use_theme},
-};
+use crate::{components::Text, hooks::use_theme};
 
 use leptos::prelude::*;
 
@@ -93,7 +90,7 @@ fn DashboardRoute(path: &'static str, icon: &'static str, name: &'static str) ->
 
 #[island]
 fn ThemeToggleButton() -> impl IntoView {
-    let Theme(theme, set_theme) = use_theme();
+    let (theme, set_theme) = use_theme();
 
     view! {
         <button on:click=move |_| set_theme.update(|theme| theme.toggle())>

@@ -40,12 +40,14 @@ web-sys = { workspace = true, features = [
     "Storage",
     "HtmlDocument",
 ], optional = true }
+cookie = { workspace = true, optional = true }
 
 [features]
 hydrate = [
     "dep:cfg-if",
     "dep:console_error_panic_hook",
     "dep:console_log",
+    "dep:cookie",
     "dep:leptos_meta",
     "dep:leptos_router",
     "dep:lerpz-utils",
@@ -56,8 +58,9 @@ hydrate = [
     "leptos/hydrate",
 ]
 ssr = [
-    "dep:cfg-if",
     "dep:axum",
+    "dep:cfg-if",
+    "dep:cookie",
     "dep:dotenvy",
     "dep:tracing",
     "dep:tracing-subscriber",
@@ -70,6 +73,7 @@ ssr = [
     "dep:lerpz-utils",
     "dep:strum",
     "dep:tailwind_fuse",
+    "dep:wasm-bindgen",
     "dep:web-sys",
     "leptos/ssr",
     "leptos_meta/ssr",
@@ -77,7 +81,6 @@ ssr = [
 ]
 
 [package.metadata.cargo-all-features]
-denylist = ["axum", "tower", "tower-http", "tokio", "sqlx", "leptos_axum"]
 skip_feature_sets = [["csr", "ssr"], ["csr", "hydrate"], ["ssr", "hydrate"], []]
 
 [package.metadata.leptos]

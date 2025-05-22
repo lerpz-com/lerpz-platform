@@ -1,10 +1,11 @@
+use cookie::{Cookie, time::OffsetDateTime};
 use leptos::{logging::debug_warn, prelude::*};
 use leptos_meta::{Html, provide_meta_context};
 use strum::{Display, EnumString};
 use wasm_bindgen::JsCast;
 use web_sys::{HtmlDocument, window};
 
-const THEME_STORAGE_KEY: &str = "Lerpz-Theme";
+const THEME_STORAGE_KEY: &str = "lerpz-theme";
 
 #[derive(Clone, Default, Display, EnumString)]
 #[strum(serialize_all = "snake_case")]
@@ -15,7 +16,7 @@ pub enum ThemeKind {
 }
 
 #[derive(Clone)]
-pub struct Theme(pub ReadSignal<ThemeKind>, pub WriteSignal<ThemeKind>);
+pub struct ThemeContext(pub ReadSignal<ThemeKind>, pub WriteSignal<ThemeKind>);
 
 impl ThemeKind {
     pub fn new() -> Self {
@@ -26,20 +27,23 @@ impl ThemeKind {
                 let cookie_str = window()
                     .and_then(|w| w.document())
                     .and_then(|d| d.dyn_into::<HtmlDocument>().ok())
-                    .and_then(|d| d.cookie().ok());
+                    .and_then(|d| d.cookie().ok())
+                    .unwrap_or_default();
 
-                match cookie_str {
-                    Some(cookie) => {
-                        cookie
-                            .split(';')
-                            .find(|c| c.trim().starts_with(THEME_STORAGE_KEY))
-                            .and_then(|c| c.split('=').nth(1))
-                            .and_then(|c| ThemeKind::from_str(c).ok())
-                            .unwrap_or_default()
-                    },
-                    None => ThemeKind::default(),
+                let cookie = Cookie::split_parse(cookie_str)
+                    .filter_map(|c| c.ok())
+                    .find(|c| c.name() == THEME_STORAGE_KEY);
+
+                if let Some(cookie) = cookie {
+                    ThemeKind::from_str(cookie.value()).unwrap_or_default()
+                } else {
+                    ThemeKind::default()
                 }
             } else if #[cfg(feature = "ssr")] {
+                // use axum::extract::Cookie;
+                // use leptos_axum::extract;
+
+                // let (Cookie, query): (Cookie) = extract().await?;
                 ThemeKind::default()
             }
         }
@@ -53,25 +57,25 @@ impl ThemeKind {
     }
 }
 
-impl Theme {
-    pub fn toggle(&self) {
-        self.1.update(|theme| theme.toggle());
+impl ThemeContext {
+    pub fn new() -> Self {
+        let (theme, set_theme) = signal(ThemeKind::new());
+        ThemeContext(theme, set_theme)
     }
 }
 
-pub fn use_theme() -> Theme {
-    match use_context::<Theme>() {
+pub fn use_theme() -> (ReadSignal<ThemeKind>, WriteSignal<ThemeKind>) {
+    match use_context::<ThemeContext>() {
+        Some(ctx) => (ctx.0, ctx.1),
         None => {
             debug_warn!(
                 "ThemeContext was not found. Did you forget to add the
                 `<ThemeProvider />` component?"
             );
-            let (theme, set_theme) = signal(ThemeKind::new());
-            let theme_ctx = Theme(theme, set_theme);
-            provide_context(theme_ctx.clone());
-            theme_ctx
+            let ctx = ThemeContext::new();
+            provide_context(ctx.clone());
+            (ctx.0, ctx.1)
         }
-        Some(theme) => theme,
     }
 }
 
@@ -80,14 +84,21 @@ pub fn ThemeProvider(children: Children) -> impl IntoView {
     provide_meta_context();
 
     let (theme, set_theme) = signal(ThemeKind::new());
-    let theme_ctx = Theme(theme, set_theme);
+    let theme_ctx = ThemeContext(theme, set_theme);
     provide_context(theme_ctx.clone());
 
     Effect::new(move || {
+        let theme = theme.get();
+        let cookie = Cookie::build((THEME_STORAGE_KEY, theme.to_string()))
+            // .expires(OffsetDateTime::now_utc())
+            .build();
+
+        debug_warn!("Setting theme cookie: {:?}", &cookie);
+
         window()
             .and_then(|w| w.document())
             .and_then(|d| d.dyn_into::<HtmlDocument>().ok())
-            .and_then(|d| d.set_cookie(&theme.get().to_string()).ok());
+            .and_then(|d| d.set_cookie(&cookie.to_string()).ok());
     });
 
     view! {
