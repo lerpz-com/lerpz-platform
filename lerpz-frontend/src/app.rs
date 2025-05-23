@@ -1,9 +1,10 @@
 use crate::components::Text;
 use crate::hooks::ThemeProvider;
-use crate::pages::{DashboardPage, HomePage};
+use crate::pages::{DashboardGroups, DashboardLayout, DashboardOverview, DashboardUsers, HomePage};
 
 use leptos::config::LeptosOptions;
 use leptos::prelude::*;
+use leptos_router::components::ParentRoute;
 use leptos_router::{
     components::{Route, Router, Routes},
     path,
@@ -42,8 +43,12 @@ pub fn App() -> impl IntoView {
             <Router>
                 <main>
                     <Routes fallback=Fallback transition=true>
-                        <Route path=path!("/") view=|| view! { <HomePage /> }/>
-                        <Route path=path!("/dashboard") view=|| view! { <DashboardPage /> }/>
+                        <Route path=path!("/") view=HomePage/>
+                        <ParentRoute path=path!("/dashboard") view=DashboardLayout>
+                            <Route path=path!("") view=DashboardOverview/>
+                            <Route path=path!("/users") view=DashboardUsers/>
+                            <Route path=path!("/groups") view=DashboardGroups/>
+                        </ParentRoute>
                     </Routes>
                 </main>
             </Router>

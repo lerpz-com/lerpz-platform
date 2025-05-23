@@ -2,7 +2,7 @@ pub mod dashboard;
 
 use leptos::prelude::*;
 
-pub use crate::pages::dashboard::DashboardPage;
+pub use dashboard::*;
 
 use crate::components::Text;
 

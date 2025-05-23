@@ -1,4 +1,11 @@
-use crate::{components::Text, hooks::use_theme};
+mod groups;
+mod overview;
+mod users;
+
+use std::sync::LazyLock;
+
+use crate::components::Text;
+pub use crate::pages::dashboard::{groups::*, overview::*, users::*};
 
 use leptos::prelude::*;
 
@@ -14,40 +21,52 @@ struct Route {
     icon: &'static str,
 }
 
-const CATEGORIES: &'static [Category] = &[Category {
-    path: "/overview",
-    name: "Overview",
-    routes: &[
-        Route {
-            path: "/dashboard",
-            name: "Dashboard",
-            icon: "fa-solid fa-gauge",
-        },
-        Route {
-            path: "/dashboard",
-            name: "Users",
-            icon: "fa-solid fa-users",
-        },
-        Route {
-            path: "/dashboard",
-            name: "Groups",
-            icon: "fa-solid fa-user-group",
-        },
-    ],
-}];
+static CATEGORIES: LazyLock<&[Category]> = LazyLock::new(|| {
+    &[Category {
+        path: "",
+        name: "Overview",
+        routes: &[
+            Route {
+                path: "",
+                name: "Dashboard",
+                icon: "fa-solid fa-gauge",
+            },
+            Route {
+                path: "/users",
+                name: "Users",
+                icon: "fa-solid fa-users",
+            },
+            Route {
+                path: "/groups",
+                name: "Groups",
+                icon: "fa-solid fa-user-group",
+            },
+        ],
+    }]
+});
+
+fn full_path(category: &'static Category, route: &'static Route) -> String {
+    let prefix = "/dashboard";
+
+    if route.path.is_empty() {
+        format!("{}{}", prefix, category.path.to_string())
+    } else {
+        format!(
+            "{}{}{}",
+            prefix,
+            category.path.to_string(),
+            route.path.to_string()
+        )
+    }
+}
 
 #[component]
-pub fn DashboardPage() -> impl IntoView {
+pub fn DashboardLayout() -> impl IntoView {
     view! {
-        <ThemeToggleButton />
         <div class="px-4 py-8">
             {CATEGORIES.iter()
-            .map(|c| view! {
-                <DashboardCategory
-                    _path=c.path
-                    name=c.name
-                    routes=c.routes
-                />
+            .map(|category| view! {
+                <DashboardCategory category />
             })
             .collect_view()}
         </div>
@@ -55,46 +74,27 @@ pub fn DashboardPage() -> impl IntoView {
 }
 
 #[component]
-fn DashboardCategory(
-    _path: &'static str,
-    name: &'static str,
-    routes: &'static [Route],
-) -> impl IntoView {
+fn DashboardCategory(category: &'static Category) -> impl IntoView {
     view! {
         <div>
             <Text size="xs">
-                {name}
+                {category.name}
             </Text>
-            {routes.iter().map(|r| view! {
-                <DashboardRoute
-                    path=r.path
-                    icon=r.icon
-                    name=r.name
-                />
+            {category.routes.iter().map(|route| view! {
+                <DashboardRoute category route />
             }).collect_view()}
         </div>
     }
 }
 
 #[component]
-fn DashboardRoute(path: &'static str, icon: &'static str, name: &'static str) -> impl IntoView {
+fn DashboardRoute(category: &'static Category, route: &'static Route) -> impl IntoView {
     view! {
-        <a href=path class="px-2 py-4">
+        <a href=full_path(category, route) class="px-2 py-4">
             <Text size="xs">
-                <i class=format!("aspect-square mr-4 {}", icon) />
-                {name}
+                <i class=format!("aspect-square mr-4 {}", route.icon) />
+                {route.name}
             </Text>
         </a>
-    }
-}
-
-#[island]
-fn ThemeToggleButton() -> impl IntoView {
-    let (theme, set_theme) = use_theme();
-
-    view! {
-        <button on:click=move |_| set_theme.update(|theme| theme.toggle())>
-            {move || {format!("Toggle Theme {}", theme.get())}}
-        </button>
     }
 }

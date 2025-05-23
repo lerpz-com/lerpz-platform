@@ -25,7 +25,7 @@ leptos_axum = { workspace = true, features = [
 ], optional = true }
 leptos_meta = { workspace = true, optional = true }
 leptos_router = { workspace = true, optional = true }
-# serde = { workspace = true, features = ["derive"], optional = true }
+serde = { workspace = true, features = ["derive"], optional = true }
 # serde_json = { workspace = true, optional = true }
 strum = { workspace = true, features = ["derive"], optional = true }
 tailwind_fuse = { workspace = true, features = ["variant"], optional = true }
@@ -53,6 +53,7 @@ hydrate = [
     "dep:leptos_meta",
     "dep:leptos_router",
     "dep:lerpz-utils",
+    "dep:serde",
     "dep:strum",
     "dep:tailwind_fuse",
     "dep:wasm-bindgen",
@@ -74,6 +75,7 @@ ssr = [
     "dep:leptos_meta",
     "dep:leptos_router",
     "dep:lerpz-utils",
+    "dep:serde",
     "dep:strum",
     "dep:tailwind_fuse",
     "dep:wasm-bindgen",

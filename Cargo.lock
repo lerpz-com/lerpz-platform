@@ -1316,6 +1316,7 @@ dependencies = [
  "leptos_meta",
  "leptos_router",
  "lerpz-utils",
+ "serde",
  "strum",
  "tailwind_fuse",
  "tokio",
