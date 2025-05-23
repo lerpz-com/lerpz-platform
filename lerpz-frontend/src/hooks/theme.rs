@@ -4,6 +4,7 @@ use cookie::Cookie;
 use leptos::{logging::debug_warn, prelude::*};
 use leptos_meta::{Html, provide_meta_context};
 use strum::{Display, EnumString};
+use time::{Duration, OffsetDateTime};
 use wasm_bindgen::JsCast;
 use web_sys::{HtmlDocument, window};
 
@@ -99,7 +100,8 @@ pub fn ThemeProvider(children: Children) -> impl IntoView {
     Effect::new(move || {
         let theme = theme.get();
         let cookie = Cookie::build((THEME_STORAGE_KEY, theme.to_string()))
-            // .expires(OffsetDateTime::now_utc())
+            .expires(OffsetDateTime::now_utc() + Duration::days(365 * 5))
+            .path("/")
             .build();
 
         window()

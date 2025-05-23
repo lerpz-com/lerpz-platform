@@ -43,6 +43,7 @@ web-sys = { workspace = true, features = [
 ], optional = true }
 cookie = { workspace = true, optional = true }
 http = { workspace = true, optional = true }
+time = { version = "0.3.41", features = ["wasm-bindgen"] }
 
 [features]
 hydrate = [
