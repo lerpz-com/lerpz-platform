@@ -8,7 +8,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 # Internal
-lerpz-utils = { path = "../lerpz-utils", optional = true }
+lerpz-utils = { path = "../../utils", optional = true }
 # General
 axum = { workspace = true, features = ["tokio"], optional = true }
 axum-extra = { workspace = true, features = ["cookie"] }

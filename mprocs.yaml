@@ -1,0 +1,7 @@
+procs:
+  frontend:
+    shell: "cargo leptos watch"
+  auth:
+    shell: "cargo run --bin lerpz-auth"
+  relay:
+    shell: "cargo run --bin lerpz-relay"

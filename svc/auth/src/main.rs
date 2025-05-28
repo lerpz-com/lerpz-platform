@@ -1,7 +1,8 @@
 use std::net::Ipv4Addr;
 
+use lerpz_auth::{error::HandlerResult, shutdown::shutdown_signal};
+
 use axum::Router;
-use lerpz_backend::{error::HandlerResult, shutdown::shutdown_signal};
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
 
 #[tokio::main]

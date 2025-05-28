@@ -4,7 +4,7 @@ mod users;
 
 use std::sync::LazyLock;
 
-use crate::components::Text;
+use crate::{components::Text, hooks::use_theme};
 pub use crate::pages::dashboard::{groups::*, overview::*, users::*};
 
 use leptos::prelude::*;
@@ -63,6 +63,7 @@ fn full_path(category: &'static Category, route: &'static Route) -> String {
 #[component]
 pub fn DashboardLayout() -> impl IntoView {
     view! {
+        <ThemeButton />
         <div class="px-4 py-8">
             {CATEGORIES.iter()
             .map(|category| view! {
@@ -96,5 +97,21 @@ fn DashboardRoute(category: &'static Category, route: &'static Route) -> impl In
                 {route.name}
             </Text>
         </a>
+    }
+}
+
+#[island]
+fn ThemeButton() -> impl IntoView {
+    let (theme, set_theme) = use_theme();
+
+    view! {
+        <button
+            class="px-2 py-4"
+            on:click=move |_| set_theme.update(|t| t.toggle())
+        >
+            <Text size="xs">
+                {move || format!("Toggle: {}", theme.get().to_string())}
+            </Text>
+        </button>
     }
 }

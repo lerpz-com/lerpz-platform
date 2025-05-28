@@ -1,0 +1,26 @@
+[package]
+name = "lerpz-utils"
+edition = "2024"
+version.workspace = true
+
+[dependencies]
+axum = { workspace = true, optional = true }
+chrono = { workspace = true, optional = true }
+jsonwebtoken = { workspace = true, optional = true }
+rand = { workspace = true, optional = true }
+thiserror = { workspace = true }
+serde = { workspace = true, optional = true }
+uuid = { workspace = true, optional = true }
+
+[features]
+axum = [ 
+    "dep:axum",
+    "jwt",
+]
+jwt = [
+    "dep:jsonwebtoken",
+    "dep:rand",
+    "dep:serde",
+    "dep:uuid",
+    "chrono/serde",
+]

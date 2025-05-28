@@ -79,7 +79,7 @@ services:
     init: true
     build:
       context: .
-      dockerfile: lerpz-frontend/Dockerfile
+      dockerfile: svc/frontend/Dockerfile
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.lerpz-frontend-http.rule=Host(`lerpz.local`)"
@@ -89,7 +89,7 @@ services:
       - "traefik.http.routers.lerpz-frontend-https.tls=true"
     hostname: lerpz-frontend
     domainname: frontend.lerpz.local
-    env_file: lerpz-frontend/.env
+    env_file: svc/frontend/.env
     ports:
       - "3000:3000"
     depends_on:
@@ -102,23 +102,23 @@ services:
         aliases:
           - frontend.lerpz.local
 
-  lerpz-backend:
-    container_name: lerpz-backend
+  lerpz-auth:
+    container_name: lerpz-auth
     restart: always
     init: true
     build:
       context: .
-      dockerfile: lerpz-backend/Dockerfile
+      dockerfile: svc/auth/Dockerfile
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.lerpz-backend-http.rule=Host(`lerpz.local`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.lerpz-backend-http.entrypoints=web"
-      - "traefik.http.routers.lerpz-backend-https.rule=Host(`lerpz.local`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.lerpz-backend-https.entrypoints=websecure"
-      - "traefik.http.routers.lerpz-backend-https.tls=true"
-    hostname: lerpz-backend
-    domainname: backend.lerpz.local
-    env_file: lerpz-backend/.env
+      - "traefik.http.routers.lerpz-auth-http.rule=Host(`lerpz.local`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.lerpz-auth-http.entrypoints=web"
+      - "traefik.http.routers.lerpz-auth-https.rule=Host(`lerpz.local`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.lerpz-auth-https.entrypoints=websecure"
+      - "traefik.http.routers.lerpz-auth-https.tls=true"
+    hostname: lerpz-auth
+    domainname: auth.lerpz.local
+    env_file: svc/auth/.env
     ports:
       - "4000:4000"
     depends_on:
@@ -129,7 +129,7 @@ services:
     networks:
       lerpz-network:
         aliases:
-          - backend.lerpz.local
+          - auth.lerpz.local
 
 secrets:
   cert.pem:
