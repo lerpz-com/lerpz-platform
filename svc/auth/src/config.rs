@@ -15,5 +15,6 @@ pub static CONFIG: LazyLock<Config> = LazyLock::new(|| Config::from_env().unwrap
 
 generate_config!(
     ENV: String = get_env,
-    ADDR: SocketAddr = get_env_parse
+    ADDR: SocketAddr = get_env_parse,
+    DATABASE_URL: String = get_env
 );

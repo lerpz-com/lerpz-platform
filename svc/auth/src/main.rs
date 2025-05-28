@@ -1,6 +1,9 @@
-use lerpz_auth::{config::CONFIG, shutdown::shutdown_signal};
+use std::time::Duration;
+
+use lerpz_auth::{AppState, config::CONFIG, shutdown::shutdown_signal};
 
 use axum::Router;
+use sqlx::postgres::PgPoolOptions;
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
 
 #[tokio::main]
@@ -17,7 +20,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         tracing::warn!("no .env file found: {}", err);
     }
 
-    let app = Router::new().nest("/api", lerpz_auth::api::router());
+    let pool = PgPoolOptions::new()
+        .max_connections(5)
+        .acquire_timeout(Duration::from_secs(3))
+        .connect(&CONFIG.DATABASE_URL)
+        .await
+        .unwrap_or_else(|err| panic!("can't connect to database: {err}"));
+
+    let state = AppState { pool };
+
+    let app = Router::<AppState>::new()
+        .nest("/api", lerpz_auth::api::router(state.clone()))
+        .with_state(state);
 
     let listener = tokio::net::TcpListener::bind(&CONFIG.ADDR).await?;
     tracing::info!("server started listening on {}", CONFIG.ADDR);

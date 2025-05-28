@@ -5,5 +5,5 @@ pub mod shutdown;
 
 #[derive(Clone, Debug)]
 pub struct AppState {
-    pg: sqlx::PgPool
+    pub pool: sqlx::PgPool
 }
