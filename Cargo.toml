@@ -12,6 +12,8 @@ leptos_axum = "0.8"
 leptos_meta = "0.8"
 leptos_router = "0.8"
 tailwind_fuse = "0.3.2"
+# Database
+sqlx = "0.8"
 # Axum, Tokio and Tower
 axum = "0.8"
 axum-extra = "0.10"
