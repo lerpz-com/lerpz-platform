@@ -29,7 +29,7 @@ mod verify_email;
 
 use crate::AppState;
 
-pub fn router(state: AppState) -> axum::Router<AppState> {
+pub fn router(state: AppState) -> axum::Router {
     axum::Router::<AppState>::new()
         .nest("/oauth", oauth::router(state.clone()))
         .route("/register", axum::routing::post(register::handler))

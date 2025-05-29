@@ -18,14 +18,14 @@ pub enum Size {
 
 #[component]
 pub fn Button(
-    #[prop(into)] text: Cow<'static, str>,
+    #[prop(into)] children: TypedChildren<String>,
     #[prop(into, optional)] size: Cow<'static, str>,
 ) -> impl IntoView {
     let size = Size::from_str(&size).unwrap_or_default();
 
     view! {
         <button class=tw_merge!(size)>
-            {text}
+            {children.into_inner()()}
         </button>
     }
 }

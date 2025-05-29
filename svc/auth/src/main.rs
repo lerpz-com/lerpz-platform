@@ -2,7 +2,6 @@ use std::time::Duration;
 
 use lerpz_auth::{AppState, config::CONFIG, shutdown::shutdown_signal};
 
-use axum::Router;
 use sqlx::postgres::PgPoolOptions;
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -29,9 +28,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let state = AppState { pool };
 
-    let app = Router::<AppState>::new()
-        .nest("/api", lerpz_auth::api::router(state.clone()))
-        .with_state(state);
+    let app = lerpz_auth::api::router(state.clone());
 
     let listener = tokio::net::TcpListener::bind(&CONFIG.ADDR).await?;
     tracing::info!("server started listening on {}", CONFIG.ADDR);
