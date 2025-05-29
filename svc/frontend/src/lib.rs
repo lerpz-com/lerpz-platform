@@ -1,5 +1,5 @@
 pub mod app;
-pub mod components;
+pub mod cmps;
 pub mod config;
 pub mod hooks;
 pub mod pages;

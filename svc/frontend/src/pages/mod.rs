@@ -4,7 +4,7 @@ use leptos::prelude::*;
 
 pub use dashboard::*;
 
-use crate::components::Text;
+use crate::cmps::Text;
 
 #[component]
 pub fn HomePage() -> impl IntoView {

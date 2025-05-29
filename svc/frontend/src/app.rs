@@ -1,4 +1,4 @@
-use crate::components::Text;
+use crate::cmps::Text;
 use crate::hooks::ThemeProvider;
 use crate::pages::{DashboardGroups, DashboardLayout, DashboardOverview, DashboardUsers, HomePage};
 

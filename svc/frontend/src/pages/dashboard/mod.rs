@@ -4,7 +4,7 @@ mod users;
 
 use std::sync::LazyLock;
 
-use crate::{components::Text, hooks::use_theme};
+use crate::{cmps::Text, hooks::use_theme};
 pub use crate::pages::dashboard::{groups::*, overview::*, users::*};
 
 use leptos::prelude::*;

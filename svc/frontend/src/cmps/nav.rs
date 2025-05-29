@@ -3,7 +3,7 @@ use std::borrow::Cow;
 use leptos::prelude::*;
 use tailwind_fuse::*;
 
-use crate::components::Text;
+use crate::cmps::Text;
 
 #[component]
 pub fn NavBar(
