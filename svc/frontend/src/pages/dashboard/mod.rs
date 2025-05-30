@@ -4,7 +4,7 @@ mod users;
 
 use std::sync::LazyLock;
 
-use crate::{cmps::Text, hooks::use_theme};
+use crate::cmps::Text;
 pub use crate::pages::dashboard::{groups::*, overview::*, users::*};
 
 use leptos::prelude::*;
@@ -63,8 +63,7 @@ fn full_path(category: &'static Category, route: &'static Route) -> String {
 #[component]
 pub fn DashboardLayout() -> impl IntoView {
     view! {
-        <ThemeButton />
-        <div class="px-4 py-8">
+        <div class="px-4 py-8 h-full max-w-64 border-r border-hover-dark">
             {CATEGORIES.iter()
             .map(|category| view! {
                 <DashboardCategory category />
@@ -91,27 +90,13 @@ fn DashboardCategory(category: &'static Category) -> impl IntoView {
 #[component]
 fn DashboardRoute(category: &'static Category, route: &'static Route) -> impl IntoView {
     view! {
-        <a href=full_path(category, route) class="px-2 py-4">
-            <Text size="xs">
-                <i class=format!("aspect-square mr-4 {}", route.icon) />
-                {route.name}
-            </Text>
+        <a href=full_path(category, route)>
+            <div class="px-4 py-2 my-1 hover:bg-hover-light dark:hover:bg-hover-dark rounded-lg">
+                <Text size="xs">
+                    <i class=format!("aspect-square mr-6 {}", route.icon) />
+                    {route.name}
+                </Text>
+            </div>
         </a>
-    }
-}
-
-#[island]
-fn ThemeButton() -> impl IntoView {
-    let (theme, set_theme) = use_theme();
-
-    view! {
-        <button
-            class="px-2 py-4"
-            on:click=move |_| set_theme.update(|t| t.toggle())
-        >
-            <Text size="xs">
-                {move || format!("Toggle: {}", theme.get().to_string())}
-            </Text>
-        </button>
     }
 }

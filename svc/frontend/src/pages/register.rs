@@ -1,26 +1,17 @@
-mod dashboard;
-mod login;
-mod register;
-
 use leptos::prelude::*;
-use leptos_router::components::A;
-
-pub use dashboard::*;
-pub use login::*;
-pub use register::*;
 
 use crate::cmps::Text;
 
 #[component]
-pub fn HomePage() -> impl IntoView {
+pub fn RegisterPage() -> impl IntoView {
     view! {
         <Text weight="bold" size="2xl">
             "Lerpz"
         </Text>
-        <A href="/dashboard">
+        <a href="/dashboard">
             <Text weight="bold">
                 "Dashboard"
             </Text>
-        </A>
+        </a>
     }
 }

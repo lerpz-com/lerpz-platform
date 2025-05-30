@@ -1,6 +1,6 @@
 use crate::cmps::Text;
 use crate::hooks::ThemeProvider;
-use crate::pages::{DashboardGroups, DashboardLayout, DashboardOverview, DashboardUsers, HomePage};
+use crate::pages::*;
 
 use leptos::config::LeptosOptions;
 use leptos::prelude::*;
@@ -29,7 +29,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <AutoReload options=options.clone()/>
                 <HydrationScripts options=options islands=true islands_router=true/>
             </head>
-            <body class="bg-light dark:bg-dark">
+            <body class="bg-light dark:bg-dark h-screen">
                 <App />
             </body>
         </html>
@@ -41,16 +41,16 @@ pub fn App() -> impl IntoView {
     view! {
         <ThemeProvider>
             <Router>
-                <main>
-                    <Routes fallback=Fallback transition=true>
-                        <Route path=path!("/") view=HomePage/>
-                        <ParentRoute path=path!("/dashboard") view=DashboardLayout>
-                            <Route path=path!("") view=DashboardOverview/>
-                            <Route path=path!("/users") view=DashboardUsers/>
-                            <Route path=path!("/groups") view=DashboardGroups/>
-                        </ParentRoute>
-                    </Routes>
-                </main>
+                <Routes fallback=Fallback transition=true>
+                    <Route path=path!("") view=HomePage/>
+                    <Route path=path!("/login") view=LoginPage/>
+                    <Route path=path!("/register") view=RegisterPage/>
+                    <ParentRoute path=path!("/dashboard") view=DashboardLayout>
+                        <Route path=path!("") view=DashboardOverview/>
+                        <Route path=path!("/users") view=DashboardUsers/>
+                        <Route path=path!("/groups") view=DashboardGroups/>
+                    </ParentRoute>
+                </Routes>
             </Router>
         </ThemeProvider>
     }
@@ -59,7 +59,7 @@ pub fn App() -> impl IntoView {
 #[component]
 pub fn Fallback() -> impl IntoView {
     view! {
-        <div class="flex flex-col items-center justify-center h-screen">
+        <div class="flex flex-col items-center justify-center h-full">
             <Text size="xl" weight="bold">"404"</Text>
             <Text size="lg" weight="medium">"Not Found"</Text>
         </div>
