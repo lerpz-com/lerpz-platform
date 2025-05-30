@@ -1,19 +1,12 @@
-"use client";
+"use client"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import { ThemeButton } from "@/components/theme-button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+  CollapsibleTrigger
+} from "@/components/ui/collapsible"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,9 +14,10 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Separator } from "@/components/ui/separator";
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu"
+import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
 import {
   Sidebar,
   SidebarContent,
@@ -40,9 +34,9 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import nav from "@/lib/routes";
+  SidebarTrigger
+} from "@/components/ui/sidebar"
+import nav from "@/lib/dashboard-routes"
 import {
   BadgeCheck,
   Bell,
@@ -50,23 +44,23 @@ import {
   ChevronsUpDown,
   Command,
   CreditCard,
-  LogOut,
-  Sparkles,
-} from "lucide-react";
-import { useState } from "react";
+  LogOut
+} from "lucide-react"
+import Link from "next/link"
+import { useState } from "react"
 
-export const iframeHeight = "800px";
+export const iframeHeight = "800px"
 
-export const description = "An inset sidebar with site header navigation.";
+export const description = "An inset sidebar with site header navigation."
 
 const user = {
   name: "Kanerix",
   email: "kas@lerpz.com",
-  avatar: "/avatars/shadcn.jpg",
-};
+  avatar: "/avatars/shadcn.jpg"
+}
 
 export default function Page({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(true)
 
   return (
     <SidebarProvider open={open} onOpenChange={setOpen}>
@@ -78,7 +72,7 @@ export default function Page({ children }: { children: React.ReactNode }) {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild>
-                <a href="/dashboard">
+                <Link href="/dashboard">
                   <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                     <Command className="size-4" />
                   </div>
@@ -86,7 +80,7 @@ export default function Page({ children }: { children: React.ReactNode }) {
                     <span className="truncate font-semibold">Lerpz</span>
                     <span className="truncate text-xs">Enterprise</span>
                   </div>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -103,12 +97,12 @@ export default function Page({ children }: { children: React.ReactNode }) {
                       asChild
                       defaultOpen={item.isActive}
                     >
-                      <>
+                      <div>
                         <SidebarMenuButton asChild tooltip={item.title}>
-                          <a href={item.url}>
+                          <Link href={`/dashboard${group.url}${item.url}`}>
                             <item.icon />
                             <span>{item.title}</span>
-                          </a>
+                          </Link>
                         </SidebarMenuButton>
                         {item.items?.length ? (
                           <>
@@ -124,10 +118,18 @@ export default function Page({ children }: { children: React.ReactNode }) {
                                   <SidebarMenuSubItem
                                     key={`subitem-${subItem.title}`}
                                   >
-                                    <SidebarMenuSubButton asChild>
-                                      <a href={subItem.url}>
+                                    <SidebarMenuSubButton
+                                      asChild
+                                      isActive={
+                                        window.location.pathname ===
+                                        `/dashboard${group.url}${item.url}${subItem.url}`
+                                      }
+                                    >
+                                      <Link
+                                        href={`/dashboard${group.url}${item.url}${subItem.url}`}
+                                      >
                                         <span>{subItem.title}</span>
-                                      </a>
+                                      </Link>
                                     </SidebarMenuSubButton>
                                   </SidebarMenuSubItem>
                                 ))}
@@ -135,7 +137,7 @@ export default function Page({ children }: { children: React.ReactNode }) {
                             </CollapsibleContent>
                           </>
                         ) : null}
-                      </>
+                      </div>
                     </Collapsible>
                   </SidebarMenuItem>
                 ))}
@@ -212,7 +214,6 @@ export default function Page({ children }: { children: React.ReactNode }) {
           </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
-
       <SidebarInset>
         <header className=" flex shrink-0 items-center gap-2 border-b py-2">
           <div className="flex items-center gap-2 px-4 py-2">
@@ -220,23 +221,12 @@ export default function Page({ children }: { children: React.ReactNode }) {
               <SidebarTrigger />
               <Separator orientation="vertical" className="mr-2 h-4" />
             </div>
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+            <Input type="text" placeholder="Search" className="grow" />
+            <ThemeButton />
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
+        <main className="flex flex-1 flex-col gap-4 p-4">{children}</main>
       </SidebarInset>
     </SidebarProvider>
-  );
+  )
 }

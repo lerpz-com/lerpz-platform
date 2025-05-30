@@ -1,13 +1,13 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import { dirname } from "path"
+import { fileURLToPath } from "url"
+import { FlatCompat } from "@eslint/eslintrc"
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+  baseDirectory: __dirname
+})
 
 const eslintConfig = [
   ...compat.config({
@@ -16,25 +16,31 @@ const eslintConfig = [
       "plugin:@typescript-eslint/recommended",
       "plugin:import/recommended",
       "plugin:react/recommended",
-      "plugin:prettier/recommended",
+      "plugin:prettier/recommended"
     ],
     plugins: ["react", "react-hooks", "import", "@typescript-eslint"],
     rules: {
-      "react/react-in-jsx-scope": "off",
+      "react/react-in-jsx-scope": "off"
     },
     parser: "@typescript-eslint/parser",
     parserOptions: {
       ecmaFeatures: {
-        jsx: true,
-      },
+        jsx: true
+      }
     },
     settings: {
       react: {
-        version: "detect",
+        version: "detect"
       },
+      "import/resolver": {
+        typescript: {
+          alwaysTryTypes: true,
+          project: "./tsconfig.json"
+        }
+      }
     },
-    ignorePatterns: ["node_modules/", ".next/", ".turbo/"],
-  }),
-];
+    ignorePatterns: ["node_modules/", ".next/", ".turbo/"]
+  })
+]
 
-export default eslintConfig;
+export default eslintConfig

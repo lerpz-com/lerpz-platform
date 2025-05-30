@@ -1,3 +1,3 @@
 export default function DashboardOverview() {
-  return <div></div>;
+  return <div></div>
 }
