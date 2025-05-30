@@ -12,16 +12,15 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.config({
     extends: [
-      "next",
-      "plugin:react/recommended",
-      "plugin:import/recommended",
+      "plugin:@next/next/recommended",
       "plugin:@typescript-eslint/recommended",
+      "plugin:import/recommended",
+      "plugin:react/recommended",
       "plugin:prettier/recommended",
     ],
     plugins: ["react", "react-hooks", "import", "@typescript-eslint"],
     rules: {
       "react/react-in-jsx-scope": "off",
-      "comma-dangle": ["error", "never"],
     },
     parser: "@typescript-eslint/parser",
     parserOptions: {
