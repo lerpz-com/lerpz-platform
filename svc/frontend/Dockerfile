@@ -1,54 +1,46 @@
-FROM rust:slim-bookworm AS chef
-
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y --no-install-recommends \
-    build-essential npm
-
-RUN npm install -g pnpm
-RUN --mount=type=cache,target=/root/.cargo/registry \
-    cargo install cargo-chef cargo-leptos
+FROM node:23-slim AS base
 
 
-FROM chef AS planner
-WORKDIR /chef
+FROM base AS deps
+WORKDIR /app
 
-COPY . .
-RUN cargo chef prepare --recipe-path recipe.json
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable pnpm && pnpm i --frozen-lockfile
 
 
-FROM chef AS builder
-WORKDIR /build
+FROM base AS builder
+WORKDIR /app
 
-COPY --from=planner /chef/recipe.json ./recipe.json
-RUN --mount=type=cache,target=/build/target \
-    cargo chef cook --release --recipe-path recipe.json
-
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
-    --mount=type=cache,target=/root/.pnpm-store \
-    pnpm install --frozen-lockfile
-
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN cargo leptos build --release
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN corepack enable pnpm && pnpm run build
 
 
-FROM debian:bookworm-slim AS runtime
-WORKDIR /var/app
+FROM base AS runner
+WORKDIR /app
 
-RUN groupadd -r server && \
-    useradd -r -g server -s /usr/sbin/nologin -c "The docker user" docker && \
-    chown -R docker:server /var/app
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
-COPY --chown=docker:server --from=builder /build/target/site ./site
-COPY --chown=docker:server --from=builder /build/target/release/lerpz-frontend ./
+RUN addgroup --system app && \
+    adduser --system --ingroup app --shell /bin/false --disabled-password --no-create-home lerpz && \
+    chown -R lerpz:app /app
 
-USER docker
+COPY --from=builder /app/public ./public
+
+COPY --from=builder --chown=lerpz:appuser /app/.next/standalone ./
+COPY --from=builder --chown=lerpz:appuser /app/.next/static ./.next/static
+
+USER lexentry
+
+HEALTHCHECK CMD curl --fail http://localhost:3000/ || exit 1
+
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 EXPOSE 3000
 
-ENV LEPTOS_ENV="PROD"
-ENV LEPTOS_SITE_ADDR="0.0.0.0:3000"
-ENV LEPTOS_SITE_ROOT="/var/app/site"
-
-ENTRYPOINT ["/var/app/lerpz-frontend"]
+CMD ["node", "server.js"]
