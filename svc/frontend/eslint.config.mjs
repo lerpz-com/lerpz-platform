@@ -18,7 +18,13 @@ const eslintConfig = [
       "plugin:react/recommended",
       "plugin:prettier/recommended"
     ],
-    plugins: ["react", "react-hooks", "import", "@typescript-eslint"],
+    plugins: [
+      "react",
+      "react-hooks",
+      "@tanstack/query",
+      "import",
+      "@typescript-eslint"
+    ],
     rules: {
       "react/react-in-jsx-scope": "off"
     },
