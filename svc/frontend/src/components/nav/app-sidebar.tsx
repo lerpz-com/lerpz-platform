@@ -90,13 +90,13 @@ const navGeneral = [
 const navAdmin = [
   {
     title: "Users",
-    url: "#",
+    url: "users",
     icon: User,
     isActive: false,
     items: [
       {
         title: "Invitations",
-        url: "#"
+        url: "invites"
       }
     ]
   },
