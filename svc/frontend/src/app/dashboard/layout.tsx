@@ -1,7 +1,7 @@
 "use client"
 
 import { AppSidebar } from "@/components/nav/app-sidebar"
-import { ThemeButton } from "@/components/theme-button"
+import { ThemeButton } from "@/components/theme/button"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,

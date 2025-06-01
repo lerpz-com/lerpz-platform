@@ -89,6 +89,8 @@ export const schema = z.object({
 const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
     id: "select",
+    enableSorting: false,
+    enableHiding: false,
     header: ({ table }) => (
       <div className="flex items-center justify-center">
         <Checkbox
@@ -109,17 +111,15 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           aria-label="Select row"
         />
       </div>
-    ),
-    enableSorting: false,
-    enableHiding: false
+    )
   },
   {
     accessorKey: "header",
     header: "Header",
+    enableHiding: false,
     cell: ({ row }) => {
       return <TableCellViewer item={row.original} />
-    },
-    enableHiding: false
+    }
   },
   {
     accessorKey: "type",

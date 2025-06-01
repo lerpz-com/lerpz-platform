@@ -95,6 +95,10 @@ const navAdmin = [
     isActive: false,
     items: [
       {
+        title: "List",
+        url: "list"
+      },
+      {
         title: "Invitations",
         url: "invites"
       }
@@ -128,10 +132,6 @@ const navAdmin = [
       {
         title: "Team",
         url: "team"
-      },
-      {
-        title: "Billing",
-        url: "billing"
       },
       {
         title: "Limits",
