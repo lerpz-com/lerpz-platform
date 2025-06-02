@@ -4,17 +4,23 @@ edition = "2024"
 version.workspace = true
 
 [dependencies]
+anyhow = { workspace = true, optional = true }
 axum = { workspace = true, optional = true }
 chrono = { workspace = true, optional = true }
 jsonwebtoken = { workspace = true, optional = true }
 rand = { workspace = true, optional = true }
 thiserror = { workspace = true }
+tokio = { workspace = true, optional = true }
+tracing = { workspace = true, optional = true }
 serde = { workspace = true, optional = true }
 uuid = { workspace = true, optional = true }
 
 [features]
 axum = [ 
+    "dep:anyhow",
     "dep:axum",
+    "dep:tokio",
+    "dep:tracing",
     "jwt",
 ]
 jwt = [

@@ -1,6 +1,7 @@
 use std::time::Duration;
 
-use lerpz_auth::{AppState, config::CONFIG, shutdown::shutdown_signal};
+use lerpz_auth::{AppState, config::CONFIG};
+use lerpz_utils::axum::shutdown_signal;
 
 use sqlx::postgres::PgPoolOptions;
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};

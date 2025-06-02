@@ -5,4 +5,4 @@ pub mod env;
 pub mod jwt;
 
 #[cfg(feature = "axum")]
-pub mod middelware;
+pub mod axum;
