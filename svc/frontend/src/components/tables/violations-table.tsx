@@ -117,7 +117,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     accessorKey: "type",
     header: "Section Type",
     cell: ({ row }) => (
-      <div>
+      <div className="flex gap-1">
         <Badge variant="outline" className="text-muted-foreground px-1.5">
           {row.original.type}
         </Badge>
@@ -127,12 +127,12 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
     accessorKey: "detected",
     header: "Detected",
-    cell: ({ row }) => <div>{row.getValue("detected")}</div>
+    cell: ({ row }) => <span>{row.getValue("detected")}</span>
   },
   {
     accessorKey: "reviewer",
     header: "Reviewer",
-    cell: ({ row }) => <div>{row.getValue("reviewer")}</div>
+    cell: ({ row }) => <span>{row.getValue("reviewer")}</span>
   },
   {
     accessorKey: "status",
