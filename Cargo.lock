@@ -918,12 +918,15 @@ version = "0.1.0"
 name = "lerpz-utils"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "axum",
  "chrono",
  "jsonwebtoken",
  "rand 0.9.1",
  "serde",
  "thiserror",
+ "tokio",
+ "tracing",
  "uuid",
 ]
 

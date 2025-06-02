@@ -1,7 +1,6 @@
 ///! This module handles shutdown of the server.
 
-/// A function that allows the server to gracefully shutdown when receiving a
-/// signal.
+/// A function that resolves when a shutdown signal is received.
 pub async fn shutdown_signal() {
     let ctrl_c = async {
         tokio::signal::ctrl_c()
