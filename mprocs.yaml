@@ -1,6 +1,7 @@
 procs:
   frontend:
-    shell: "cargo leptos watch"
+    cwd: "svc/frontend"
+    shell: "pnpm dev"
   auth:
     shell: "cargo run --bin lerpz-auth"
   relay:
