@@ -19,11 +19,11 @@ const eslintConfig = [
       "plugin:prettier/recommended"
     ],
     plugins: [
-      "react",
-      "react-hooks",
       "@tanstack/query",
+      "@typescript-eslint",
       "import",
-      "@typescript-eslint"
+      "react",
+      "react-hooks"
     ],
     rules: {
       "react/react-in-jsx-scope": "off"
