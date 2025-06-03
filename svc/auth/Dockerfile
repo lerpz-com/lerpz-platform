@@ -25,6 +25,8 @@ RUN --mount=type=cache,target=/build/target \
 
 COPY . .
 
+ENV SQLX_OFFLINE=true
+
 RUN cargo build --release --bin lerpz-backend
 
 

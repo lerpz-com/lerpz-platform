@@ -1,3 +1,5 @@
+name: lerpz
+
 services:
   postgres:
     image: postgres:17
@@ -7,7 +9,7 @@ services:
     domainname: postgres.lerpz.local
     environment:
       - POSTGRES_USER=lerpz
-      - POSTGRES_PASSWORD=#Password123!
+      - POSTGRES_PASSWORD=Password123
       - POSTGRES_DB=primary
     ports:
       - "5432:5432"

@@ -1,10 +1,19 @@
-use std::time::Duration;
+mod api;
+mod config;
 
-use lerpz_auth::{AppState, config::CONFIG};
+use crate::config::CONFIG;
+
 use lerpz_utils::axum::shutdown_signal;
+
+use std::time::Duration;
 
 use sqlx::postgres::PgPoolOptions;
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
+
+#[derive(Clone, Debug)]
+pub struct AppState {
+    pub pool: sqlx::PgPool,
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -17,7 +26,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     #[cfg(debug_assertions)]
     if let Err(err) = dotenvy::dotenv() {
-        tracing::warn!("no .env file found: {}", err);
+        tracing::warn!("failed loading .env file: {}", err);
     }
 
     let pool = PgPoolOptions::new()
@@ -29,7 +38,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let state = AppState { pool };
 
-    let app = lerpz_auth::api::router(state.clone());
+    let app = crate::api::router(state);
 
     let listener = tokio::net::TcpListener::bind(&CONFIG.ADDR).await?;
     tracing::info!("server started listening on {}", CONFIG.ADDR);

@@ -94,6 +94,21 @@ where
         }
     }
 
+    /// Create a new [`HandlerError`] with status code, header and message,
+    /// and fill the `instance` field with the path of the request.
+    /// 
+    /// This is a convenience function to create an error that is
+    /// specific to a request, so that the client can see which
+    /// endpoint the error occurred on.
+    pub fn new_with_parts(
+        status_code: StatusCode,
+        header: impl Into<String>,
+        message: impl Into<String>,
+        p: &Parts,
+    ) -> Self {
+        Self::new(status_code, header, message).fill_instance(p)
+    }
+
     /// An generic unauthorized response.
     ///
     /// This is a generic response for someone that tries to access an

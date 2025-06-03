@@ -6,6 +6,7 @@ version.workspace = true
 [dependencies]
 # Internal
 lerpz-utils = { path = "../../lib/utils", features = ["axum"] }
+lerpz-core = { path = "../../lib/core", features = ["db"] }
 # General
 anyhow = { workspace = true }
 axum = { workspace = true, features = ["tokio", "macros"] }
@@ -15,10 +16,7 @@ serde_json = { workspace = true }
 sqlx = { workspace = true, features = [
     "postgres",
     "runtime-tokio-native-tls",
-    "chrono",
-    "migrate",
     "macros",
-    "uuid",
 ] }
 thiserror = { workspace = true }
 tokio = { workspace = true, features = ["full"] }
