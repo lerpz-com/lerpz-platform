@@ -1,5 +1,4 @@
 mod authorize;
-mod introspect;
 mod revoke;
 mod token;
 mod userinfo;
@@ -13,7 +12,6 @@ pub fn router(state: AppState) -> axum::Router<AppState> {
         .route("/authorize", get(authorize::handler))
         .route("/token", post(token::handler))
         .route("/userinfo", get(userinfo::handler))
-        .route("/introspect", post(introspect::handler))
         .route("/revoke", post(revoke::handler))
         .with_state(state)
 }

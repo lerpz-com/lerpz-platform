@@ -7,8 +7,6 @@
 //! New User Journey:
 //! 1. POST /register → Create account
 //! 2. GET /verify-email → Verify email
-//! 3. GET /oauth/authorize → Login & authorize app
-//! 4. POST /oauth/token → Get access token
 //!
 //! Existing User Journey:
 //! 1. GET /oauth/authorize → Login & authorize app  
@@ -17,15 +15,12 @@
 //! Password Recovery:
 //! 1. POST /forgot-password → Request reset
 //! 2. POST /reset-password → Set new password
-//!
-//! Account Management:
-//! 1. GET /verify-email → Verify email
 
+mod email_verify;
 mod oauth;
 mod pwd_forgot;
 mod pwd_reset;
 mod register;
-mod verify_email;
 
 use crate::AppState;
 
@@ -35,6 +30,6 @@ pub fn router(state: AppState) -> axum::Router {
         .route("/register", axum::routing::post(register::handler))
         .route("/forgot-password", axum::routing::post(pwd_forgot::handler))
         .route("/reset-password", axum::routing::post(pwd_reset::handler))
-        .route("/verify-email", axum::routing::get(verify_email::handler))
+        .route("/verify-email", axum::routing::get(email_verify::handler))
         .with_state(state)
 }

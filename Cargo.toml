@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["svc/*", "utils"]
+members = [ "lib/*", "svc/*"]
 exclude = ["svc/frontend"]
 
 [workspace.package]
