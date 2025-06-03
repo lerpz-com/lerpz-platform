@@ -29,9 +29,8 @@ pub async fn hash_pwd(pwd: impl Into<String>, salt: impl Into<String>) -> Result
 /// You can use this function together with the [`PwdParts::new`] method to
 /// create a password using the latest scheme.
 pub async fn hash_pwd_parts(pwd_parts: PwdParts) -> Result<String> {
-    let scheme = get_scheme(&pwd_parts.scheme)?;
     tokio::task::spawn_blocking(move || {
-        scheme
+        get_scheme(&pwd_parts.scheme)?
             .hash(&pwd_parts.pwd, &pwd_parts.salt)
             .map(|hash| format!("#{}#{}", pwd_parts.scheme, hash))
             .map_err(Error::SchemeError)
@@ -78,9 +77,8 @@ pub async fn validate_pwd_parts(
     let pwd_ref = pwd_ref.into();
     let pwd_salt = pwd_salt.map(|v| v.into());
 
-    let scheme = get_scheme(&hash_parts.scheme)?;
     tokio::task::spawn_blocking(move || {
-        scheme
+        get_scheme(&hash_parts.scheme)?
             .validate(&hash_parts.hash, &pwd_ref, pwd_salt.as_deref())
             .map_err(Error::SchemeError)
     })
