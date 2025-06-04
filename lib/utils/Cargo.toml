@@ -31,6 +31,7 @@ axum = [
     "dep:serde",
     "dep:sqlx",
     "dep:validator",
+    "dep:uuid",
 ]
 jwt = [
     "dep:jsonwebtoken",
@@ -40,6 +41,7 @@ jwt = [
     "chrono/serde",
 ]
 pwd = [
+    "dep:argon2",
     "dep:rand",
     "dep:uuid",
     "dep:validator",

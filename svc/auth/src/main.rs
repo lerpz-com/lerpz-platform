@@ -33,7 +33,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
         .unwrap_or_else(|err| panic!("can't connect to database: {err}"));
 
-    let state = AppState { pool };
+    let state = AppState { database: pool };
 
     let app = crate::api::router(state);
 

@@ -7,7 +7,7 @@ use argon2::password_hash::Error as Argon2Error;
 /// Used by this module to return the same error for each [`Result`].
 pub type Result<T> = std::result::Result<T, Error>;
 
-/// All the different errors the `scheme` module might produce.
+/// All errors the `shceme` module might produce.
 #[derive(thiserror::Error, Debug)]
 #[non_exhaustive]
 pub enum Error {

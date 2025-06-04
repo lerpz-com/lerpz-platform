@@ -1,6 +1,9 @@
 //! Error module for endpoint handlers.
 //!
-//! This module will follow the [Problem Details for HTTP APIs](https://datatracker.ietf.org/doc/html/rfc9457) specification.
+//! This module follows the [Problem Details for HTTP APIs]
+//! (https://datatracker.ietf.org/doc/html/rfc9457) specification.
+
+use std::borrow::Cow;
 
 use axum::{
     http::{request::Parts, StatusCode}, response::{IntoResponse, Response}, Json
@@ -26,13 +29,13 @@ where
     ///
     /// Short and precise text that gives an indication of what the error is
     /// about. This should not change between occurrences.
-    title: String,
+    title: Cow<'static, str>,
     /// A human-readable detailed error explanation.
     ///
     /// A more detailed description of what wen't wrong. This is unlike `title`,
     /// allowed to change between occurrances.
-    detail: String,
-    /// A URI reference that specifies to the problem type.
+    detail: Cow<'static, str>,
+    /// A URI reference that is specific to the problem type.
     /// 
     /// Does not get send to the client if it's [`None`]. This is a unique
     /// identifier for the error. This will usually be the endpoint that the
@@ -79,14 +82,14 @@ where
     /// All optional fields are `None` by default. These can be set using
     /// functions found on the struct.
     pub fn new(
-        status_code: StatusCode,
-        header: impl Into<String>,
-        message: impl Into<String>,
+        status: StatusCode,
+        title: impl Into<Cow<'static, str>>,
+        detail: impl Into<Cow<'static, str>>,
     ) -> Self {
         Self {
-            status: status_code,
-            title: header.into(),
-            detail: message.into(),
+            status,
+            title: title.into(),
+            detail: detail.into(),
             instance: None,
             extension: None,
             log_id: None,
@@ -101,12 +104,12 @@ where
     /// specific to a request, so that the client can see which
     /// endpoint the error occurred on.
     pub fn new_with_parts(
-        status_code: StatusCode,
-        header: impl Into<String>,
-        message: impl Into<String>,
+        status: StatusCode,
+        title: impl Into<Cow<'static, str>>,
+        detail: impl Into<Cow<'static, str>>,
         p: &Parts,
     ) -> Self {
-        Self::new(status_code, header, message).fill_instance(p)
+        Self::new(status, title, detail).fill_instance(p)
     }
 
     /// An generic unauthorized response.
@@ -116,8 +119,8 @@ where
     pub fn unauthorized() -> Self {
         Self::new(
             StatusCode::UNAUTHORIZED,
-            String::from("Unauthorized for resource"),
-            String::from("You do not have permission to access this resource."),
+            Cow::from("Unauthorized for resource"),
+            Cow::from("You do not have permission to access this resource."),
         )
     }
 
@@ -219,8 +222,8 @@ where
     fn from(value: E) -> Self {
         Self {
             status: StatusCode::INTERNAL_SERVER_ERROR,
-            title: String::from("Something went wrong"),
-            detail: String::from("If this issue persists, please contact an administrator."),
+            title: "Something went wrong".into(),
+            detail: "If this issue persists, please contact an administrator.".into(),
             instance: None,
             extension: None,
             log_id: None, // This will be set in [`HandlerError::into_response()`] if `inner` is [`Some`].
