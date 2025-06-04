@@ -1,23 +1,25 @@
 use axum::{Json, http::StatusCode};
 use lerpz_utils::axum::{
     error::{HandlerError, HandlerResult},
-    middelware::db::DbConn,
+    middelware::db::Database,
 };
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 struct RegisterRequest {
     email: String,
     username: String,
 }
 
-pub async fn handler(DbConn(mut pool): DbConn, Json(body): Json<RegisterRequest>) -> HandlerResult<()> {
+#[axum::debug_handler]
+pub async fn handler(Database(mut conn): Database, Json(body): Json<RegisterRequest>) -> HandlerResult<()> {
     sqlx::query_as!(
         lerpz_core::db::User,
         "INSERT INTO users (email, username) VALUES ($1, $2)",
         body.email,
         body.username,
     )
-    .fetch_one(&mut *pool)
+    .fetch_one(&mut *conn)
     .await
     .map_err(|err| match err {
         sqlx::Error::Database(db_err) => match db_err.kind() {

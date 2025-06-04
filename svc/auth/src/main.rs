@@ -1,7 +1,9 @@
 mod api;
 mod config;
+mod state;
 
 use crate::config::CONFIG;
+use crate::state::AppState;
 
 use lerpz_utils::axum::shutdown_signal;
 
@@ -9,11 +11,6 @@ use std::time::Duration;
 
 use sqlx::postgres::PgPoolOptions;
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
-
-#[derive(Clone, Debug)]
-pub struct AppState {
-    pub pool: sqlx::PgPool,
-}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

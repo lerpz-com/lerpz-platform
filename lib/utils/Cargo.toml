@@ -28,6 +28,7 @@ axum = [
     "dep:axum",
     "dep:tokio",
     "dep:tracing",
+    "dep:serde",
     "dep:sqlx",
     "dep:validator",
 ]

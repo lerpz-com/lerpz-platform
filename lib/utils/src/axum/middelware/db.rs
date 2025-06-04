@@ -6,13 +6,13 @@ use sqlx::{PgPool, Postgres, pool::PoolConnection};
 
 use crate::axum::error::HandlerError;
 
-/// A wrapper around a [`PoolConnection`] to make it extractable from requests.
+/// A wrapper around a [`PoolConnection`] to make it extractable from request state.
 ///
 /// This is useful when you want to use a database connection in your handlers.
 /// We force the connection type to be a Postgres connection here.
-pub struct DbConn(pub PoolConnection<Postgres>);
+pub struct Database(pub PoolConnection<Postgres>);
 
-impl<S> FromRequestParts<S> for DbConn
+impl<S> FromRequestParts<S> for Database
 where
     PgPool: FromRef<S>,
     S: Send + Sync,
