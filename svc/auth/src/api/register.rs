@@ -33,7 +33,7 @@ pub async fn handler(
         password_hash,
         password_salt
     )
-    .fetch_one(&mut *db)
+    .execute(&mut *db)
     .await
     .map_err(|err| match err {
         sqlx::Error::Database(db_err) => match db_err.kind() {

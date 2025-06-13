@@ -5,6 +5,7 @@ mod state;
 use crate::config::CONFIG;
 use crate::state::AppState;
 
+use axum::Router;
 use lerpz_utils::axum::shutdown_signal;
 
 use std::time::Duration;
@@ -22,8 +23,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .init();
 
     #[cfg(debug_assertions)]
-    if let Err(err) = dotenvy::dotenv() {
-        tracing::warn!("failed loading .env file: {}", err);
+    {
+        use std::path::PathBuf;
+
+        let env_path = PathBuf::from_iter([env!("CARGO_MANIFEST_DIR"), ".env"]);
+        if let Err(err) = dotenvy::from_path(&env_path) {
+            tracing::warn!("failed loading .env file: {}", err);
+        }
     }
 
     let pool = PgPoolOptions::new()
@@ -35,7 +41,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let state = AppState { database: pool };
 
-    let app = crate::api::router(state);
+    let app = Router::new().nest("/api", crate::api::router(state));
 
     let listener = tokio::net::TcpListener::bind(&CONFIG.ADDR).await?;
     tracing::info!("server started listening on {}", CONFIG.ADDR);
