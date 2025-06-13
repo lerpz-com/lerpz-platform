@@ -23,14 +23,15 @@ pub async fn handler(
 ) -> HandlerResult<()> {
     let mut db = state.database.acquire().await?;
 
-    let salt = Uuid::new_v4();
-    let password_hash = hash_pwd(body.password, salt).await?;
+    let password_salt = Uuid::new_v4().to_string();
+    let password_hash = hash_pwd(body.password, &password_salt).await?;
 
     sqlx::query!(
-        "INSERT INTO users (email, username, password_hash) VALUES ($1, $2, $3)",
+        "INSERT INTO users (email, username, password_hash, password_salt) VALUES ($1, $2, $3, $4)",
         body.email,
         body.username,
         password_hash,
+        password_salt
     )
     .fetch_one(&mut *db)
     .await
