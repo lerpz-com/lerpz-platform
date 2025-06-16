@@ -27,9 +27,14 @@ pub async fn handler(
     let password_hash = hash_pwd(body.password, &password_salt).await?;
 
     sqlx::query!(
-        "INSERT INTO users (email, username, password_hash, password_salt) VALUES ($1, $2, $3, $4)",
-        body.email,
+        "INSERT INTO users (
+        username,
+        primary_email,
+        password_hash,
+        password_salt
+        ) VALUES ($1, $2, $3, $4)",
         body.username,
+        body.email,
         password_hash,
         password_salt
     )

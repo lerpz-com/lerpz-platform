@@ -8,15 +8,29 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE TABLE IF NOT EXISTS organizations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(64) NOT NULL UNIQUE,
+    description TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_timestamp
+    BEFORE UPDATE ON organizations
+    FOR EACH ROW
+    EXECUTE FUNCTION update_timestamp();
+
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    email VARCHAR(64) NOT NULL UNIQUE,
     username VARCHAR(32) NOT NULL UNIQUE,
+    primary_email VARCHAR(64) NOT NULL UNIQUE,
     password_hash VARCHAR(128) NOT NULL,
     password_salt VARCHAR(64) NOT NULL,
     avatar VARCHAR(256) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    organization_id UUID DEFAULT NULL REFERENCES organizations(id)
 );
 
 CREATE TRIGGER update_timestamp
@@ -30,8 +44,7 @@ CREATE TABLE IF NOT EXISTS oauth_clients (
     name VARCHAR(64) NOT NULL UNIQUE,
     description TEXT DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    owner_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TRIGGER update_timestamp
