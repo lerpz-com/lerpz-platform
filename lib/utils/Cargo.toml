@@ -9,15 +9,15 @@ axum = { workspace = true, optional = true }
 chrono = { workspace = true, optional = true }
 jsonwebtoken = { workspace = true, optional = true }
 rand = { workspace = true, optional = true }
-thiserror = { workspace = true }
+thiserror = { workspace = true, optional = true }
 tokio = { workspace = true, optional = true }
 tracing = { workspace = true, optional = true }
 serde = { workspace = true, optional = true }
 sqlx = { workspace = true, optional = true }
 uuid = { workspace = true, optional = true }
-validator = { workspace = true, optional = true, features = ["derive"] }
-regex = { workspace = true }
-argon2 = { workspace = true, optional = true, features = ["std"] }
+validator = { workspace = true, optional = true }
+regex = { workspace = true, optional = true }
+argon2 = { workspace = true, optional = true }
 
 [dev-dependencies]
 dotenvy = { workspace = true }
@@ -26,15 +26,18 @@ dotenvy = { workspace = true }
 axum = [ 
     "dep:anyhow",
     "dep:axum",
+    "dep:thiserror",
     "dep:tokio",
     "dep:tracing",
     "dep:serde",
     "dep:sqlx",
     "dep:validator",
     "dep:uuid",
+    "validator/derive",
 ]
 jwt = [
     "dep:jsonwebtoken",
+    "dep:thiserror",
     "dep:rand",
     "dep:serde",
     "dep:uuid",
@@ -42,7 +45,10 @@ jwt = [
 ]
 pwd = [
     "dep:argon2",
+    "dep:thiserror",
     "dep:rand",
+    "dep:regex",
     "dep:uuid",
     "dep:validator",
+    "argon2/std",
 ]
