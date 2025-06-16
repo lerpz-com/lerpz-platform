@@ -4,19 +4,26 @@ FROM node:23-slim AS base
 FROM base AS deps
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml ./
-RUN corepack enable pnpm && pnpm i --frozen-lockfile
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+COPY ./svc/frontend/package.json ./svc/frontend/
+
+RUN --mount=type=cache,target=/app/.pnpm-store \
+    corepack enable pnpm && pnpm i --frozen-lockfile
 
 
 FROM base AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY --from=deps /app/svc/frontend/node_modules ./svc/frontend/node_modules
+
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+COPY ./svc/frontend ./svc/frontend
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN corepack enable pnpm && pnpm run build
+RUN --mount=type=cache,target=/app/svc/frontend/.next \
+    corepack enable pnpm && pnpm run build
 
 
 FROM base AS runner
@@ -29,12 +36,12 @@ RUN addgroup --system app && \
     adduser --system --ingroup app --shell /bin/false --disabled-password --no-create-home lerpz && \
     chown -R lerpz:app /app
 
-COPY --from=builder /app/public ./public
 
-COPY --from=builder --chown=lerpz:appuser /app/.next/standalone ./
-COPY --from=builder --chown=lerpz:appuser /app/.next/static ./.next/static
+COPY --from=builder --chown=lerpz:app /app/svc/frontend/.next/standalone ./
+COPY --from=builder --chown=lerpz:app /app/svc/frontend/.next/static ./.next/static
+COPY --from=builder --chown=lerpz:app /app/svc/frontend/public ./public
 
-USER lexentry
+USER lerpz
 
 HEALTHCHECK CMD curl --fail http://localhost:3000/ || exit 1
 

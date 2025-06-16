@@ -1,0 +1,18 @@
+{
+  "name": "@lerpz/platform",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter frontend dev",
+    "build": "pnpm --filter frontend build",
+    "start": "pnpm --filter frontend start",
+    "lint": "pnpm --filter frontend lint"
+  },
+  "packageManager": "pnpm@10.11.0",
+  "devDependencies": {
+    "@types/node": "^24"
+  },
+  "engines": {
+    "node": "^23.0.0"
+  }
+}

@@ -39,6 +39,6 @@ COPY --chown=docker:server --from=builder /build/target/release/lerpz-backend ./
 
 USER docker
 
-EXPOSE 5000
+EXPOSE 3002
 
-ENTRYPOINT ["/var/app/lerpz-backend"]
+ENTRYPOINT ["/var/app/lerpz-relay"]

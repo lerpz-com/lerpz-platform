@@ -1,9 +1,9 @@
 # Rust
-/target
+/target/
 
 # Node 
-/.next/
-**/node_modules
+**/.next/
+**/node_modules/
 .pnpm-debug.log*
 npm-debug.log*
 next-env.d.ts

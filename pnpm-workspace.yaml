@@ -1,2 +1,2 @@
 packages:
-- 'svc/*'
+- 'svc/frontend'
