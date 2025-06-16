@@ -1,13 +1,17 @@
 # Rust
 /target
 
-# Npm 
-/node_modules
+# Node 
+/.next/
+**/node_modules
+.pnpm-debug.log*
+npm-debug.log*
+next-env.d.ts
 
 # Environment files
 .env
-!.env.docker
-!.env.example
+!**/.env.docker
+!**/.env.example
 
 # Secrets
 /certs/*
