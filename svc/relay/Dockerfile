@@ -2,7 +2,7 @@ FROM rust:slim-bookworm AS chef
 
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y --no-install-recommends \
-    build-essential
+    build-essential pkg-config libssl-dev
 
 RUN --mount=type=cache,target=/root/.cargo/registry \
     cargo install cargo-chef
@@ -25,7 +25,7 @@ RUN --mount=type=cache,target=/build/target \
 
 COPY . .
 
-RUN cargo build --release --bin lerpz-backend
+RUN cargo build --release --bin lerpz-relay
 
 
 FROM debian:bookworm-slim AS runtime
@@ -35,7 +35,7 @@ RUN groupadd -r server && \
     useradd -r -g server -s /usr/sbin/nologin -c "The docker user" docker && \
     chown -R docker:server /var/app
 
-COPY --chown=docker:server --from=builder /build/target/release/lerpz-backend ./
+COPY --chown=docker:server --from=builder /build/target/release/lerpz-relay ./
 
 USER docker
 

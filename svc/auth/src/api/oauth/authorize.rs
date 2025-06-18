@@ -24,17 +24,17 @@ pub struct AuthorizationCodeGrant {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ClientCredentialsGrant {
   grant_type: String,
-  scope: String,
   client_id: String,
   client_secret: String, 
+  scope: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ImplicitFlowGrant {
   grant_type: String,
-  scope: String,
   client_id: String,
   client_secret: String, 
+  scope: String,
 }
 
 
