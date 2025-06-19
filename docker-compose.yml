@@ -76,7 +76,7 @@ services:
             - lerpz.local
 
   lerpz-frontend:
-    container_name: lerpz-frontend
+    container_name: frontend
     restart: always
     init: true
     build:
@@ -105,7 +105,7 @@ services:
           - lerpz.local
 
   lerpz-auth:
-    container_name: lerpz-auth
+    container_name: auth
     restart: always
     init: true
     build:

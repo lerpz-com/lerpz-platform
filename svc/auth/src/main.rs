@@ -8,9 +8,8 @@ use crate::state::AppState;
 use axum::Router;
 use lerpz_utils::axum::shutdown_signal;
 
-use std::time::Duration;
+use std::{sync::Arc, time::Duration};
 
-use sqlx::postgres::PgPoolOptions;
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
 
 #[tokio::main]
@@ -32,14 +31,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    let pool = PgPoolOptions::new()
+    let database_pool = sqlx::postgres::PgPoolOptions::new()
         .max_connections(5)
         .acquire_timeout(Duration::from_secs(3))
         .connect(&CONFIG.DATABASE_URL)
         .await
         .unwrap_or_else(|err| panic!("can't connect to database: {err}"));
 
-    let state = AppState { database: pool };
+    let redis_pool = Arc::new(
+        redis::Client::open(CONFIG.REDIS_URL.clone())
+            .unwrap_or_else(|err| panic!("can't connect to redis: {err}")),
+    );
+
+    let state = AppState {
+        database: database_pool,
+        redis: redis_pool,
+    };
 
     let app = Router::new().nest("/api", crate::api::router(state));
 

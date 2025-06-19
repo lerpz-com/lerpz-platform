@@ -11,6 +11,7 @@ lerpz-utils = { path = "../../lib/utils", features = ["axum", "pwd"] }
 anyhow = { workspace = true }
 axum = { workspace = true, features = ["tokio", "macros"] }
 dotenvy = { workspace = true }
+redis = { workspace = true, features = ["tokio-comp"] }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
 sqlx = { workspace = true, features = [

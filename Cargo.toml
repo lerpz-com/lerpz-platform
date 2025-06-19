@@ -8,6 +8,7 @@ version = "0.1.0"
 
 [workspace.dependencies]
 # Database
+redis = "0.32"
 sqlx = "0.8"
 # Axum, Tokio and Tower
 axum = "0.8"
