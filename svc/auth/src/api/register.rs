@@ -1,25 +1,40 @@
 use crate::state::AppState;
 
 use lerpz_utils::{
-    axum::error::{HandlerError, HandlerResult},
+    axum::{
+        error::{HandlerError, HandlerResult},
+        middelware::validate::Validated,
+    },
     pwd::hash_pwd,
 };
 
 use axum::{Json, extract::State, http::StatusCode};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use uuid::Uuid;
+use validator::Validate;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize, Validate)]
 pub struct RegisterRequest {
+    #[validate(email(message = "Invalid email format"))]
     email: String,
+    #[validate(length(
+        min = 3,
+        max = 32,
+        message = "Username must be between 3 and 32 characters"
+    ))]
     username: String,
+    #[validate(length(
+        min = 8,
+        max = 128,
+        message = "Password must be between 8 and 128 characters"
+    ))]
     password: String,
 }
 
 #[axum::debug_handler]
 pub async fn handler(
     State(state): State<AppState>,
-    Json(body): Json<RegisterRequest>,
+    Validated(Json(body)): Validated<Json<RegisterRequest>>,
 ) -> HandlerResult<()> {
     let mut db = state.database.acquire().await?;
 
