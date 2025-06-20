@@ -259,7 +259,7 @@ where
             detail: "If this issue persists, please contact an administrator.".into(),
             instance: None,
             extension: None,
-            log_id: None, // This will be set in [`HandlerError::into_response()`] if `inner` is [`Some`].
+            log_id: None, // This will be set in HandlerError::into_response() if `inner` is `Some`.
             inner: Some(value.into()),
         }
     }
