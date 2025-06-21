@@ -978,6 +978,7 @@ dependencies = [
  "redis",
  "serde",
  "serde_json",
+ "serde_urlencoded",
  "sqlx",
  "thiserror",
  "tokio",
@@ -985,6 +986,7 @@ dependencies = [
  "tower-http",
  "tracing",
  "tracing-subscriber",
+ "url",
  "uuid",
  "validator",
 ]

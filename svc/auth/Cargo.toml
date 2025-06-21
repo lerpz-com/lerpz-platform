@@ -14,6 +14,7 @@ dotenvy = { workspace = true }
 redis = { workspace = true, features = ["tokio-native-tls-comp"] }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
+serde_urlencoded = { workspace = true }
 sqlx = { workspace = true, features = [
     "postgres",
     "runtime-tokio-native-tls",
@@ -25,5 +26,6 @@ tower = { workspace = true }
 tower-http = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true, features = ["env-filter"] }
+url = { workspace = true }
 uuid = { workspace = true, features = ["v4", "serde"] }
 validator = { workspace = true, features = ["derive"] }
