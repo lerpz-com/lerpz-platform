@@ -13,7 +13,7 @@ use serde::Deserialize;
 use uuid::Uuid;
 use validator::Validate;
 
-#[derive(Debug, Deserialize, Validate)]
+#[derive(Deserialize, Debug, Validate)]
 pub struct RegisterRequest {
     #[validate(email(message = "Invalid email format"))]
     email: String,

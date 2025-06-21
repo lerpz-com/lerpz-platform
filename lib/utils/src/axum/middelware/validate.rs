@@ -16,9 +16,12 @@ use crate::axum::error::{HandlerError, HandlerResult};
 pub struct Validated<T>(pub T);
 
 /// Error response for validation errors.
+/// 
+/// This is used to return validation errors in a structured format. The format
+/// is a map of field names to a list of errors for that field.
 #[derive(Serialize, Debug, Clone)]
 pub struct ValidationErrorResponse {
-    pub errors: HashMap<Cow<'static, str>, FieldErrors>,
+    pub validation_errors: HashMap<Cow<'static, str>, FieldErrors>,
 }
 
 /// Errors in the individual fields.
@@ -34,7 +37,7 @@ impl From<ValidationErrors> for ValidationErrorResponse {
             error_map.insert(field.into(), kind.into());
         }
 
-        Self { errors: error_map }
+        Self { validation_errors: error_map }
     }
 }
 
