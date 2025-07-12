@@ -13,7 +13,9 @@ terraform
 # Rust & Node
 target
 node_modules
+.next
 
 # Development
 **/certs
-**/.env.example
+**/.env
+**/.env.*

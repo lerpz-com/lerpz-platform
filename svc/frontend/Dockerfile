@@ -22,7 +22,7 @@ COPY ./svc/frontend ./svc/frontend
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN --mount=type=cache,target=/app/svc/frontend/.next \
+RUN --mount=type=cache,target=/app/svc/frontend/.next/cache \
     corepack enable pnpm && pnpm run build
 
 
@@ -35,7 +35,6 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system app && \
     adduser --system --ingroup app --shell /bin/false --disabled-password --no-create-home lerpz && \
     chown -R lerpz:app /app
-
 
 COPY --from=builder --chown=lerpz:app /app/svc/frontend/.next/standalone ./
 COPY --from=builder --chown=lerpz:app /app/svc/frontend/.next/static ./.next/static
