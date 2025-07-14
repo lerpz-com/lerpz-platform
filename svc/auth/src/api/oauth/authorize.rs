@@ -2,7 +2,6 @@ use lerpz_utils::axum::error::{HandlerError, HandlerResult};
 
 use axum::{http::StatusCode, response::Redirect, Form};
 use serde::{Deserialize, Serialize};
-use serde_urlencoded::to_string;
 use url::Url;
 
 /// Represents an OAuth 2.0 request to the authorization endpoint.
@@ -125,14 +124,12 @@ fn extend_url_query<T: Serialize>(url_str: &str, params: &T) -> Result<Url, Hand
         .map_err(|_| HandlerError::new(
             StatusCode::BAD_REQUEST,
             "Invalid redirect URI",
-            "The redirect URI provided is not valid."
+            "The redirect URI provided is not a valid URI."
         ))?;
     
     let query_string = serde_urlencoded::to_string(params)?;
-    
     if !query_string.is_empty() {
-        if url.query().is_some() {
-            let existing_query = url.query().unwrap();
+        if let Some(existing_query) = url.query() {
             url.set_query(Some(&format!("{}&{}", existing_query, query_string)));
         } else {
             url.set_query(Some(&query_string));
