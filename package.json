@@ -8,8 +8,9 @@
     "start": "pnpm --filter frontend start",
     "lint": "pnpm --filter frontend lint"
   },
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@10.13.1",
   "devDependencies": {
+    "@postgrestools/postgrestools": "^0.8.1",
     "@types/node": "^24"
   },
   "engines": {

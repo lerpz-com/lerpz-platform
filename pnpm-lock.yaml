@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@postgrestools/postgrestools':
+        specifier: ^0.8.1
+        version: 0.8.1
       '@types/node':
         specifier: ^24
         version: 24.0.3
@@ -468,6 +471,47 @@ packages:
   '@pkgr/core@0.2.7':
     resolution: {integrity: sha512-YLT9Zo3oNPJoBjBc4q8G2mjU4tqIbf5CEOORbUUr48dCD9q3umJ3IPlVqOqDakPfd2HuwccBaqlGhN4Gmr5OWg==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
+
+  '@postgrestools/cli-aarch64-apple-darwin@0.8.1':
+    resolution: {integrity: sha512-2+N55BrZlpTp7TS4HZauWGI5i7xkFl9Oztjh/ZjuMohWJW7J8XJlq/stoMev/Zrr03MUPGjWIxT/xS1YVPxL4A==}
+    engines: {node: '>=20'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@postgrestools/cli-aarch64-linux-gnu@0.8.1':
+    resolution: {integrity: sha512-i+BXd+nQEsPd19AQ1KCDLTi3fMBNfHSmIZ4lJ7QVeZIHhFTdJpF/71fNkBDjb4ITJ7tFLbUToU7ChUQq/nZ6Zw==}
+    engines: {node: '>=20'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@postgrestools/cli-aarch64-windows-msvc@0.8.1':
+    resolution: {integrity: sha512-1bH1BL34D255hLC1b3Za2Q4apNUnjgDMrWtJk7s6ZdClUpptk/MUyCChGoxJ37URyLRtBNK5EUQHBHzn2/E3SQ==}
+    engines: {node: '>=20'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@postgrestools/cli-x86_64-apple-darwin@0.8.1':
+    resolution: {integrity: sha512-H6ZJuG+WMk0BwXlBvc362SAdVDGHUoA9ZZ7T9Jr5v4bY8dEgtCFbryuj2nw29kT97xxaZ33kgDGuFkr8QAdfFg==}
+    engines: {node: '>=20'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@postgrestools/cli-x86_64-linux-gnu@0.8.1':
+    resolution: {integrity: sha512-RNXyyr0z7vWwVtpYrvNFrOidChlofMLQJ3zJmZj6GL40MOFaGVAEbJOPKyzSkUzxX/R61vRoceQwgpiJhKV3zg==}
+    engines: {node: '>=20'}
+    cpu: [x64]
+    os: [linux]
+
+  '@postgrestools/cli-x86_64-windows-msvc@0.8.1':
+    resolution: {integrity: sha512-l2I/bXBjjh02pul3A3KCrj6vf2klRjD5FdvBYCWpeKfBb6xKwyPLNnp+aGtUr6UjUSnC7ZXeGIHpL4ZmPw7DwA==}
+    engines: {node: '>=20'}
+    cpu: [x64]
+    os: [win32]
+
+  '@postgrestools/postgrestools@0.8.1':
+    resolution: {integrity: sha512-4jNdoxtzYrdjdZt73eIB3ZoW082uZK+acdFas1o3u9bbEac2BaayMbWq7hH5C0MtqX6FyUrzdwwj6nHFE2GYqA==}
+    engines: {node: '>=20'}
+    hasBin: true
 
   '@radix-ui/number@1.1.1':
     resolution: {integrity: sha512-MkKCwxlXTgz6CFoJx3pCwn07GKp36+aZyu/u2Ln2VrA5DcdyCZkASEDBTd8x5whTQQL5CiYf4prXKLcgQdv29g==}
@@ -2914,6 +2958,33 @@ snapshots:
   '@nolyfill/is-core-module@1.0.39': {}
 
   '@pkgr/core@0.2.7': {}
+
+  '@postgrestools/cli-aarch64-apple-darwin@0.8.1':
+    optional: true
+
+  '@postgrestools/cli-aarch64-linux-gnu@0.8.1':
+    optional: true
+
+  '@postgrestools/cli-aarch64-windows-msvc@0.8.1':
+    optional: true
+
+  '@postgrestools/cli-x86_64-apple-darwin@0.8.1':
+    optional: true
+
+  '@postgrestools/cli-x86_64-linux-gnu@0.8.1':
+    optional: true
+
+  '@postgrestools/cli-x86_64-windows-msvc@0.8.1':
+    optional: true
+
+  '@postgrestools/postgrestools@0.8.1':
+    optionalDependencies:
+      '@postgrestools/cli-aarch64-apple-darwin': 0.8.1
+      '@postgrestools/cli-aarch64-linux-gnu': 0.8.1
+      '@postgrestools/cli-aarch64-windows-msvc': 0.8.1
+      '@postgrestools/cli-x86_64-apple-darwin': 0.8.1
+      '@postgrestools/cli-x86_64-linux-gnu': 0.8.1
+      '@postgrestools/cli-x86_64-windows-msvc': 0.8.1
 
   '@radix-ui/number@1.1.1': {}
 
