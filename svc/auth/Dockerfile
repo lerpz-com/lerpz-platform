@@ -4,7 +4,7 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y --no-install-recommends \
     build-essential pkg-config libssl-dev
 
-RUN --mount=type=cache,target=/root/.cargo/registry \
+RUN --mount=type=cache,target=/root/.cargo/registry/cache \
     cargo install cargo-chef
 
 
