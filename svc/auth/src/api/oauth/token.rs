@@ -16,7 +16,8 @@ pub enum GrantRequest {
 
 /// A request to exchange an authorization code for an access token.
 ///
-/// Source: https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.3
+/// Sources:
+/// - https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.3
 #[derive(Deserialize, Debug)]
 pub struct AuthorizationCodeRequest {
     code: String,
@@ -26,7 +27,8 @@ pub struct AuthorizationCodeRequest {
 
 /// A request to exchange username and password for an access token.
 ///
-/// Source: https://datatracker.ietf.org/doc/html/rfc6749#section-4.3.2
+/// Sources:
+/// - https://datatracker.ietf.org/doc/html/rfc6749#section-4.3.2
 #[derive(Deserialize, Debug)]
 pub struct PasswordCredentialsRequest {
     password: String,
@@ -36,7 +38,8 @@ pub struct PasswordCredentialsRequest {
 
 /// A request to exchange client credentials for an access token.
 ///
-/// Source: https://datatracker.ietf.org/doc/html/rfc6749#section-4.4.2
+/// Sources:
+/// - https://datatracker.ietf.org/doc/html/rfc6749#section-4.4.2
 #[derive(Deserialize, Debug)]
 pub struct ClientCredentialsRequest {
     scope: Option<String>,
@@ -44,7 +47,8 @@ pub struct ClientCredentialsRequest {
 
 /// A request to exchange username and password for an access token.
 ///
-/// Source: https://datatracker.ietf.org/doc/html/rfc6749#section-6
+/// Sources:
+/// - https://datatracker.ietf.org/doc/html/rfc6749#section-6
 #[derive(Deserialize, Debug)]
 pub struct RefreshTokenRequest {
     refresh_token: String,
@@ -53,14 +57,16 @@ pub struct RefreshTokenRequest {
 
 /// A response containing an access token, refresh token, and other metadata.
 ///
-/// Source: https://datatracker.ietf.org/doc/html/rfc6749#section-5.1
+/// Sources:
+/// - https://datatracker.ietf.org/doc/html/rfc6749#section-5.1
 #[derive(Serialize, Debug)]
 pub struct AccessTokenResponse {
     /// The access token issued by the authorization server.
     access_token: String,
     /// The type of the token issued, typically "Bearer".
     ///
-    /// Source: https://datatracker.ietf.org/doc/html/rfc6749#section-7.1
+    /// Sources:
+    /// - https://datatracker.ietf.org/doc/html/rfc6749#section-7.1
     token_type: String,
     /// The lifetime in seconds of the access token.
     ///

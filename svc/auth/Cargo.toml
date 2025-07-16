@@ -10,6 +10,7 @@ lerpz-utils = { path = "../../lib/utils", features = ["axum", "pwd"] }
 # General
 anyhow = { workspace = true }
 axum = { workspace = true, features = ["tokio", "macros"] }
+base64 = { workspace = true }
 dotenvy = { workspace = true }
 redis = { workspace = true, features = ["tokio-native-tls-comp"] }
 serde = { workspace = true, features = ["derive"] }
