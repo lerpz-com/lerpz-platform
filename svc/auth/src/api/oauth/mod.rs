@@ -1,8 +1,8 @@
-//! This is the implementation of the OAuth 2.0 authorization server.
+//! This is the implementation of the OAuth 2.0 framework (server).
 //! 
-//! The implicit grant flow is deprecated and not implemented in this version.
-//! Instead the authorization code flow + PKCE is used, which is more secure and
-//! recommended for public clients.
+//! There is an in-progress effort to update the framework to OAuth 2.1. Flows
+//! like the `implicit grant` and `password grant` are not implemented as they
+//! are deprecated and will be removed in the future update of the framework.
 //! 
 //! Sources:
 //! - https://datatracker.ietf.org/doc/html/rfc6749
@@ -17,10 +17,7 @@ mod revoke;
 mod token;
 mod userinfo;
 
-/// Possible errors the authorization server might return.
-///
-/// Sources:
-/// - https://datatracker.ietf.org/doc/html/rfc6749#section-5.2
+/// This is the main router for the OAuth 2.0 API.
 pub fn router(state: AppState) -> axum::Router<AppState> {
     axum::Router::<AppState>::new()
         .route("/authorize", get(authorize::handler))

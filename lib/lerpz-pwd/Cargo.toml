@@ -1,0 +1,15 @@
+[package]
+name = "lerpz-pwd"
+edition = "2024"
+version.workspace = true
+
+[dependencies]
+rand = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+uuid = { workspace = true }
+regex = { workspace = true }
+argon2 = { workspace = true, features = ["std"] }
+
+[dev-dependencies]
+dotenvy = { workspace = true }

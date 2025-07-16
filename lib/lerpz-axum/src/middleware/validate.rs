@@ -8,7 +8,7 @@ use axum::{
 use serde::{Serialize, de::DeserializeOwned};
 use validator::{Validate, ValidationErrors, ValidationErrorsKind};
 
-use crate::axum::error::{HandlerError, HandlerResult};
+use crate::error::{HandlerError, HandlerResult};
 
 /// Validator that validates the inner value.
 ///

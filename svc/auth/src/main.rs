@@ -6,7 +6,7 @@ use crate::config::CONFIG;
 use crate::state::AppState;
 
 use axum::Router;
-use lerpz_utils::axum::shutdown_signal;
+use lerpz_axum::shutdown_signal;
 
 use std::{sync::Arc, time::Duration};
 

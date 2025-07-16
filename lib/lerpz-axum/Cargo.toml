@@ -1,0 +1,15 @@
+[package]
+name = "lerpz-axum"
+edition = "2024"
+version.workspace = true
+
+[dependencies]
+anyhow = { workspace = true }
+axum = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+serde = { workspace = true }
+sqlx = { workspace = true }
+uuid = { workspace = true }
+validator = { workspace = true, features = ["derive"] }

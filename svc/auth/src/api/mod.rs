@@ -11,25 +11,32 @@
 //! Existing User Journey:
 //! 1. GET /oauth/authorize → Login & authorize app  
 //! 2. POST /oauth/token → Get access token
+//! 
+//! Internal User Journey:
+//! 1. Post /login -> Login with username & password
 //!
 //! Password Recovery:
 //! 1. POST /forgot-password → Request reset
 //! 2. POST /reset-password → Set new password
 
 mod email_verify;
+mod login;
 mod oauth;
 mod pwd_forgot;
 mod pwd_reset;
 mod register;
+
+use axum::routing::{get, post};
 
 use crate::AppState;
 
 pub fn router(state: AppState) -> axum::Router {
     axum::Router::<AppState>::new()
         .nest("/oauth", oauth::router(state.clone()))
-        .route("/register", axum::routing::post(register::handler))
-        .route("/verify-email", axum::routing::get(email_verify::handler))
-        .route("/forgot-password", axum::routing::post(pwd_forgot::handler))
-        .route("/reset-password", axum::routing::post(pwd_reset::handler))
+        .route("/register", post(register::handler))
+        .route("/verify-email", get(email_verify::handler))
+        .route("/forgot-password", post(pwd_forgot::handler))
+        .route("/reset-password", post(pwd_reset::handler))
+        .route("/login", post(login::handler))
         .with_state(state)
 }

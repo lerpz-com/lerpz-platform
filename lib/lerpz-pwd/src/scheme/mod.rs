@@ -12,8 +12,8 @@ use scheme_01::Scheme01;
 pub trait Scheme {
     /// Hashes a password from some [`PwdParts`](super::parts::PwdParts).
     fn hash(&self, pwd: &str, salt: &str) -> Result<String>;
-    /// Validate a password hash against a real password.
-    fn validate(&self, pwd_hash: &str, pwd_ref: &str, pwd_ref_salt: Option<&str>) -> Result<bool>;
+    /// Validate a password hash against a real password and a salt.
+    fn validate(&self, pwd_hash: &str, pwd_ref: &str, pwd_ref_salt: &str) -> Result<bool>;
 }
 
 /// Returns a scheme given a scheme name as a string.

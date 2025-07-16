@@ -30,34 +30,17 @@ CREATE TRIGGER update_timestamp
 CREATE TABLE IF NOT EXISTS users(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     username VARCHAR(32) NOT NULL UNIQUE,
-    avatar VARCHAR(256) DEFAULT NULL,
     primary_email VARCHAR(64) NOT NULL UNIQUE,
     password_hash VARCHAR(128) NOT NULL,
     password_salt VARCHAR(64) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    avatar VARCHAR(256) DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     organization_id UUID DEFAULT NULL REFERENCES organizations(id)
 );
 
 CREATE TRIGGER update_timestamp
     BEFORE UPDATE ON users
-    FOR EACH ROW
-    EXECUTE FUNCTION update_timestamp();
-
--- User Consents
-
-CREATE TABLE IF NOT EXISTS user_client_authorizations(
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID NOT NULL REFERENCES users(id),
-    client_id UUID NOT NULL REFERENCES oauth_clients(id),
-    scope TEXT NOT NULL,
-    authorized_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expires_at TIMESTAMP DEFAULT NULL,
-    UNIQUE (user_id, client_id)
-);
-
-CREATE TRIGGER update_timestamp
-    BEFORE UPDATE ON user_client_authorizations
     FOR EACH ROW
     EXECUTE FUNCTION update_timestamp();
 
@@ -75,6 +58,23 @@ CREATE TABLE IF NOT EXISTS oauth_clients(
 
 CREATE TRIGGER update_timestamp
     BEFORE UPDATE ON oauth_clients
+    FOR EACH ROW
+    EXECUTE FUNCTION update_timestamp();
+
+-- User Consents
+
+CREATE TABLE IF NOT EXISTS user_client_authorizations(
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id),
+    client_id UUID NOT NULL REFERENCES oauth_clients(id),
+    scope TEXT NOT NULL,
+    authorized_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP DEFAULT NULL,
+    UNIQUE (user_id, client_id)
+);
+
+CREATE TRIGGER update_timestamp
+    BEFORE UPDATE ON user_client_authorizations
     FOR EACH ROW
     EXECUTE FUNCTION update_timestamp();
 

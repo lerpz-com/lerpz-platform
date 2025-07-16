@@ -1,4 +1,6 @@
-use lerpz_utils::axum::error::{HandlerError, HandlerResult};
+//! The token endpoint for OAuth 2.0
+
+use lerpz_axum::error::{HandlerError, HandlerResult};
 
 use axum::{Form, Json, http::StatusCode};
 use serde::{Deserialize, Serialize};
@@ -7,9 +9,8 @@ use serde::{Deserialize, Serialize};
 #[serde(tag = "grant_type")]
 #[serde(rename_all = "snake_case")]
 #[non_exhaustive]
-pub enum GrantRequest {
+pub enum GrantType {
     AuthorizationCode(AuthorizationCodeRequest),
-    PasswordCredentials(PasswordCredentialsRequest),
     ClientCredentials(ClientCredentialsRequest),
     RefreshToken(RefreshTokenRequest),
 }
@@ -25,23 +26,14 @@ pub struct AuthorizationCodeRequest {
     client_id: String,
 }
 
-/// A request to exchange username and password for an access token.
-///
-/// Sources:
-/// - https://datatracker.ietf.org/doc/html/rfc6749#section-4.3.2
-#[derive(Deserialize, Debug)]
-pub struct PasswordCredentialsRequest {
-    password: String,
-    username: String,
-    scope: String,
-}
-
 /// A request to exchange client credentials for an access token.
 ///
 /// Sources:
 /// - https://datatracker.ietf.org/doc/html/rfc6749#section-4.4.2
 #[derive(Deserialize, Debug)]
 pub struct ClientCredentialsRequest {
+    client_id: String,
+    client_secret: String,
     scope: Option<String>,
 }
 
@@ -79,18 +71,19 @@ pub struct AccessTokenResponse {
     /// This is not always present, depending on the grant type.
     #[serde(skip_serializing_if = "Option::is_none")]
     refresh_token: Option<String>,
+    /// Scope of the requested access token.
+    ///
     /// Might not be present if the scope is the same as the one requested.
     #[serde(skip_serializing_if = "Option::is_none")]
     scope: Option<String>,
 }
 
 #[axum::debug_handler]
-pub async fn handler(Form(body): Form<GrantRequest>) -> HandlerResult<Json<AccessTokenResponse>> {
+pub async fn handler(Form(body): Form<GrantType>) -> HandlerResult<Json<AccessTokenResponse>> {
     let access_token = match body {
-        GrantRequest::AuthorizationCode(req) => authorization_code(req),
-        GrantRequest::PasswordCredentials(req) => password_credentials(req),
-        GrantRequest::ClientCredentials(req) => client_credentials(req),
-        GrantRequest::RefreshToken(req) => refresh_token(req),
+        GrantType::AuthorizationCode(req) => authorization_code(req),
+        GrantType::ClientCredentials(req) => client_credentials(req),
+        GrantType::RefreshToken(req) => refresh_token(req),
     }?;
 
     Ok(Json(access_token))
@@ -104,26 +97,18 @@ fn authorization_code(_req: AuthorizationCodeRequest) -> HandlerResult<AccessTok
     ))
 }
 
-fn password_credentials(req: PasswordCredentialsRequest) -> HandlerResult<AccessTokenResponse> {
-    Err(HandlerError::new(
-        StatusCode::NOT_IMPLEMENTED,
-        "Flow not implemented",
-        "Authorization code flow is not implemented yet.",
-    ))
-}
-
 fn client_credentials(_req: ClientCredentialsRequest) -> HandlerResult<AccessTokenResponse> {
     Err(HandlerError::new(
         StatusCode::NOT_IMPLEMENTED,
         "Flow not implemented",
-        "Authorization code flow is not implemented yet.",
+        "Client credentials flow is not implemented yet.",
     ))
 }
 
-fn refresh_token(req: RefreshTokenRequest) -> Result<AccessTokenResponse, HandlerError> {
+fn refresh_token(_req: RefreshTokenRequest) -> Result<AccessTokenResponse, HandlerError> {
     Err(HandlerError::new(
         StatusCode::NOT_IMPLEMENTED,
         "Flow not implemented",
-        "Authorization code flow is not implemented yet.",
+        "Refresh token flow is not implemented yet.",
     ))
 }

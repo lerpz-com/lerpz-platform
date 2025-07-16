@@ -1,6 +1,6 @@
 #![allow(unused)]
 
-use lerpz_utils::axum::error::{HandlerError, HandlerResult};
+use lerpz_axum::error::{HandlerError, HandlerResult};
 
 use axum::{Form, http::StatusCode, response::Redirect};
 use serde::{Deserialize, Serialize};
@@ -65,7 +65,6 @@ pub enum AuthorizationErrorKind {
     ServerError,
     TemporarilyUnavailable,
 }
-
 
 #[axum::debug_handler]
 pub async fn handler(Form(query): Form<AuthorizationRequest>) -> HandlerResult<(StatusCode, String)> {

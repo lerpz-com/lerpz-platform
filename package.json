@@ -10,7 +10,7 @@
   },
   "packageManager": "pnpm@10.13.1",
   "devDependencies": {
-    "@postgrestools/postgrestools": "^0.8.1",
+    "@postgrestools/postgrestools": "^0.9.0",
     "@types/node": "^24"
   },
   "engines": {

@@ -25,7 +25,7 @@ impl Scheme for Scheme01 {
         Ok(pwd)
     }
 
-    fn validate(&self, pwd_hash: &str, pwd_ref: &str, _: Option<&str>) -> Result<bool> {
+    fn validate(&self, pwd_hash: &str, pwd_ref: &str, _pwd_ref_salt: &str) -> Result<bool> {
         let pwd_hash_parsed = PasswordHash::new(pwd_hash).map_err(Error::PwdHash)?;
 
         let pwd_ref_bytes = pwd_ref.as_bytes();

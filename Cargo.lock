@@ -983,9 +983,11 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum",
- "base64",
  "dotenvy",
- "lerpz-core",
+ "lerpz-axum",
+ "lerpz-jwt",
+ "lerpz-model",
+ "lerpz-pwd",
  "lerpz-utils",
  "redis",
  "serde",
@@ -1004,11 +1006,54 @@ dependencies = [
 ]
 
 [[package]]
-name = "lerpz-core"
+name = "lerpz-axum"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "axum",
+ "serde",
+ "sqlx",
+ "thiserror",
+ "tokio",
+ "tracing",
+ "uuid",
+ "validator",
+]
+
+[[package]]
+name = "lerpz-jwt"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "jsonwebtoken",
+ "rand 0.9.1",
+ "serde",
+ "thiserror",
+ "uuid",
+]
+
+[[package]]
+name = "lerpz-model"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "serde",
  "sqlx",
+ "thiserror",
+ "uuid",
+]
+
+[[package]]
+name = "lerpz-pwd"
+version = "0.1.0"
+dependencies = [
+ "argon2",
+ "dotenvy",
+ "rand 0.9.1",
+ "regex",
+ "thiserror",
+ "tokio",
  "uuid",
 ]
 
@@ -1023,21 +1068,7 @@ dependencies = [
 name = "lerpz-utils"
 version = "0.1.0"
 dependencies = [
- "anyhow",
- "argon2",
- "axum",
- "chrono",
- "dotenvy",
- "jsonwebtoken",
- "rand 0.9.1",
- "regex",
- "serde",
- "sqlx",
  "thiserror",
- "tokio",
- "tracing",
- "uuid",
- "validator",
 ]
 
 [[package]]

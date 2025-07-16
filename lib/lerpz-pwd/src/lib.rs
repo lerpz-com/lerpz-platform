@@ -1,4 +1,7 @@
 //! Functions related to password hashing and verification.
+//! 
+//! The schemes are:
+//! - `01`: The default scheme, which is using Argon2 (DEFAULT).
 
 /// Errors that can occur when working with passwords.
 mod error;
@@ -7,7 +10,7 @@ mod parts;
 /// Schemas for hashing and validating passwords.
 mod scheme;
 
-use std::str::FromStr;
+use std::{str::FromStr, sync::Arc};
 
 pub use error::{Error, Result};
 pub use parts::{HashParts, PwdParts};
@@ -46,12 +49,12 @@ pub async fn hash_pwd_parts(pwd_parts: PwdParts) -> Result<String> {
 /// [`HashParts::from_str`] to see how the format works.
 pub async fn validate_pwd(
     pwd_hash: &str,
-    pwd_ref: impl Into<String>,
-    pwd_salt: Option<impl Into<String>>,
+    pwd_salt: &str,
+    pwd_ref: &str,
 ) -> Result<bool> {
     let pwd_hash = HashParts::from_str(pwd_hash)?;
     let pwd_ref = pwd_ref.into();
-    let pwd_salt = pwd_salt.map(|v| v.into());
+    let pwd_salt = pwd_salt.into();
     validate_pwd_parts(pwd_hash, pwd_ref, pwd_salt).await
 }
 
@@ -70,16 +73,13 @@ pub async fn validate_pwd(
 /// hash.
 pub async fn validate_pwd_parts(
     hash_parts: impl Into<HashParts>,
-    pwd_ref: impl Into<String>,
-    pwd_salt: Option<impl Into<String>>,
+    pwd_ref: Arc<str>, 
+    pwd_salt: Arc<str>,
 ) -> Result<bool> {
     let hash_parts = hash_parts.into();
-    let pwd_ref = pwd_ref.into();
-    let pwd_salt = pwd_salt.map(|v| v.into());
-
     tokio::task::spawn_blocking(move || {
         get_scheme(&hash_parts.scheme)?
-            .validate(&hash_parts.hash, &pwd_ref, pwd_salt.as_deref())
+            .validate(&hash_parts.hash, &pwd_ref, &pwd_salt)
             .map_err(Error::SchemeError)
     })
     .await
@@ -100,7 +100,7 @@ mod tests {
             .await
             .unwrap();
 
-        assert!(!validate_pwd(&hash, "drowssap", Some(&salt)).await.unwrap());
-        assert!(validate_pwd(&hash, "password", Some(&salt)).await.unwrap());
+        assert!(!validate_pwd(&hash, &salt, "drowssap").await.unwrap());
+        assert!(validate_pwd(&hash, &salt, "password").await.unwrap());
     }
 }

@@ -7,6 +7,12 @@ exclude = ["svc/frontend"]
 version = "0.1.0"
 
 [workspace.dependencies]
+# Internal
+lerpz-axum = { path = "lib/lerpz-axum" }
+lerpz-jwt = { path = "lib/lerpz-jwt" }
+lerpz-model = { path = "lib/lerpz-model" }
+lerpz-pwd = { path = "lib/lerpz-pwd" }
+lerpz-utils = { path = "lib/lerpz-utils" }
 # Database
 redis = "0.32"
 sqlx = "0.8"
