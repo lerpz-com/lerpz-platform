@@ -69,7 +69,7 @@ pub enum AuthorizationErrorKind {
 
 #[axum::debug_handler]
 pub async fn handler(Form(query): Form<AuthorizationRequest>) -> HandlerResult<(StatusCode, String)> {
-    return Ok((StatusCode::NOT_IMPLEMENTED, "Not implemented yet!".into()));
+    return Ok((StatusCode::NOT_IMPLEMENTED, "Authorization code flow is not implemented yet.".into()));
 }
 
 fn authorization_code(req: &AuthorizationCodeRequest) -> HandlerResult<AuthorizationCodeResponse> {

@@ -1,6 +1,6 @@
 use lerpz_utils::axum::error::{HandlerError, HandlerResult};
 
-use axum::{Form, Json};
+use axum::{Form, Json, http::StatusCode};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Debug)]
@@ -75,7 +75,7 @@ pub struct AccessTokenResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     expires_in: Option<u64>,
     /// A token that can be used to obtain a new access token without re-authenticating.
-    /// 
+    ///
     /// This is not always present, depending on the grant type.
     #[serde(skip_serializing_if = "Option::is_none")]
     refresh_token: Option<String>,
@@ -96,47 +96,34 @@ pub async fn handler(Form(body): Form<GrantRequest>) -> HandlerResult<Json<Acces
     Ok(Json(access_token))
 }
 
- fn authorization_code(req: AuthorizationCodeRequest) -> Result<AccessTokenResponse, HandlerError> {
-    println!("Received authorization code: {}", req.code);
-    Ok(AccessTokenResponse {
-        access_token: "example_access_token".into(),
-        token_type: "Bearer".into(),
-        expires_in: None,
-        refresh_token: Some("example_refresh_token".into()),
-        scope: None,  
-    })
+fn authorization_code(_req: AuthorizationCodeRequest) -> HandlerResult<AccessTokenResponse> {
+    Err(HandlerError::new(
+        StatusCode::NOT_IMPLEMENTED,
+        "Flow not implemented",
+        "Authorization code flow is not implemented yet.",
+    ))
 }
 
-fn password_credentials(req: PasswordCredentialsRequest) -> Result<AccessTokenResponse, HandlerError> {
-    println!("Received password credentials: {}:{}", req.username, req.password);
-    Ok(AccessTokenResponse {
-        access_token: "example_access_token".into(),
-        token_type: "Bearer".into(),
-        expires_in: None,
-        refresh_token: Some("example_refresh_token".into()),
-        scope: None,  
-    })
+fn password_credentials(req: PasswordCredentialsRequest) -> HandlerResult<AccessTokenResponse> {
+    Err(HandlerError::new(
+        StatusCode::NOT_IMPLEMENTED,
+        "Flow not implemented",
+        "Authorization code flow is not implemented yet.",
+    ))
 }
 
-fn client_credentials(_req: ClientCredentialsRequest) -> Result<AccessTokenResponse, HandlerError> {
-    println!("Received client credentials");
-    Ok(AccessTokenResponse {
-        access_token: "example_access_token".into(),
-        token_type: "Bearer".into(),
-        expires_in: None,
-        refresh_token: Some("example_refresh_token".into()),
-        scope: None,  
-    })
+fn client_credentials(_req: ClientCredentialsRequest) -> HandlerResult<AccessTokenResponse> {
+    Err(HandlerError::new(
+        StatusCode::NOT_IMPLEMENTED,
+        "Flow not implemented",
+        "Authorization code flow is not implemented yet.",
+    ))
 }
-
 
 fn refresh_token(req: RefreshTokenRequest) -> Result<AccessTokenResponse, HandlerError> {
-    println!("Received refresh token: {}", req.refresh_token);
-    Ok(AccessTokenResponse {
-        access_token: "example_access_token".into(),
-        token_type: "Bearer".into(),
-        expires_in: None,
-        refresh_token: Some("example_refresh_token".into()),
-        scope: None,  
-    })
+    Err(HandlerError::new(
+        StatusCode::NOT_IMPLEMENTED,
+        "Flow not implemented",
+        "Authorization code flow is not implemented yet.",
+    ))
 }
