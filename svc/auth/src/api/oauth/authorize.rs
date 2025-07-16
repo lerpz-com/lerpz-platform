@@ -1,10 +1,10 @@
+#![allow(unused)]
+
 use lerpz_utils::axum::error::{HandlerError, HandlerResult};
 
 use axum::{Form, http::StatusCode, response::Redirect};
 use serde::{Deserialize, Serialize};
 use url::Url;
-
-use super::AuthorizationErrorKind;
 
 /// Represents an OAuth 2.0 request to the authorization endpoint.
 #[derive(Deserialize, Debug)]
@@ -50,14 +50,26 @@ pub enum AuthorizationCodeResponse {
     },
 }
 
+/// Error kinds that the authorization endpoint might return.
+///
+/// Sources:
+/// - https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2.1
+#[derive(Serialize, Debug)]
+#[serde(rename_all = "snake_case")]
+pub enum AuthorizationErrorKind {
+    InvalidRequest,
+    UnauthorizedClient,
+    AccessDenied,
+    UnsupportedResponseType,
+    InvalidScope,
+    ServerError,
+    TemporarilyUnavailable,
+}
+
+
 #[axum::debug_handler]
-pub async fn handler(Form(query): Form<AuthorizationRequest>) -> HandlerResult<Redirect> {
-    let AuthorizationRequest::AuthorizationCode(req) = query;
-    let res = authorization_code(&req)?;
-
-    let redirect_uri = extend_url_query(&req.redirect_uri, &res)?;
-
-    Ok(Redirect::to(redirect_uri.as_str()))
+pub async fn handler(Form(query): Form<AuthorizationRequest>) -> HandlerResult<(StatusCode, String)> {
+    return Ok((StatusCode::NOT_IMPLEMENTED, "Not implemented yet!".into()));
 }
 
 fn authorization_code(req: &AuthorizationCodeRequest) -> HandlerResult<AuthorizationCodeResponse> {

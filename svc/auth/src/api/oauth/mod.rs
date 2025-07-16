@@ -11,39 +11,16 @@
 use crate::AppState;
 
 use axum::routing::{get, post};
-use serde::Serialize;
 
 mod authorize;
 mod revoke;
 mod token;
 mod userinfo;
 
-/// What the authorization server returns in case of a bad request.
-///
-/// Sources:
-/// - https://datatracker.ietf.org/doc/html/rfc6749#section-5.2
-pub struct AuthorizationError {
-    pub error: AuthorizationErrorKind,
-    pub error_description: Option<String>,
-    pub error_uri: Option<String>,
-}
-
 /// Possible errors the authorization server might return.
 ///
 /// Sources:
 /// - https://datatracker.ietf.org/doc/html/rfc6749#section-5.2
-#[derive(Serialize, Debug)]
-#[serde(rename_all = "snake_case")]
-pub enum AuthorizationErrorKind {
-    InvalidRequest,
-    UnauthorizedClient,
-    AccessDenied,
-    UnsupportedResponseType,
-    InvalidScope,
-    ServerError,
-    TemporarilyUnavailable,
-}
-
 pub fn router(state: AppState) -> axum::Router<AppState> {
     axum::Router::<AppState>::new()
         .route("/authorize", get(authorize::handler))
