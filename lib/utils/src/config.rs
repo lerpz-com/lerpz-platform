@@ -15,7 +15,6 @@
 /// 	SOME_INTEGER: u32 = get_env_parse,
 /// }
 /// 
-/// 
 ///	pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
 /// 	Config::from_env().unwrap()
 /// }) 
