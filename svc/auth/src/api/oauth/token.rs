@@ -1,3 +1,4 @@
+#![allow(unused)]
 //! The token endpoint for OAuth 2.0
 //! 
 //! Only the Authorization Code, Client Credentials, and Refresh Token flows are
@@ -32,12 +33,13 @@ pub struct AuthorizationCodeRequest {
 /// A request to exchange client credentials for an access token.
 ///
 /// Sources:
+/// - https://datatracker.ietf.org/doc/html/rfc6749#section-2.3
 /// - https://datatracker.ietf.org/doc/html/rfc6749#section-4.4.2
 #[derive(Deserialize, Debug)]
 pub struct ClientCredentialsRequest {
+    scope: Option<String>,
     client_id: String,
     client_secret: String,
-    scope: Option<String>,
 }
 
 /// A request to exchange username and password for an access token.
@@ -57,28 +59,28 @@ pub struct RefreshTokenRequest {
 #[derive(Serialize, Debug)]
 pub struct AccessTokenResponse {
     /// The access token issued by the authorization server.
-    access_token: String,
+    pub access_token: String,
     /// The type of the token issued, typically "Bearer".
     ///
     /// Sources:
     /// - https://datatracker.ietf.org/doc/html/rfc6749#section-7.1
-    token_type: String,
+    pub token_type: String,
     /// The lifetime in seconds of the access token.
     ///
     /// This might not be present if the lifetime is defined within the token
     /// itself.
     #[serde(skip_serializing_if = "Option::is_none")]
-    expires_in: Option<u64>,
+    pub expires_in: Option<u64>,
     /// A token that can be used to obtain a new access token without re-authenticating.
     ///
     /// This is not always present, depending on the grant type.
     #[serde(skip_serializing_if = "Option::is_none")]
-    refresh_token: Option<String>,
+    pub refresh_token: Option<String>,
     /// Scope of the requested access token.
     ///
     /// Might not be present if the scope is the same as the one requested.
     #[serde(skip_serializing_if = "Option::is_none")]
-    scope: Option<String>,
+    pub scope: Option<String>,
 }
 
 #[axum::debug_handler]
@@ -108,7 +110,7 @@ fn client_credentials(_req: ClientCredentialsRequest) -> HandlerResult<AccessTok
     ))
 }
 
-fn refresh_token(_req: RefreshTokenRequest) -> Result<AccessTokenResponse, HandlerError> {
+fn refresh_token(_req: RefreshTokenRequest) -> HandlerResult<AccessTokenResponse> {
     Err(HandlerError::new(
         StatusCode::NOT_IMPLEMENTED,
         "Flow not implemented",

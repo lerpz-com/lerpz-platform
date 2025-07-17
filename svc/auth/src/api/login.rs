@@ -8,14 +8,12 @@ use lerpz_axum::{
 };
 use lerpz_pwd::validate_pwd;
 
-use axum::{Json, extract::State, http::StatusCode};
+use axum::{extract::State, http::StatusCode, Form};
 use serde::Deserialize;
 use validator::Validate;
 
 #[derive(Deserialize, Debug, Validate)]
 pub struct RegisterRequest {
-    #[validate(email(message = "Invalid email format"))]
-    email: String,
     #[validate(length(
         min = 3,
         max = 32,
@@ -33,14 +31,13 @@ pub struct RegisterRequest {
 #[axum::debug_handler]
 pub async fn handler(
     State(state): State<AppState>,
-    Validated(Json(body)): Validated<Json<RegisterRequest>>,
+    Validated(Form(body)): Validated<Form<RegisterRequest>>,
 ) -> HandlerResult<()> {
     let mut database = state.database.acquire().await?;
 
     let user = sqlx::query_as!(
         lerpz_model::User,
-        "SELECT * FROM users WHERE primary_email = $1 OR username = $2",
-        body.email,
+        "SELECT * FROM users WHERE username = $1",
         body.username
     )
     .fetch_one(&mut *database)

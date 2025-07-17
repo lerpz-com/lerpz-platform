@@ -6,11 +6,10 @@ use lerpz_axum::{
     error::{HandlerError, HandlerResult},
     middleware::validate::Validated,
 };
-use lerpz_pwd::hash_pwd;
+use lerpz_pwd::{generate_salt_hex, hash_pwd};
 
-use axum::{Json, extract::State, http::StatusCode};
+use axum::{extract::State, http::StatusCode, Form};
 use serde::Deserialize;
-use uuid::Uuid;
 use validator::Validate;
 
 #[derive(Deserialize, Debug, Validate)]
@@ -34,12 +33,12 @@ pub struct RegisterRequest {
 #[axum::debug_handler]
 pub async fn handler(
     State(state): State<AppState>,
-    Validated(Json(body)): Validated<Json<RegisterRequest>>,
+    Validated(Form(body)): Validated<Form<RegisterRequest>>,
 ) -> HandlerResult<()> {
     let mut database = state.database.acquire().await?;
 
-    let password_salt = Uuid::new_v4().to_string();
-    let password_hash = hash_pwd(body.password, &password_salt).await?;
+    let password_salt = generate_salt_hex();
+    let password_hash = hash_pwd(&body.password, &password_salt).await?;
 
     sqlx::query!(
         "INSERT INTO users (

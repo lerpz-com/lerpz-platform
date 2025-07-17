@@ -32,10 +32,10 @@ use crate::AppState;
 pub fn router(state: AppState) -> axum::Router {
     axum::Router::<AppState>::new()
         .nest("/oauth", oauth::router(state.clone()))
+        .route("/login", post(login::handler))
         .route("/register", post(register::handler))
         .route("/verify-email", get(email_verify::handler))
         .route("/forgot-password", post(pwd_forgot::handler))
         .route("/reset-password", post(pwd_reset::handler))
-        .route("/login", post(login::handler))
         .with_state(state)
 }

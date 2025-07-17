@@ -1,4 +1,7 @@
-//! Userinfo endpoint for OAuth 2.0.
+//! Userinfo endpoint for OpenID Connect Core 1.0.
+//! 
+//! Sources:
+//! - https://openid.net/specs/openid-connect-core-1_0.html#User
 
 use lerpz_axum::error::HandlerResult;
 

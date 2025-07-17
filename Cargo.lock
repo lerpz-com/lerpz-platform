@@ -1001,7 +1001,6 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "url",
- "uuid",
  "validator",
 ]
 
@@ -1051,6 +1050,7 @@ version = "0.1.0"
 dependencies = [
  "argon2",
  "dotenvy",
+ "hex",
  "rand 0.9.1",
  "regex",
  "thiserror",

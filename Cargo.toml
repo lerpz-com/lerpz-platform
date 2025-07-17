@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = [ "lib/*", "svc/*"]
+members = ["lib/*", "svc/*"]
 exclude = ["svc/frontend"]
 
 [workspace.package]
@@ -41,6 +41,7 @@ cfg-if = "1.0"
 chrono = "0.4"
 cookie = "0.18"
 dotenvy = "0.15"
+hex = "0.4"
 jsonwebtoken = "9.3"
 rand = "0.9"
 regex = "1.11"

@@ -32,5 +32,4 @@ tower-http = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true, features = ["env-filter"] }
 url = { workspace = true }
-uuid = { workspace = true, features = ["v4", "serde"] }
 validator = { workspace = true, features = ["derive"] }

@@ -4,12 +4,13 @@ edition = "2024"
 version.workspace = true
 
 [dependencies]
-rand = { workspace = true }
-thiserror = { workspace = true }
-tokio = { workspace = true }
-uuid = { workspace = true }
-regex = { workspace = true }
 argon2 = { workspace = true, features = ["std"] }
+hex = { workspace = true }
+rand = { workspace = true }
+regex = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }
+uuid = { workspace = true }
 
 [dev-dependencies]
 dotenvy = { workspace = true }

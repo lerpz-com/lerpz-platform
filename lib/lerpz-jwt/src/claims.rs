@@ -25,6 +25,9 @@ pub struct Claims {
     pub nbf: i64,
     /// When the token was issued.
     pub iat: i64,
+    /// Scope of the token.
+    #[serde(skip_serializing_if = "String::is_empty")]
+    pub scp: String
 }
 
 impl Default for Claims {
@@ -37,6 +40,7 @@ impl Default for Claims {
             exp: Utc::now().timestamp() + 900,
             nbf: Utc::now().timestamp(),
             iat: Utc::now().timestamp(),
+            scp: String::new(),
         }
     }
 }

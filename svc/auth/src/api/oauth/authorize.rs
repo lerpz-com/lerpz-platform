@@ -1,13 +1,18 @@
 #![allow(unused)]
 //! Endpoint for OAuth 2.0 authorization.
-//! 
+//!
 //! This only implements the Authorization Code + PKCE flow as per RFC 6749 and
 //! RFC 7636. The implicit grant is deprecated and not implemented.
 
 use lerpz_axum::error::{HandlerError, HandlerResult};
 
-use axum::{Form, http::StatusCode, response::Redirect};
+use axum::{
+    Form,
+    http::{StatusCode, header},
+    response::{Html, Redirect},
+};
 use serde::{Deserialize, Serialize};
+use tokio::fs;
 use url::Url;
 
 /// Represents an OAuth 2.0 request to the authorization endpoint.
@@ -70,9 +75,15 @@ pub enum AuthorizationErrorKind {
     TemporarilyUnavailable,
 }
 
+// #[axum::debug_handler]
+// pub async fn handler(Form(query): Form<AuthorizationRequest>) -> Html<&'static str> {
+//     Html(include_str!("authorize.html"))
+// }
+
 #[axum::debug_handler]
-pub async fn handler(Form(query): Form<AuthorizationRequest>) -> HandlerResult<(StatusCode, String)> {
-    return Ok((StatusCode::NOT_IMPLEMENTED, "Authorization code flow is not implemented yet.".into()));
+pub async fn handler() -> HandlerResult<Html<String>> {
+    let content = fs::read_to_string("svc/auth/static/authorize.html").await?;
+    Ok(Html(content))
 }
 
 fn authorization_code(req: &AuthorizationCodeRequest) -> HandlerResult<AuthorizationCodeResponse> {
