@@ -1,4 +1,7 @@
 //! The token endpoint for OAuth 2.0
+//! 
+//! Only the Authorization Code, Client Credentials, and Refresh Token flows are
+//! implemented. The Password Grant flow is not implemented as it is deprecated.
 
 use lerpz_axum::error::{HandlerError, HandlerResult};
 

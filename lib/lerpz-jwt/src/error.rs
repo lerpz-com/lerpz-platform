@@ -7,6 +7,6 @@ pub type Result<T> = std::result::Result<T, Error>;
 #[non_exhaustive]
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
-	#[error("token error: {0}")]
+	#[error(transparent)]
 	TokenError(#[from] jsonwebtoken::errors::Error),
 }

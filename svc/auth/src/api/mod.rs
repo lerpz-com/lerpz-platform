@@ -1,20 +1,19 @@
-//! This module defines the API endpoints for the authentication service.
-//!
-//! Follows RFC 6749 (OAuth 2.0) and RFC 6750 (Bearer Token Usage).
-//!
+//! This module defines the API endpoints for a authentication service.
+//! 
+//! The auth service implements the OAuth 2.0 framework for user authentication
+//! and authorization. The service prepares for the future release of OAuth 2.1
+//! which means that deprecated endpoints want be implemented.
+//! 
 //! # Auth Service Endpoints
-//!
+//! 
 //! New User Journey:
 //! 1. POST /register → Create account
 //! 2. GET /verify-email → Verify email
-//!
+//! 
 //! Existing User Journey:
 //! 1. GET /oauth/authorize → Login & authorize app  
 //! 2. POST /oauth/token → Get access token
 //! 
-//! Internal User Journey:
-//! 1. Post /login -> Login with username & password
-//!
 //! Password Recovery:
 //! 1. POST /forgot-password → Request reset
 //! 2. POST /reset-password → Set new password

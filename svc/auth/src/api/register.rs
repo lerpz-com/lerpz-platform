@@ -1,3 +1,5 @@
+//! Endpoint for user registration.
+
 use crate::state::AppState;
 
 use lerpz_axum::{

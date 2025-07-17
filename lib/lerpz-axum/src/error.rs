@@ -88,7 +88,7 @@ where
 {
     /// Create a new [`HandlerError`] with status code, header and message.
     ///
-    /// All optional fields are `None` by default. These can be set using
+    /// All optional fields are [`None`] by default. These can be set using
     /// functions found on the struct.
     pub fn new(
         status: StatusCode,
@@ -107,12 +107,12 @@ where
         }
     }
 
-    /// Create a new [`HandlerError`] with status code, header and message,
-    /// and fill the `instance` field with the path of the request.
+    /// Create a new [`HandlerError`] with status code, header and message, and
+    /// fill the `instance` field with the path of the request.
     ///
-    /// This is a convenience function to create an error that is
-    /// specific to a request, so that the client can see which
-    /// endpoint the error occurred on.
+    /// This is a convenience function to create an error that is specific to a
+    /// request, so that the client can see which endpoint the error occurred
+    /// on.
     pub fn new_with_parts(
         status: StatusCode,
         title: impl Into<Cow<'static, str>>,
@@ -136,8 +136,8 @@ where
 
     /// An generic forbidden response.
     ///
-    /// This is a generic response for someone that tries to access a
-    /// forbidden resource, even though they are authorized.
+    /// This is a generic response for someone that tries to access a forbidden
+    /// resource, even though they are authorized.
     pub fn forbidden() -> Self {
         Self::new(
             StatusCode::FORBIDDEN,
@@ -210,7 +210,7 @@ where
     /// Converts a [`HandlerError`] into a [`Response`].
     ///
     /// This automatically logs errors using [`tracing`]. This also sets the
-    /// log_id field so that the error can be tracked.
+    /// [`Self::log_id`] field so that the error can be tracked.
     fn into_response(mut self) -> Response {
         if let Some(error) = self.inner.as_ref() {
             if self.log_id.is_none() {

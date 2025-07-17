@@ -1027,6 +1027,7 @@ dependencies = [
  "anyhow",
  "chrono",
  "jsonwebtoken",
+ "lerpz-model",
  "rand 0.9.1",
  "serde",
  "thiserror",
