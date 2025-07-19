@@ -182,10 +182,10 @@ where
         self
     }
 
-    /// Set the `log_id` field for the [`HandlerError`].
+    /// Set the [`Self::log_id`] field for the [`HandlerError`].
     ///
-    /// The `log_id` field is automatically set when the `inner` field is
-    /// present and the `log_id` is [`None`]. Changing this field might make it
+    /// The [`Self::log_id`] field is automatically set when the `inner` field is
+    /// present and the [`Self::log_id`] is [`None`]. Changing this field might make it
     /// hard or impossible to track the error or in other ways, break how the
     /// error is logged.
     ///
@@ -248,7 +248,7 @@ where
     D: Serialize + Send + Sync,
 {
     /// Turns any error into a [`HandlerError`].
-    /// 
+    ///
     /// This assumes that the error is an internal server error. This will
     /// automatically set the error in the [`Self::inner`] field.
     fn from(value: E) -> Self {

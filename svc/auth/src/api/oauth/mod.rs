@@ -17,12 +17,14 @@ use axum::routing::{get, post};
 
 mod authorize;
 mod revoke;
+mod assets;
 mod token;
 mod userinfo;
 
 /// This is the main router for the OAuth 2.0 API.
 pub fn router(state: AppState) -> axum::Router<AppState> {
     axum::Router::<AppState>::new()
+        .route("/assets/{*path}", get(assets::handler))
         .route("/authorize", get(authorize::handler))
         .route("/token", post(token::handler))
         .route("/revoke", post(revoke::handler))

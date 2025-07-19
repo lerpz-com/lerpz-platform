@@ -4,15 +4,18 @@
 //! This only implements the Authorization Code + PKCE flow as per RFC 6749 and
 //! RFC 7636. The implicit grant is deprecated and not implemented.
 
+use std::path::PathBuf;
+
 use lerpz_axum::error::{HandlerError, HandlerResult};
 
 use axum::{
-    Form,
-    http::{StatusCode, header},
-    response::{Html, Redirect},
+    body::Body,
+    http::{Response, StatusCode, header},
+    response::IntoResponse,
 };
 use serde::{Deserialize, Serialize};
-use tokio::fs;
+use tokio::fs::File;
+use tokio_util::io::ReaderStream;
 use url::Url;
 
 /// Represents an OAuth 2.0 request to the authorization endpoint.
@@ -81,9 +84,20 @@ pub enum AuthorizationErrorKind {
 // }
 
 #[axum::debug_handler]
-pub async fn handler() -> HandlerResult<Html<String>> {
-    let content = fs::read_to_string("svc/auth/static/authorize.html").await?;
-    Ok(Html(content))
+pub async fn handler() -> HandlerResult<impl IntoResponse> {
+    let full_path = PathBuf::from("svc/auth/assets/authorize.html");
+
+    let file = File::open(&full_path).await?;
+
+    let stream = ReaderStream::new(file);
+    let body = Body::from_stream(stream);
+
+    let content_type = "text/html; charset=utf-8";
+
+    Ok(Response::builder()
+        .header(header::CONTENT_TYPE, content_type)
+        .body(body)
+        .unwrap())
 }
 
 fn authorization_code(req: &AuthorizationCodeRequest) -> HandlerResult<AuthorizationCodeResponse> {
