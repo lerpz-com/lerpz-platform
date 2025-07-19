@@ -14,11 +14,13 @@ use lerpz_axum::error::{HandlerError, HandlerResult};
 use tokio::fs::File;
 use tokio_util::io::ReaderStream;
 
+use crate::config::CONFIG;
+
 #[axum::debug_handler]
 pub async fn handler(Path(file_path): Path<String>) -> HandlerResult<impl IntoResponse> {
-    let full_path = PathBuf::from("svc/auth/assets").join(file_path);
+    let full_path = PathBuf::from(&CONFIG.OAUTH_ASSETS_PATH).join(file_path);
 
-    if !full_path.starts_with(&PathBuf::from("svc/auth/assets")) {
+    if !full_path.starts_with(&CONFIG.OAUTH_ASSETS_PATH) {
         return Err(HandlerError::new(
             StatusCode::FORBIDDEN,
             "Forbidden",

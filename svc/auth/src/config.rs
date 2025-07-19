@@ -1,6 +1,6 @@
 //! Configuration module for the server.
 
-use std::{net::SocketAddr, sync::LazyLock};
+use std::{net::SocketAddr, path::PathBuf, sync::LazyLock};
 
 use lerpz_utils::{
     env::{get_env, get_env_parse},
@@ -17,5 +17,6 @@ generate_config!(
     ENV: String = get_env,
     ADDR: SocketAddr = get_env_parse,
     DATABASE_URL: String = get_env,
-    REDIS_URL: String = get_env
+    REDIS_URL: String = get_env,
+    OAUTH_ASSETS_PATH: PathBuf = get_env_parse
 );
