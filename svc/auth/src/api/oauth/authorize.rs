@@ -18,6 +18,8 @@ use tokio::fs::File;
 use tokio_util::io::ReaderStream;
 use url::Url;
 
+use crate::config::CONFIG;
+
 /// Represents an OAuth 2.0 request to the authorization endpoint.
 #[derive(Deserialize, Debug)]
 #[serde(tag = "response_type")]
@@ -78,14 +80,9 @@ pub enum AuthorizationErrorKind {
     TemporarilyUnavailable,
 }
 
-// #[axum::debug_handler]
-// pub async fn handler(Form(query): Form<AuthorizationRequest>) -> Html<&'static str> {
-//     Html(include_str!("authorize.html"))
-// }
-
 #[axum::debug_handler]
 pub async fn handler() -> HandlerResult<impl IntoResponse> {
-    let full_path = PathBuf::from("svc/auth/assets/authorize.html");
+    let full_path = PathBuf::from(&CONFIG.OAUTH_ASSETS_PATH).join("authorize.html");
 
     let file = File::open(&full_path).await?;
 
