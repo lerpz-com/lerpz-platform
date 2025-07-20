@@ -26,7 +26,7 @@ pub struct ValidationErrorResponse {
 
 /// Errors in the individual fields.
 #[derive(Serialize, Debug, Clone)]
-pub struct FieldErrors(pub Vec<Cow<'static, str>>);
+pub struct FieldErrors(Vec<Cow<'static, str>>);
 
 
 impl From<ValidationErrors> for ValidationErrorResponse {
