@@ -34,6 +34,9 @@ pub enum AuthorizationRequest {
 }
 
 /// Represents an OAuth 2.0 response from the authorization endpoint.
+#[derive(Serialize, Debug)]
+#[serde(rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum AuthorizationResponse {
     AuthorizationCode(AuthorizationCodeResponse),
 }
@@ -98,8 +101,7 @@ pub async fn handler() -> HandlerResult<impl IntoResponse> {
 
     Ok(Response::builder()
         .header(header::CONTENT_TYPE, content_type)
-        .body(body)
-        .unwrap())
+        .body(body)?)
 }
 
 fn authorization_code(req: &AuthorizationCodeRequest) -> HandlerResult<AuthorizationCodeResponse> {
