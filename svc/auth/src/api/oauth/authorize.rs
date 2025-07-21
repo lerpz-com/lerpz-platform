@@ -12,9 +12,7 @@ use std::{
 use lerpz_axum::error::{HandlerError, HandlerResult};
 
 use axum::{
-    body::Body,
-    http::{Response, StatusCode, header},
-    response::IntoResponse,
+    body::Body, extract::Query, http::{header, Response, StatusCode}, response::IntoResponse
 };
 use serde::{Deserialize, Serialize};
 use tinytemplate::TinyTemplate;
@@ -38,6 +36,7 @@ pub enum AuthorizationRequest {
 #[serde(rename_all = "snake_case")]
 #[non_exhaustive]
 pub enum AuthorizationResponse {
+    #[serde(rename = "code")]
     AuthorizationCode(AuthorizationCodeResponse),
 }
 
@@ -47,6 +46,7 @@ pub enum AuthorizationResponse {
 /// - https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.1
 ///
 #[derive(Serialize, Deserialize, Debug)]
+#[serde(tag = "response_type")]
 pub struct AuthorizationCodeRequest {
     client_id: String,
     redirect_uri: String,
@@ -89,7 +89,7 @@ pub enum AuthorizationErrorKind {
 }
 
 #[axum::debug_handler]
-pub async fn handler() -> HandlerResult<impl IntoResponse> {
+pub async fn handler(Query(url): Query<AuthorizationCodeRequest>) -> HandlerResult<impl IntoResponse> {
     let full_path = PathBuf::from(&CONFIG.OAUTH_ASSETS_PATH).join("authorize.html");
 
     let file = File::open(&full_path).await?;

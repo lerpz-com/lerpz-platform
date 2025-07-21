@@ -43,7 +43,6 @@ impl From<ValidationErrors> for ValidationErrorResponse {
 
 impl From<ValidationErrorsKind> for FieldErrors {
     fn from(err: ValidationErrorsKind) -> Self {
-		dbg!(&err);
         match err {
             ValidationErrorsKind::Field(errors) => FieldErrors(
                 errors

@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lerpz OAuth Authorization</title>
-    <!-- HTMX library -->
-    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6/dist/htmx.min.js"></script>
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Internal CSS & JS -->
     <link href="/api/assets/authorize.css" rel="stylesheet">
     <script src="/api/assets/authorize.js" defer></script>
@@ -14,13 +14,7 @@
 
 <body>
     <main>
-        <form hx-post="/api/login" hx-params="*">
-            <!-- Server-rendered OAuth parameters -->
-            <input type="hidden" name="client_id" value="{client_id}">
-            <input type="hidden" name="redirect_uri" value="{redirect_uri}">
-            <input type="hidden" name="scope" value="{scope}">
-            <input type="hidden" name="state" value="{state}">
-
+        <form method="post" action="/api/oauth/authorize">
             <div>
                 <label for="username">Name (3 to 32 characters):</label>
                 <input id="username" name="username" type="text" placeholder="Username">
