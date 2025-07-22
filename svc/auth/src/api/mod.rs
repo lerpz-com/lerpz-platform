@@ -18,13 +18,12 @@
 //! 1. POST /forgot-password → Request reset
 //! 2. POST /reset-password → Set new password
 
-mod assets;
 mod email_verify;
 mod login;
-mod oauth;
 mod pwd_forgot;
 mod pwd_reset;
 mod register;
+mod token;
 
 use axum::routing::{get, post};
 
@@ -32,12 +31,11 @@ use crate::AppState;
 
 pub fn router(state: AppState) -> axum::Router {
     axum::Router::<AppState>::new()
-        .nest("/oauth", oauth::router(state.clone()))
-        .route("/login", post(login::handler))
-        .route("/register", post(register::handler))
-        .route("/verify-email", get(email_verify::handler))
-        .route("/forgot-password", post(pwd_forgot::handler))
-        .route("/reset-password", post(pwd_reset::handler))
-        .route("/assets/{*path}", get(assets::handler))
+        .route("/register", post(register::post))
+        .route("/login", post(login::post))
+        .route("/token", post(token::post))
+        .route("/verify-email", get(email_verify::get))
+        .route("/forgot-password", post(pwd_forgot::post))
+        .route("/reset-password", post(pwd_reset::post))
         .with_state(state)
 }

@@ -8,12 +8,12 @@ use lerpz_axum::{
 };
 use lerpz_pwd::validate_pwd;
 
-use axum::{extract::State, http::StatusCode, Form};
+use axum::{Json, extract::State, http::StatusCode};
 use serde::Deserialize;
 use validator::Validate;
 
 #[derive(Deserialize, Debug, Validate)]
-pub struct RegisterRequest {
+pub struct LoginRequest {
     #[validate(length(
         min = 3,
         max = 32,
@@ -29,9 +29,9 @@ pub struct RegisterRequest {
 }
 
 #[axum::debug_handler]
-pub async fn handler(
+pub async fn post(
     State(state): State<AppState>,
-    Validated(Form(body)): Validated<Form<RegisterRequest>>,
+    Validated(Json(body)): Validated<Json<LoginRequest>>,
 ) -> HandlerResult<()> {
     let mut database = state.database.acquire().await?;
 
