@@ -12,7 +12,10 @@ use std::{
 use lerpz_axum::error::{HandlerError, HandlerResult};
 
 use axum::{
-    body::Body, extract::Query, http::{header, Response, StatusCode}, response::IntoResponse
+    body::Body,
+    extract::Query,
+    http::{Response, StatusCode, header},
+    response::IntoResponse,
 };
 use serde::{Deserialize, Serialize};
 use tinytemplate::TinyTemplate;
@@ -89,7 +92,9 @@ pub enum AuthorizationErrorKind {
 }
 
 #[axum::debug_handler]
-pub async fn handler(Query(url): Query<AuthorizationCodeRequest>) -> HandlerResult<impl IntoResponse> {
+pub async fn handler(
+    Query(url): Query<AuthorizationCodeRequest>,
+) -> HandlerResult<impl IntoResponse> {
     let full_path = PathBuf::from(&CONFIG.OAUTH_ASSETS_PATH).join("authorize.html");
 
     let file = File::open(&full_path).await?;
