@@ -1,7 +1,3 @@
-mod api;
-mod config;
-mod state;
-
 use crate::config::CONFIG;
 use crate::state::AppState;
 
@@ -11,6 +7,11 @@ use lerpz_axum::shutdown_signal;
 use std::{sync::Arc, time::Duration};
 
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
+
+mod api;
+mod config;
+mod oauth;
+mod state;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -48,7 +49,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         redis: redis_pool,
     };
 
-    let app = Router::new().nest("/api", crate::api::router(state));
+    let app = Router::new()
+        .nest("/api", crate::api::router(state.clone()))
+        .nest("/oauth/v2.0", crate::oauth::router(state));
 
     let listener = tokio::net::TcpListener::bind(&CONFIG.ADDR).await?;
     tracing::info!("server started listening on {}", CONFIG.ADDR);

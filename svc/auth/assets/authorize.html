@@ -13,6 +13,11 @@
 </head>
 
 <body>
+    <header>
+        <h1>Lerpz OAuth Authorization</h1>
+        <p>Please log in to authorize the application.</p>
+    </header>
+
     <main>
         <form method="post" action="/api/oauth/authorize">
             <div>
@@ -28,17 +33,10 @@
             </button>
         </form>
     </main>
-    <!-- <script>
-        function getOAuthParams() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return {
-                client_id: urlParams.get('client_id'),
-                redirect_uri: urlParams.get('redirect_uri'),
-                scope: urlParams.get('scope'),
-                state: urlParams.get('state')
-            };
-        }
-    </script> -->
+
+    <footer>
+
+    </footer>
 </body>
 
 </html>
