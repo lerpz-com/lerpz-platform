@@ -1,16 +1,24 @@
 use crate::config::CONFIG;
 use crate::state::AppState;
 
-use axum::Router;
+use axum::{
+    Router,
+    routing::{get, post},
+};
 use lerpz_axum::shutdown_signal;
 
 use std::{sync::Arc, time::Duration};
 
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
 
-mod api;
+mod assets;
 mod config;
+mod email_verify;
+mod login;
 mod oauth;
+mod pwd_forgot;
+mod pwd_reset;
+mod register;
 mod state;
 
 #[tokio::main]
@@ -50,8 +58,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     let app = Router::new()
-        .nest("/api", crate::api::router(state.clone()))
-        .nest("/oauth/v2.0", crate::oauth::router(state));
+        .nest("/oauth/v2.0", crate::oauth::router(state.clone()))
+        .route("/register", post(register::handler))
+        .route("/verify-email", get(email_verify::handler))
+        .route("/login", post(login::handler))
+        .route("/forgot-password", post(pwd_forgot::handler))
+        .route("/reset-password", post(pwd_reset::handler))
+        .route("/assets/{*path}", get(assets::handler))
+        .with_state(state);
 
     let listener = tokio::net::TcpListener::bind(&CONFIG.ADDR).await?;
     tracing::info!("server started listening on {}", CONFIG.ADDR);

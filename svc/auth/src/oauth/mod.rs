@@ -22,7 +22,7 @@ mod token;
 mod userinfo;
 
 /// This is the main router for the OAuth 2.0 API.
-pub fn router(state: AppState) -> axum::Router {
+pub fn router(state: AppState) -> axum::Router<AppState> {
     axum::Router::<AppState>::new()
         .route("/authorize", get(authorize::handler))
         .route("/revoke", post(revoke::handler))
