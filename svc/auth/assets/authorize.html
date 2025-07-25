@@ -4,39 +4,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lerpz OAuth Authorization</title>
+    <title>Lerpz Auth</title>
+    <link rel="icon" href="/api/assets/favicon.ico" type="image/x-icon">
+    <!-- Recursive Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Recursive:wght@300..1000&display=swap" rel="stylesheet">
     <!-- Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Internal CSS & JS -->
     <link href="/api/assets/authorize.css" rel="stylesheet">
-    <script src="/api/assets/authorize.js" defer></script>
+    <script type="module" src="/api/assets/authorize.js" defer></script>
 </head>
 
 <body>
-    <header>
-        <h1>Lerpz OAuth Authorization</h1>
-        <p>Please log in to authorize the application.</p>
-    </header>
-
     <main>
-        <form method="post" action="/api/oauth/authorize">
+        <form method="post" action="/api/login">
             <div>
-                <label for="username">Name (3 to 32 characters):</label>
-                <input id="username" name="username" type="text" placeholder="Username">
+                <h2>Lerpz Auth</h2>
+                <p>Login to your account to continue.</p>
             </div>
             <div>
-                <label for="password">Password (6 to 128 characters):</label>
-                <input id="password" name="password" type="password" placeholder="Password">
+                <label for="username">Name</label>
+                <input id="username" name="username" type="text" placeholder="example">
+            </div>
+            <div>
+                <div>
+                    <label for="password">Password</label>
+                    <a href="/forgot-password">Forgot password?</a>
+                </div>
+                <input id="password" name="password" type="password" placeholder="********">
             </div>
             <button type="submit">
                 Login
             </button>
+            <p>
+                Don't have an account? <a href="/register">Register</a>
+            </p>
         </form>
     </main>
-
-    <footer>
-
-    </footer>
 </body>
 
 </html>

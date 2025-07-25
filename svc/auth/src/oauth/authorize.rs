@@ -4,10 +4,7 @@
 //! This only implements the Authorization Code + PKCE flow as per RFC 6749 and
 //! RFC 7636. The implicit grant is deprecated and not implemented.
 
-use std::{
-    path::PathBuf,
-    sync::{Arc, LazyLock},
-};
+use std::path::PathBuf;
 
 use lerpz_axum::error::{HandlerError, HandlerResult};
 
@@ -18,7 +15,6 @@ use axum::{
     response::IntoResponse,
 };
 use serde::{Deserialize, Serialize};
-use tinytemplate::TinyTemplate;
 use tokio::fs::File;
 use tokio_util::io::ReaderStream;
 use url::Url;

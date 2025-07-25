@@ -1152,7 +1152,6 @@ dependencies = [
  "serde_urlencoded",
  "sqlx",
  "thiserror",
- "tinytemplate",
  "tokio",
  "tokio-util",
  "tower",

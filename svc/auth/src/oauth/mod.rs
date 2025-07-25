@@ -25,8 +25,8 @@ mod userinfo;
 pub fn router(state: AppState) -> axum::Router {
     axum::Router::<AppState>::new()
         .route("/authorize", get(authorize::handler))
-        .route("/token", post(token::handler))
         .route("/revoke", post(revoke::handler))
+        .route("/token", post(token::handler))
         .route("/userinfo", get(userinfo::handler))
         .with_state(state)
 }

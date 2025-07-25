@@ -62,13 +62,11 @@ CREATE TRIGGER update_timestamp
 
 -- User Consents
 
-CREATE TABLE IF NOT EXISTS user_client_authorizations(
+CREATE TABLE IF NOT EXISTS user_client_consent(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL REFERENCES users(id),
     client_id UUID NOT NULL REFERENCES oauth_clients(id),
-    scope TEXT NOT NULL,
-    authorized_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    expires_at TIMESTAMPTZ DEFAULT NULL,
+    authorized_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     UNIQUE (user_id, client_id)
@@ -83,8 +81,8 @@ CREATE TRIGGER update_timestamp
 
 CREATE TABLE IF NOT EXISTS redirect_uris(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    uri VARCHAR(2000) NOT NULL,
     client_id UUID NOT NULL REFERENCES oauth_clients(id),
-    uri VARCHAR(512) NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL
 );

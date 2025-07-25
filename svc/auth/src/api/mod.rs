@@ -13,9 +13,9 @@ use crate::AppState;
 
 pub fn router(state: AppState) -> axum::Router {
     axum::Router::<AppState>::new()
-        .route("/login", post(login::handler))
         .route("/register", post(register::handler))
         .route("/verify-email", get(email_verify::handler))
+        .route("/login", post(login::handler))
         .route("/forgot-password", post(pwd_forgot::handler))
         .route("/reset-password", post(pwd_reset::handler))
         .route("/assets/{*path}", get(assets::handler))
