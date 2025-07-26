@@ -59,12 +59,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let app = Router::new()
         .nest("/oauth/v2.0", crate::oauth::router(state.clone()))
-        .route("/register", post(register::handler))
-        .route("/verify-email", get(email_verify::handler))
-        .route("/login", post(login::handler))
-        .route("/forgot-password", post(pwd_forgot::handler))
-        .route("/reset-password", post(pwd_reset::handler))
-        .route("/assets/{*path}", get(assets::handler))
+        .route("/register", post(register::post))
+        .route("/verify-email", get(email_verify::get))
+        .route("/login", post(login::post))
+        .route("/forgot-password", post(pwd_forgot::post))
+        .route("/reset-password", post(pwd_reset::post))
+        .route("/assets/{*path}", get(assets::get))
         .with_state(state);
 
     let listener = tokio::net::TcpListener::bind(&CONFIG.ADDR).await?;

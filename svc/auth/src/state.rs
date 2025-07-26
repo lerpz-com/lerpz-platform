@@ -17,6 +17,6 @@ impl FromRef<AppState> for Pool<Postgres> {
 
 impl FromRef<AppState> for Arc<redis::Client> {
     fn from_ref(state: &AppState) -> Self {
-        state.redis.clone() 
+        state.redis.clone()
     }
 }

@@ -2,36 +2,23 @@
 
 use crate::state::AppState;
 
-use lerpz_axum::{
-    error::{HandlerError, HandlerResult},
-    middleware::validate::Validated,
-};
+use lerpz_axum::error::{HandlerError, HandlerResult};
 use lerpz_pwd::validate_pwd;
 
 use axum::{Json, extract::State, http::StatusCode};
 use serde::Deserialize;
-use validator::Validate;
 
-#[derive(Deserialize, Debug, Validate)]
+#[derive(Deserialize, Debug)]
 pub struct LoginRequest {
-    #[validate(length(
-        min = 3,
-        max = 32,
-        message = "Username must be between 3 and 32 characters"
-    ))]
     username: String,
-    #[validate(length(
-        min = 8,
-        max = 128,
-        message = "Password must be between 8 and 128 characters"
-    ))]
     password: String,
+    client_id: String,
 }
 
 #[axum::debug_handler]
 pub async fn post(
     State(state): State<AppState>,
-    Validated(Json(body)): Validated<Json<LoginRequest>>,
+    Json(body): Json<LoginRequest>,
 ) -> HandlerResult<()> {
     let mut database = state.database.acquire().await?;
 

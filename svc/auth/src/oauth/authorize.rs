@@ -1,4 +1,3 @@
-#![allow(unused)]
 //! Endpoint for OAuth 2.0 authorization.
 //!
 //! This only implements the Authorization Code + PKCE flow as per RFC 6749 and

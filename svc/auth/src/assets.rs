@@ -17,7 +17,7 @@ use tokio_util::io::ReaderStream;
 use crate::config::CONFIG;
 
 #[axum::debug_handler]
-pub async fn handler(Path(file_path): Path<String>) -> HandlerResult<impl IntoResponse> {
+pub async fn get(Path(file_path): Path<String>) -> HandlerResult<impl IntoResponse> {
     let full_path = PathBuf::from(&CONFIG.OAUTH_ASSETS_PATH).join(file_path);
 
     if !full_path.starts_with(&CONFIG.OAUTH_ASSETS_PATH) {

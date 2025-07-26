@@ -1,4 +1,3 @@
-#![allow(unused)]
 //! The token endpoint for OAuth 2.0
 //! 
 //! Only the Authorization Code, Client Credentials, and Refresh Token flows are

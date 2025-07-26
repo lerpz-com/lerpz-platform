@@ -1,7 +1,7 @@
-pub mod auth;
+pub mod oauth;
 pub mod org;
 pub mod user;
 
-pub use auth::*;
+pub use oauth::*;
 pub use org::*;
 pub use user::*;

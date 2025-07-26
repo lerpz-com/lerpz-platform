@@ -12,6 +12,7 @@ pub struct RefreshToken {
     pub updated_at: DateTime<Utc>,
 }
 
+#[derive(FromRow, Debug, Clone)]
 pub struct OAuthClients {
     pub id: Uuid,
     pub name: String,
@@ -21,17 +22,7 @@ pub struct OAuthClients {
     pub updated_at: DateTime<Utc>,
 }
 
-pub struct UserClientAuthorizations {
-    pub id: Uuid,
-    pub user_id: Uuid,
-    pub client_id: Uuid,
-    pub scope: String,
-    pub authorized_at: DateTime<Utc>,
-    pub expires_at: Option<DateTime<Utc>>,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-}
-
+#[derive(FromRow, Debug, Clone)]
 pub struct RedirectUris {
     pub id: Uuid,
     pub client_id: Uuid,
@@ -40,6 +31,7 @@ pub struct RedirectUris {
     pub updated_at: DateTime<Utc>,
 }
 
+#[derive(FromRow, Debug, Clone)]
 pub struct Scopes {
     pub id: Uuid,
     pub name: String,
@@ -49,6 +41,7 @@ pub struct Scopes {
     pub updated_at: DateTime<Utc>,
 }
 
+#[derive(FromRow, Debug, Clone)]
 pub struct ClientScopes {
     pub client_id: Uuid,
     pub scope_id: Uuid,
@@ -56,6 +49,7 @@ pub struct ClientScopes {
     pub updated_at: DateTime<Utc>,
 }
 
+#[derive(FromRow, Debug, Clone)]
 pub struct RefreshTokens {
     pub id: Uuid,
     pub token: String,
@@ -67,6 +61,7 @@ pub struct RefreshTokens {
     pub revoked_at: Option<DateTime<Utc>>,
 }
 
+#[derive(FromRow, Debug, Clone)]
 pub struct AccessTokens {
     pub id: Uuid,
     pub jti: String,

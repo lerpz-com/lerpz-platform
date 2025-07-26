@@ -1,20 +1,43 @@
 const client = axios.create({
   baseURL: "/",
-  timeout: 1000,
+  timeout: 10000,
   allowAbsoluteURLs: false,
-  params: getOAuthParams(),
 });
 
 function getOAuthParams() {
-  const params = new URLSearchParams(window.location.search);
-  return params;
+  return new URLSearchParams(window.location.search);
 }
 
-function handleLogin(event) {
+async function handleLogin(event) {
   event.preventDefault();
-  const formData = new FormData(event.target);
-  const res = client.post("/login", formData).then(res => res);
-  console.log("Login response:", res);
+  
+  try {
+    const formData = new FormData(event.target);
+    for (const [key, value] of getOAuthParams().entries()) {
+      formData.append(key, value);
+    }
+    
+    const response = await client.post("/login", formData);
+    
+    if (response.status === 200) {
+      if (response.data.redirectUrl) {
+        window.location.href = response.data.redirectUrl;
+      } else {
+        console.log("Login successful:", response.data);
+      }
+    }
+  } catch (error) {
+    console.error("Login failed:", error);
+    
+    if (error.response) {
+      const errorMessage = error.response.data?.title || "Login failed";
+      alert(errorMessage);
+    } else if (error.request) {
+      alert("Network error. Please try again.");
+    } else {
+      alert("An unexpected error occurred.");
+    }
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
