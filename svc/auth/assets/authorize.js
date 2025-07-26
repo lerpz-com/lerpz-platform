@@ -1,5 +1,5 @@
 const client = axios.create({
-  baseURL: "/api/",
+  baseURL: "/",
   timeout: 1000,
   allowAbsoluteURLs: false,
   params: getOAuthParams(),
@@ -13,7 +13,7 @@ function getOAuthParams() {
 function handleLogin(event) {
   event.preventDefault();
   const formData = new FormData(event.target);
-  const res = client.post("/login", formData);
+  const res = client.post("/login", formData).then(res => res);
   console.log("Login response:", res);
 }
 
