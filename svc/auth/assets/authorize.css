@@ -1,0 +1,170 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Recursive', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-size: 1.6rem;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+        "slnt" 0,
+        "CASL" 0,
+        "CRSV" 0.5,
+        "MONO" 0;
+    line-height: 1.5;
+    color: rgb(229, 229, 229);
+    background-color: rgb(38, 38, 38);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+    color: inherit;
+}
+
+button {
+    border: none;
+    border-radius: 0.65rem;
+    color: rgb(25, 25, 25);
+    background-color: rgb(229, 229, 229);
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+}
+
+input,
+textarea {
+    border-radius: 1rem;
+    border-color: rgba(255, 255, 255, 0.1);
+    border-style: solid;
+    border-width: 1px;
+    background-color: rgb(29, 29, 29);
+    padding: 0.75rem 1rem;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    width: 100%;
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 3rem;
+    border-radius: 1.5rem;
+    border-color: rgba(255, 255, 255, 0.1);
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    background-color: rgb(23, 23, 23);
+}
+
+form h1,
+form h2,
+form h3,
+form h4,
+form h5,
+form h6,
+form p {
+    text-align: center;
+}
+
+form div {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+form div p {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+form div div {
+    display: flex;
+    justify-content: space-between;
+}
+
+form button {
+    margin-top: 1rem;
+}
+
+form p a {
+    text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+}

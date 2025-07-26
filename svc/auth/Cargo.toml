@@ -27,7 +27,6 @@ sqlx = { workspace = true, features = [
     "uuid",
 ] }
 thiserror = { workspace = true }
-tinytemplate = { workspace = true }
 tokio = { workspace = true, features = ["full"] }
 tokio-util = { workspace = true }
 tower = { workspace = true }

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lerpz Auth</title>
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+    <!-- Recursive Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Recursive:wght@300..1000&display=swap" rel="stylesheet">
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Internal CSS & JS -->
+    <link href="/assets/authorize.css" rel="stylesheet">
+    <script type="module" src="/assets/authorize.js" defer></script>
+</head>
+
+<body>
+    <main>
+        <form method="post" action="/login">
+            <div>
+                <h2>Lerpz Auth</h2>
+                <p>Login to your account to continue.</p>
+            </div>
+            <div>
+                <label for="username">Name</label>
+                <input id="username" name="username" type="text" placeholder="example">
+            </div>
+            <div>
+                <div>
+                    <label for="password">Password</label>
+                    <a href="/forgot-password">Forgot password?</a>
+                </div>
+                <input id="password" name="password" type="password" placeholder="********">
+            </div>
+            <button type="submit">
+                Login
+            </button>
+            <p>
+                Don't have an account? <a href="/register">Register</a>
+            </p>
+        </form>
+    </main>
+</body>
+
+</html>
