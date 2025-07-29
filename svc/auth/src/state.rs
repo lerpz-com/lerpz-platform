@@ -1,3 +1,5 @@
+//! Axum state shared between endpoints.
+
 use std::sync::Arc;
 
 use axum::extract::FromRef;

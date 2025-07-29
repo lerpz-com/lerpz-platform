@@ -1,6 +1,4 @@
-//! Endpoint for OAuth 2.0 authorization.
-//!
-//! This endpoint returns assets like HTML, CSS, and JavaScript files.
+//! Endpoint for serving assets like HTML, CSS, and JavaScript files.
 
 use std::path::PathBuf;
 

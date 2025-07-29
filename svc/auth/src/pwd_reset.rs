@@ -1,4 +1,4 @@
-//! Endpoint to reset a user's password.
+//! Endpoint for user password reset.
 
 use lerpz_axum::error::HandlerResult;
 

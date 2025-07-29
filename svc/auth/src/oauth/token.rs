@@ -1,5 +1,5 @@
 //! The token endpoint for OAuth 2.0
-//! 
+//!
 //! Only the Authorization Code, Client Credentials, and Refresh Token flows are
 //! implemented. The Password Grant flow is not implemented as it is deprecated.
 
@@ -83,7 +83,7 @@ pub struct AccessTokenResponse {
 }
 
 #[axum::debug_handler]
-pub async fn handler(Form(body): Form<GrantType>) -> HandlerResult<Json<AccessTokenResponse>> {
+pub async fn post(Form(body): Form<GrantType>) -> HandlerResult<Json<AccessTokenResponse>> {
     let access_token = match body {
         GrantType::AuthorizationCode(req) => authorization_code(req),
         GrantType::ClientCredentials(req) => client_credentials(req),

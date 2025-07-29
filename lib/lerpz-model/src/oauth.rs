@@ -3,27 +3,17 @@ use sqlx::FromRow;
 use uuid::Uuid;
 
 #[derive(FromRow, Debug, Clone)]
-pub struct RefreshToken {
-    pub id: Uuid,
-    pub user_id: Uuid,
-    pub token: String,
-    pub expires_at: DateTime<Utc>,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-}
-
-#[derive(FromRow, Debug, Clone)]
-pub struct OAuthClients {
+pub struct OAuthClient {
     pub id: Uuid,
     pub name: String,
     pub description: Option<String>,
-    pub organization_id: Uuid,
+    pub organization_id: Option<Uuid>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
 }
 
 #[derive(FromRow, Debug, Clone)]
-pub struct RedirectUris {
+pub struct RedirectUri {
     pub id: Uuid,
     pub client_id: Uuid,
     pub uri: String,
@@ -32,7 +22,7 @@ pub struct RedirectUris {
 }
 
 #[derive(FromRow, Debug, Clone)]
-pub struct Scopes {
+pub struct Scope {
     pub id: Uuid,
     pub name: String,
     pub description: Option<String>,
@@ -42,7 +32,7 @@ pub struct Scopes {
 }
 
 #[derive(FromRow, Debug, Clone)]
-pub struct ClientScopes {
+pub struct ClientScope {
     pub client_id: Uuid,
     pub scope_id: Uuid,
     pub created_at: DateTime<Utc>,
@@ -50,7 +40,7 @@ pub struct ClientScopes {
 }
 
 #[derive(FromRow, Debug, Clone)]
-pub struct RefreshTokens {
+pub struct RefreshToken {
     pub id: Uuid,
     pub token: String,
     pub user_id: Uuid,
@@ -62,7 +52,7 @@ pub struct RefreshTokens {
 }
 
 #[derive(FromRow, Debug, Clone)]
-pub struct AccessTokens {
+pub struct AccessToken {
     pub id: Uuid,
     pub jti: String,
     pub user_id: Option<Uuid>,

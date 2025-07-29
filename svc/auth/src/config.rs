@@ -9,7 +9,7 @@ use lerpz_utils::{
 
 /// The main configuration struct for the server.
 ///
-/// Lazy loaded using `LazyLock` to ensure that the configuration is only loaded
+/// Lazy loaded using [`std::sync::LazyLock`] to ensure that the configuration is only loaded
 /// once.
 pub static CONFIG: LazyLock<Config> = LazyLock::new(|| Config::from_env().unwrap());
 
