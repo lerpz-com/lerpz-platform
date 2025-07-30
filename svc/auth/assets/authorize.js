@@ -4,31 +4,32 @@ const client = axios.create({
   allowAbsoluteURLs: false,
 });
 
-function getOAuthParams() {
+function getParams() {
   return new URLSearchParams(window.location.search);
 }
 
 async function handleLogin(event) {
   event.preventDefault();
-  
+
   try {
     const formData = new FormData(event.target);
-    for (const [key, value] of getOAuthParams().entries()) {
-      formData.append(key, value);
-    }
-    
     const response = await client.post("/login", formData);
-    
-    if (response.status === 200) {
-      if (response.data.redirectUrl) {
-        window.location.href = response.data.redirectUrl;
-      } else {
-        console.log("Login successful:", response.data);
-      }
+
+    if (response.status !== 200) {
+      alert("Something went wrong");
     }
+
+    const loginUrl = "https://localhost:3001/oauth/2.0/authorize?";
+    for (const [key, value] of getParams().entries()) {
+      loginUrl.append(`${key}=${value}&`);
+    }
+
+    loginUrl.slice(0, -1);
+
+    window.location.href = loginUrl;
   } catch (error) {
     console.error("Login failed:", error);
-    
+
     if (error.response) {
       const errorMessage = error.response.data?.title || "Login failed";
       alert(errorMessage);

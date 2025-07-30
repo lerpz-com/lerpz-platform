@@ -61,7 +61,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .nest("/oauth/v2.0", crate::oauth::router(state.clone()))
         .route("/register", post(register::post))
         .route("/verify-email", get(email_verify::get))
-        .route("/login", post(login::post))
+        .route("/login", get(login::get).post(login::post))
         .route("/forgot-password", post(pwd_forgot::post))
         .route("/reset-password", post(pwd_reset::post))
         .route("/assets/{*path}", get(assets::get))

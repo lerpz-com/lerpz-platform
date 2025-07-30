@@ -1,25 +1,52 @@
 //! Endpoint for user login.
 
-use crate::state::AppState;
+use std::path::PathBuf;
 
+use crate::{config::CONFIG, state::AppState};
+
+use axum_extra::extract::{CookieJar, cookie::Cookie};
+use chrono::Duration;
 use lerpz_axum::error::{HandlerError, HandlerResult};
 use lerpz_pwd::validate_pwd;
 
-use axum::{Json, extract::State, http::StatusCode};
+use axum::{
+    Json,
+    body::Body,
+    extract::State,
+    http::{Response, StatusCode, header},
+};
 use serde::Deserialize;
+use tokio::fs::File;
+use tokio_util::io::ReaderStream;
 
 #[derive(Deserialize, Debug)]
 pub struct LoginRequest {
     username: String,
     password: String,
-    client_id: String,
+}
+
+#[axum::debug_handler]
+pub async fn get() -> HandlerResult<Response<Body>> {
+    let full_path = PathBuf::from(&CONFIG.OAUTH_ASSETS_PATH).join("authorize.html");
+
+    let file = File::open(&full_path).await?;
+
+    let stream = ReaderStream::new(file);
+    let body = Body::from_stream(stream);
+
+    let content_type = "text/html; charset=utf-8";
+
+    Ok(Response::builder()
+        .header(header::CONTENT_TYPE, content_type)
+        .body(body)?)
 }
 
 #[axum::debug_handler]
 pub async fn post(
     State(state): State<AppState>,
+    jar: CookieJar,
     Json(body): Json<LoginRequest>,
-) -> HandlerResult<()> {
+) -> HandlerResult<CookieJar> {
     let mut database = state.database.acquire().await?;
 
     let user = sqlx::query_as!(
@@ -38,5 +65,9 @@ pub async fn post(
         ));
     }
 
-    Ok(())
+    let session_cookie = Cookie::build(("session", "secret_session_token"))
+        .path("/")
+        .secure(true);
+
+    Ok(jar.add(session_cookie))
 }

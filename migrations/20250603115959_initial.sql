@@ -44,7 +44,7 @@ CREATE TRIGGER update_timestamp
     FOR EACH ROW
     EXECUTE FUNCTION update_timestamp();
 
--- Client & Scopes 
+-- Client & Scopes
 
 CREATE TABLE IF NOT EXISTS oauth_clients(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -151,4 +151,12 @@ INSERT INTO oauth_clients(
     'cdd37e5a-a554-4535-bff2-45ba130b05b4',
     'Lerpz Portal',
     'The main client for the Lerpz portal.'
-)
+);
+
+INSERT INTO redirect_uris(
+    client_id,
+    uri
+) VALUES (
+    'cdd37e5a-a554-4535-bff2-45ba130b05b4',
+    'http://localhost:3000'
+);
