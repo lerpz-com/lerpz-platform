@@ -1177,6 +1177,7 @@ dependencies = [
  "base64",
  "chrono",
  "dotenvy",
+ "http",
  "lerpz-axum",
  "lerpz-jwt",
  "lerpz-model",

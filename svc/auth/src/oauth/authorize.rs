@@ -11,16 +11,15 @@ use axum::{
 };
 use axum_extra::extract::CookieJar;
 use base64::{Engine, engine::general_purpose::URL_SAFE_NO_PAD};
+use http::uri::{Builder as UriBuilder, Uri};
 use rand::Rng;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use strum::AsRefStr;
-use url::Url;
 use uuid::Uuid;
 
-use crate::{config::CONFIG, state::AppState};
+use crate::state::AppState;
 
-static PROBLEM_URL: LazyLock<Url> =
-    LazyLock::new(|| Url::parse(&format!("{}/problem", CONFIG.ORIGIN)).unwrap());
+static PROBLEM_URI: LazyLock<Uri> = LazyLock::new(|| "/problem".parse::<Uri>().unwrap());
 
 /// A request to initiate the OAuth 2.0 authorization code flow.
 ///
@@ -45,31 +44,31 @@ type AuthorizationCodeResponse = Result<Success, Failed>;
 ///
 /// Sources:
 /// - https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub struct Success {
-    /// The url to redirect to.
-    url: Url,
+    /// The uri to redirect to.
+    #[serde(skip)]
+    uri: Uri,
     /// The code given the client can use to optain a access and refresh token
     code: String,
     /// State that might have been given in the request.
+    #[serde(skip_serializing_if = "Option::is_none")]
     state: Option<String>,
 }
 
 impl Success {
     /// Generate a new sucess response
-    pub fn new(url: Url, code: String, state: Option<String>) -> Self {
-        Self { url, code, state }
+    pub fn new(uri: Uri, code: String, state: Option<String>) -> Self {
+        Self { uri, code, state }
     }
 }
 
 impl IntoResponse for Success {
     fn into_response(self) -> Response {
-        let mut url = self.url;
-        {
-            let mut query_pairs = url.query_pairs_mut();
-            query_pairs.append_pair("error", &self.code);
-        }
-        Redirect::to(url.as_str()).into_response()
+        let query = serde_urlencoded::to_string(self);
+        let builder = UriBuilder::from(self.uri);
+        builder.path_and_query(query);
+        Redirect::to(uri.as_str()).into_response()
     }
 }
 
@@ -77,17 +76,21 @@ impl IntoResponse for Success {
 ///
 /// Sources:
 /// - https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2.1
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub struct Failed {
-    /// The url to redirect to.
-    url: Url,
+    /// The uri to redirect to.
+    #[serde(skip)]
+    uri: Uri,
     /// What kind of error happend.
     error: ErrorKind,
     /// An optional description of the error.
+    #[serde(skip_serializing_if = "Option::is_none")]
     error_description: Option<String>,
     /// An optional URI to documentation
+    #[serde(skip_serializing_if = "Option::is_none")]
     error_uri: Option<String>,
     /// State that might have been given in the request.
+    #[serde(skip_serializing_if = "Option::is_none")]
     state: Option<String>,
 }
 
@@ -95,7 +98,8 @@ pub struct Failed {
 ///
 /// Sources:
 /// - https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2.1
-#[derive(AsRefStr, Debug)]
+#[derive(Serialize, AsRefStr, Debug)]
+#[serde(rename_all = "snake_case")]
 #[strum(serialize_all = "snake_case")]
 pub enum ErrorKind {
     InvalidRequest,
@@ -109,9 +113,9 @@ pub enum ErrorKind {
 
 impl Failed {
     /// Generate a new sucess response
-    pub fn new(url: Url, error: ErrorKind, state: Option<String>) -> Self {
+    pub fn new(uri: Uri, error: ErrorKind, state: Option<String>) -> Self {
         Self {
-            url,
+            uri,
             error,
             state,
             error_description: None,
@@ -120,26 +124,28 @@ impl Failed {
     }
 
     /// Adds a error description to the response.
-    pub fn with_error_description(mut self, description: String) -> Self {
-        self.error_description = Some(description);
+    pub fn with_error_description(mut self, description: impl Into<String>) -> Self {
+        self.error_description = Some(description.into());
         self
     }
 
     /// Adds the error URI to the response.
-    pub fn with_error_uri(mut self, uri: String) -> Self {
-        self.error_uri = Some(uri);
+    pub fn with_error_uri(mut self, uri: impl Into<String>) -> Self {
+        self.error_uri = Some(uri.into());
         self
     }
 }
 
 impl IntoResponse for Failed {
     fn into_response(self) -> Response {
-        let mut url = self.url;
-        {
-            let mut query_pairs = url.query_pairs_mut();
-            query_pairs.append_pair("error", &self.error.as_ref());
-        }
-        Redirect::to(url.as_str()).into_response()
+        let uri = self.uri.clone();
+        let query = serde_urlencoded::to_string(self).unwrap();
+        let builder = UriBuilder::from(uri)
+            .path_and_query(format!("{}?{}", path, query));
+
+        let uri = builder.build().unwrap();
+
+        Redirect::to(&uri.to_string()).into_response()
     }
 }
 
@@ -147,17 +153,28 @@ impl<E> From<E> for Failed
 where
     E: Into<anyhow::Error>,
 {
-    fn from(value: E) -> Self {
-        todo!()
+    fn from(_value: E) -> Self {
+        Failed::new(PROBLEM_URI.clone(), ErrorKind::ServerError, None)
     }
 }
+
+// fn append_optional_query_pair<T>(
+//     key: &str,
+//     value: Option<T>,
+// ) where
+//     T: AsRef<str>,
+// {
+//     if let Some(value) = value {
+//         query_pairs.append_pair(key, value.as_ref());
+//     }
+// }
 
 #[axum::debug_handler]
 pub async fn get(
     State(state): State<AppState>,
     jar: CookieJar,
     Query(query): Query<AuthorizationCodeRequest>,
-) -> AuthorizationCodeResponse {
+) -> impl IntoResponse {
     let mut database = state.database.acquire().await?;
 
     let oauth_client = sqlx::query_as!(
@@ -176,24 +193,40 @@ pub async fn get(
     .fetch_optional(&mut *database)
     .await?;
 
-    let (_, redirect_uri) = match (oauth_client, redirect_uri) {
+    let (oauth_client, redirect_uri) = match (oauth_client, redirect_uri) {
         (Some(oauth_client), Some(redirect_uri)) => (oauth_client, redirect_uri),
         _ => {
             return Err(Failed::new(
-                PROBLEM_URL.clone(),
+                PROBLEM_URI.clone(),
                 ErrorKind::InvalidRequest,
                 query.state,
             ));
         }
     };
 
+    if oauth_client.id != redirect_uri.client_id {
+        return Err(Failed::new(
+            PROBLEM_URI.clone(),
+            ErrorKind::InvalidRequest,
+            query.state,
+        ));
+    }
+
+    let redirect_uri = redirect_uri.uri.parse::<Uri>().map_err(|err| {
+        Failed::new(PROBLEM_URI.clone(), ErrorKind::InvalidRequest, query.state)
+            .with_error_description("Parsing the provided redirect URI failed.")
+    })?;
+
     if query.response_type != "code".to_string() {
-        todo!()
+        return Err(
+            Failed::new(redirect_uri, ErrorKind::InvalidRequest, query.state)
+                .with_error_description("Only 'code' is allowed as response type."),
+        );
     }
 
     let _session = match jar.get("session") {
         Some(session) => session,
-        None => return todo!(),
+        None => return Redirect::to(get_login_url(query)),
     };
 
     // TODO: Verify session token
@@ -201,9 +234,8 @@ pub async fn get(
     // TODO: Generate code
 
     // TODO: Don't use unwrap
-
     let response = Success {
-        url: Url::parse(&redirect_uri.uri)?,
+        uri: redirect_uri,
         code: generate_code_verifier(),
         state: query.state,
     };
@@ -224,24 +256,20 @@ fn generate_code_verifier() -> String {
 }
 
 /// Generate a login URL for the given authorization code request.
-fn get_login_url(query: AuthorizationCodeRequest) -> Redirect {
+fn get_login_url(query: AuthorizationCodeRequest) -> Result<Uri> {
     // TODO: Remove - this comment is only for debugging purposes.
     // http://localhost:3001/oauth/v2.0/authorize?client_id=cdd37e5a-a554-4535-bff2-45ba130b05b4&redirect_uri=http://localhost:3000&scope=openid.
 
-    // TODO: Make sure the login URL is not hardcoded.
-    let mut login_uri = Url::parse("http://localhost:3001/login").unwrap();
+    let uri_builder = UriBuilder::new().authority("/login");
 
-    {
-        let mut pairs = login_uri.query_pairs_mut();
-        pairs
-            .append_pair("client_id", &query.client_id.to_string())
-            .append_pair("redirect_uri", &query.redirect_uri)
-            .append_pair("scope", &query.scope);
+    // {
+    //     let mut query_pairs = login_uri.query();
+    //     query_pairs
+    //         .append_pair("client_id", &query.client_id.to_string())
+    //         .append_pair("redirect_uri", &query.redirect_uri)
+    //         .append_pair("scope", &query.scope);
+    //     append_optional_query_pair(&mut query_pairs, "state", query.state);
+    // }
 
-        if let Some(state) = query.state {
-            pairs.append_pair("state", &state);
-        }
-    }
-
-    Redirect::to(login_uri.as_str())
+    login_uri
 }

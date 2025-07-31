@@ -17,6 +17,7 @@ axum-extra = { workspace = true, features = ["cookie"] }
 base64 = { workspace = true }
 chrono = { workspace = true }
 dotenvy = { workspace = true }
+http = { workspace = true }
 mime_guess = { workspace = true }
 rand = { workspace = true }
 redis = { workspace = true, features = ["tokio-native-tls-comp"] }
