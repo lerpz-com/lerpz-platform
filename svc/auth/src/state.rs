@@ -1,14 +1,13 @@
 //! Axum state shared between endpoints.
 
-use std::sync::Arc;
-
 use axum::extract::FromRef;
+use bb8_redis::{RedisConnectionManager, bb8};
 use sqlx::{Pool, Postgres};
 
 #[derive(Clone)]
 pub struct AppState {
     pub database: sqlx::PgPool,
-    pub redis: Arc<redis::Client>,
+    pub redis: bb8::Pool<RedisConnectionManager>,
 }
 
 impl FromRef<AppState> for Pool<Postgres> {
@@ -17,7 +16,7 @@ impl FromRef<AppState> for Pool<Postgres> {
     }
 }
 
-impl FromRef<AppState> for Arc<redis::Client> {
+impl FromRef<AppState> for bb8::Pool<RedisConnectionManager> {
     fn from_ref(state: &AppState) -> Self {
         state.redis.clone()
     }

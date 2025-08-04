@@ -1,14 +1,15 @@
 use crate::config::CONFIG;
 use crate::state::AppState;
 
+use lerpz_axum::shutdown_signal;
+
+use std::time::Duration;
+
 use axum::{
     Router,
     routing::{get, post},
 };
-use lerpz_axum::shutdown_signal;
-
-use std::{sync::Arc, time::Duration};
-
+use bb8_redis::{RedisConnectionManager, bb8};
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
 
 mod assets;
@@ -47,10 +48,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
         .unwrap_or_else(|err| panic!("can't connect to database: {err}"));
 
-    let redis_pool = Arc::new(
-        redis::Client::open(CONFIG.REDIS_URL.clone())
-            .unwrap_or_else(|err| panic!("can't connect to redis: {err}")),
-    );
+    let redis_manager = RedisConnectionManager::new(CONFIG.REDIS_URL.clone())
+        .unwrap_or_else(|err| panic!("failed to connect to redis"));
+    let redis_pool = bb8::Pool::builder()
+        .build(redis_manager)
+        .await
+        .unwrap_or_else(|err| {
+            panic!("failed to create redis pool: {}", err);
+        });
 
     let state = AppState {
         database: database_pool,

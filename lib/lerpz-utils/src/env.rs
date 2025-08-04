@@ -1,4 +1,4 @@
-//! Get environment variables and parse them into a specific type.
+//! Environment variables utilities for applications.
 
 use std::{ffi::OsStr, str::FromStr};
 
@@ -25,7 +25,7 @@ where
 }
 
 /// Get an environment variable and try to parse it into the generic type `T`.
-/// 
+///
 /// Returns an error if the variable is not found or if the parsing fails.
 pub fn get_env_parse<K, T>(key: K) -> Result<T>
 where

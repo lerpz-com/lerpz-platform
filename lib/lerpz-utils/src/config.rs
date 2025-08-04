@@ -4,20 +4,20 @@
 ///
 /// The struct will have a field for each of the given idents given in the macro
 /// and will have a `from_env` method to create it from environment variables.
-/// 
+///
 /// # Example
-/// 
+///
 /// Usage together with the [`crate::env`] module and a [`std::sync::LazyLock`].
-/// 
+///
 /// ```
 /// generate_config! {
 /// 	ENV: String = get_env,
 /// 	SOME_INTEGER: u32 = get_env_parse,
 /// }
-/// 
+///
 ///	pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
 /// 	Config::from_env().unwrap()
-/// }) 
+/// })
 /// ```
 #[macro_export]
 macro_rules! generate_config {
@@ -26,7 +26,7 @@ macro_rules! generate_config {
 		#[allow(non_snake_case)]
 		pub struct Config {
             $(
-			    pub $name: $type,
+                pub $name: $type,
             )+
 		}
 

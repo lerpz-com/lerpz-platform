@@ -1,11 +1,12 @@
-//! Functions related to token generation and verification.
+//! Functions related to JWT token generation and verification.
 
 /// Claims related to JWT tokens.
 pub mod claims;
 /// Errors that can occur when working with JWT tokens.
 pub mod error;
 
-use jsonwebtoken::{DecodingKey, EncodingKey, Header, TokenData, Validation, decode, encode};
+pub use jsonwebtoken::{DecodingKey, EncodingKey};
+use jsonwebtoken::{Header, TokenData, Validation, decode, encode};
 
 pub use claims::Claims;
 pub use error::{Error, Result};

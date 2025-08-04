@@ -15,8 +15,12 @@ anyhow = { workspace = true }
 axum = { workspace = true, features = ["tokio", "macros"] }
 axum-extra = { workspace = true, features = ["cookie"] }
 base64 = { workspace = true }
+bb8-redis = { workspace = true }
 chrono = { workspace = true }
+cookie = { workspace = true }
 dotenvy = { workspace = true }
+fluent-uri = { workspace = true }
+hex = { workspace = true }
 http = { workspace = true }
 mime_guess = { workspace = true }
 rand = { workspace = true }
