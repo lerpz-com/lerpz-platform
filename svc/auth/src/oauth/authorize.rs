@@ -3,6 +3,8 @@
 //! This only implements the Authorization Code + PKCE flow as per RFC 6749 and
 //! RFC 7636. The implicit grant is deprecated and not implemented.
 
+use crate::login::SESSION_COOKIE_NAME;
+
 use std::sync::LazyLock;
 
 use axum::{
@@ -13,6 +15,7 @@ use axum_extra::extract::CookieJar;
 use base64::{Engine, engine::general_purpose::URL_SAFE_NO_PAD};
 use fluent_uri::{UriRef, encoding::EStr};
 use rand::Rng;
+use redis::AsyncCommands;
 use serde::{Deserialize, Serialize};
 use strum::AsRefStr;
 use uuid::Uuid;
@@ -30,9 +33,12 @@ static PROBLEM_URI_REF: LazyLock<UriRef<String>> = LazyLock::new(|| {
 ///
 /// Sources:
 /// - https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.1
+/// - https://datatracker.ietf.org/doc/html/rfc7636#section-4.3
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AuthorizationCodeRequest {
     response_type: String,
+    code_challenge: String,
+    code_challenge_method: String,
     client_id: Uuid,
     redirect_uri: String,
     scope: String,
@@ -221,7 +227,7 @@ pub async fn get(
         );
     }
 
-    let _session = match jar.get("session") {
+    let session = match jar.get(SESSION_COOKIE_NAME) {
         Some(session) => session,
         None => {
             return Err(
@@ -231,9 +237,11 @@ pub async fn get(
         }
     };
 
-    // TODO: Verify session token
+    let mut redis = state.redis.get().await?;
+    let _: String = redis.get(session.value()).await?;
 
     // TODO: Generate code
+    let code = generate_code_verifier();
 
     // TODO: Don't use unwrap
     let response = Success {

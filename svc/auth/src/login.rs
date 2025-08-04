@@ -23,6 +23,8 @@ use serde::Deserialize;
 use tokio::fs::File;
 use tokio_util::io::ReaderStream;
 
+pub const SESSION_COOKIE_NAME: &str = "session";
+
 #[derive(Deserialize, Debug)]
 pub struct LoginRequest {
     username: String,
@@ -74,9 +76,11 @@ pub async fn post(
     let redis_options = redis::SetOptions::default()
         .conditional_set(redis::ExistenceCheck::NX)
         .with_expiration(redis::SetExpiry::EX(3600));
-    let _: () = redis.set_options(&session_token, user.id.to_string(), redis_options).await?;
+    let _: () = redis
+        .set_options(&session_token, user.id.to_string(), redis_options)
+        .await?;
 
-    let mut session_cookie = Cookie::build(("session", session_token))
+    let mut session_cookie = Cookie::build((SESSION_COOKIE_NAME, session_token))
         .path("/")
         .secure(true)
         .http_only(true)
