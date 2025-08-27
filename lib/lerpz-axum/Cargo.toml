@@ -6,6 +6,8 @@ version.workspace = true
 [dependencies]
 anyhow = { workspace = true }
 axum = { workspace = true }
+jsonwebtoken = { workspace = true, optional = true }
+reqwest = { workspace = true, optional = true }
 thiserror = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }
@@ -13,3 +15,6 @@ serde = { workspace = true }
 sqlx = { workspace = true }
 uuid = { workspace = true }
 validator = { workspace = true, features = ["derive"] }
+
+[features]
+azure = ["dep:jsonwebtoken", "dep:reqwest"]
