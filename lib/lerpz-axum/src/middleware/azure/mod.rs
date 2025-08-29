@@ -3,7 +3,7 @@ use axum::{
     http::request::Parts,
 };
 use jsonwebtoken::{decode, decode_header};
-use serde::Deserialize;
+use serde::{Deserialize, Deserializer};
 
 use crate::error::HandlerError;
 
@@ -13,8 +13,11 @@ pub use validation::*;
 mod config;
 mod validation;
 
+/// A token representing a user in the Azure AD system.
+///
+/// This does not support multi-tenant applications.
 #[derive(Debug, Deserialize)]
-pub struct AzureUser {
+pub struct AzureToken {
     pub iss: String,
     pub aud: String,
     pub exp: usize,
@@ -23,7 +26,8 @@ pub struct AzureUser {
     pub sub: Option<String>,
     pub tid: Option<String>,
 
-    pub scp: Option<String>,
+    #[serde(default, deserialize_with = "deserialize_space_separated_scopes")]
+    pub scp: Vec<String>,
     pub roles: Option<Vec<String>>,
     pub appid: Option<String>,
     pub ver: Option<String>,
@@ -33,7 +37,43 @@ pub struct AzureUser {
     pub email: Option<String>,
 }
 
-impl<S> FromRequestParts<S> for AzureUser
+fn deserialize_space_separated_scopes<'de, D>(deserializer: D) -> Result<Vec<String>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let opt_string: Option<String> = Option::deserialize(deserializer)?;
+
+    Ok(opt_string
+        .map(|s| {
+            s.split_whitespace()
+                .map(|scope| scope.to_string())
+                .collect()
+        })
+        .unwrap_or_default())
+}
+
+impl AzureToken {
+    pub fn has_scope(&self, scope: &str) -> bool {
+        self.scp.iter().any(|s| s == scope)
+    }
+
+    pub fn has_any_scope(&self, scopes: &[&str]) -> bool {
+        scopes.iter().any(|scope| self.has_scope(scope))
+    }
+
+    pub fn has_role(&self, role: &str) -> bool {
+        self.roles
+            .as_ref()
+            .map(|roles| roles.contains(&role.to_string()))
+            .unwrap_or(false)
+    }
+
+    pub fn has_any_role(&self, roles: &[&str]) -> bool {
+        roles.iter().any(|role| self.has_role(role))
+    }
+}
+
+impl<S> FromRequestParts<S> for AzureToken
 where
     AzureConfig: FromRef<S>,
     S: Send + Sync,
@@ -58,8 +98,12 @@ where
             .ok_or(HandlerError::unauthorized())?;
 
         let validation = get_token_validation(&config);
-        let token_data = decode::<AzureUser>(token, &decoding_key, &validation)
+        let token_data = decode::<AzureToken>(token, &decoding_key, &validation)
             .map_err(|_| HandlerError::unauthorized())?;
+
+        if !custom_validation(&config, &token_data.claims) {
+            return Err(HandlerError::unauthorized());
+        }
 
         Ok(token_data.claims)
     }
