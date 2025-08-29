@@ -15,5 +15,9 @@
   },
   "engines": {
     "node": "^23.0.0"
+  },
+  "dependencies": {
+    "@azure/msal-browser": "^4.21.1",
+    "@azure/msal-react": "^3.0.19"
   }
 }

@@ -2,8 +2,9 @@ import QueryProvider from "@/components/query-provider"
 import { ThemeProvider } from "@/components/theme/provider"
 import type { Metadata } from "next"
 import { Fira_Mono, Inter } from "next/font/google"
-import "./globals.css"
 import { Toaster } from "sonner"
+import MSALProvider from "@/components/msal-provider"
+import "@/app/globals.css"
 
 const interSans = Inter({
   variable: "--font-inter-sans",
@@ -32,17 +33,19 @@ export default function RootLayout({
       <body
         className={`${interSans.variable} ${firaMono.variable} antialiased`}
       >
-        <QueryProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <Toaster />
-          </ThemeProvider>
-        </QueryProvider>
+        <MSALProvider>
+          <QueryProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </QueryProvider>
+        </MSALProvider>
       </body>
     </html>
   )
