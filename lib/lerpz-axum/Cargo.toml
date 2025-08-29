@@ -11,10 +11,11 @@ reqwest = { workspace = true, optional = true }
 thiserror = { workspace = true }
 tokio = { workspace = true }
 tracing = { workspace = true }
+regex = { workspace = true, optional = true }
 serde = { workspace = true }
 sqlx = { workspace = true }
 uuid = { workspace = true }
 validator = { workspace = true, features = ["derive"] }
 
 [features]
-azure = ["dep:jsonwebtoken", "dep:reqwest"]
+azure = ["dep:jsonwebtoken", "dep:reqwest", "dep:regex"]

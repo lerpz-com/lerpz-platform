@@ -61,20 +61,21 @@ where
     /// The log ID of the error.
     ///
     /// This is automatically set when the response contains an error that
-    /// should be tracked. This is not public, so that it is never set manually,
-    /// since that might break how you identify the error.
+    /// should be tracked. This should not be set manually, unless you know what
+    /// you are doing. If you do set it manually, make sure to also set the
+    /// `inner` field.
     ///
-    /// This field is sent to the client instead of the acctual error that
-    /// occured. This is way more secure, since the acctual error might contain
+    /// This field is sent to the client instead of the actual error that
+    /// occurred. This is way more secure, since the actual error might contain
     /// information that should not be leaked and might help attackers
     /// understand how to exploit the application.
     #[serde(skip_serializing_if = "Option::is_none")]
     log_id: Option<String>,
     /// The actual error that occurred.
     ///
-    /// There might no be an actual error, in which case this field is [`None`].
-    /// Should never be exposed to the client for security reasons. This is why
-    /// we skip Serilization.
+    /// There might not be an actual error, in which case this field is
+    /// [`None`].  This should never be exposed to the client for security
+    /// reasons. This is why we skip Serialization.
     ///
     /// If this field contains an error, the log_id field should also be
     /// present, to identify the error in the logs.
@@ -89,7 +90,7 @@ where
     /// Create a new [`HandlerError`] with status code, header and message.
     ///
     /// All optional fields are [`None`] by default. These can be set using
-    /// functions found on the struct.
+    /// methods found on the struct.
     pub fn new(
         status: StatusCode,
         title: impl Into<Cow<'static, str>>,
@@ -110,9 +111,9 @@ where
     /// Create a new [`HandlerError`] with status code, header and message, and
     /// fill the `instance` field with the path of the request.
     ///
-    /// This is a convenience function to create an error that is specific to a
-    /// request, so that the client can see which endpoint the error occurred
-    /// on.
+    /// This is a convenience method to create an error that is specific to a
+    /// request, so that the client can see which endpoint the problem occurred
+    /// on in the error data.
     pub fn new_with_parts(
         status: StatusCode,
         title: impl Into<Cow<'static, str>>,
