@@ -12,6 +12,7 @@ use jsonwebtoken::{DecodingKey, jwk::JwkSet};
 
 use crate::error::HandlerError;
 
+/// Azure configuration.
 #[derive(Clone)]
 pub struct AzureConfig {
     pub tenant_id: Cow<'static, str>,
@@ -20,6 +21,10 @@ pub struct AzureConfig {
     jwks_cache: Arc<RwLock<Option<JwksCache>>>,
 }
 
+/// A cache for JWKs (JSON Web Keys).
+///
+/// This cache is used to store the JWKs fetched from the Azure keys discovery
+/// endpoint.
 #[derive(Clone)]
 struct JwksCache {
     keys: HashMap<String, DecodingKey>,
@@ -27,6 +32,7 @@ struct JwksCache {
 }
 
 impl AzureConfig {
+    /// Create a new [`AzureConfig`].
     pub fn new(
         tenant_id: impl Into<Cow<'static, str>>,
         client_id: impl Into<Cow<'static, str>>,
@@ -39,6 +45,7 @@ impl AzureConfig {
         }
     }
 
+    /// Get the URL for the JWKs (JSON Web Keys) endpoint.
     pub fn get_jwks_url(&self) -> String {
         format!(
             "https://login.microsoftonline.com/{}/discovery/v2.0/keys",
@@ -46,10 +53,12 @@ impl AzureConfig {
         )
     }
 
+    /// Get the URL for the issuer endpoint.
     pub fn get_issuer_url(&self) -> String {
         format!("https://login.microsoftonline.com/{}/v2.0", &self.tenant_id)
     }
 
+    /// Get a JWK (JSON Web Key) by its key ID.
     pub async fn get_jwk(&self, kid: String) -> Result<Option<DecodingKey>, HandlerError> {
         let cache = self.jwks_cache.read().await;
         if let Some(cached) = cache.as_ref() {
@@ -67,6 +76,11 @@ impl AzureConfig {
         }
     }
 
+    /// Fetch the JWKs (JSON Web Keys) from the Azure endpoint.
+    ///
+    /// This will read the cache-control header to determine how long the
+    /// fetched keys are valid for. If this header is invalid it will defualt to
+    /// 24 hours (86400 sec).
     async fn fetch_jwks(&self) -> Result<(), HandlerError> {
         let response = self
             .http_client

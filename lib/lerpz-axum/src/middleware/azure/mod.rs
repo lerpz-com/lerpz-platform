@@ -13,9 +13,11 @@ pub use validation::*;
 mod config;
 mod validation;
 
-/// A token representing a user in the Azure AD system.
+/// A token representing a user in the Azure Entra system.
 ///
-/// This does not support multi-tenant applications.
+/// # Note:
+/// 
+/// This does not support multi-tenant applications (yet).
 #[derive(Debug, Deserialize)]
 pub struct AzureToken {
     pub iss: String,
@@ -37,6 +39,9 @@ pub struct AzureToken {
     pub email: Option<String>,
 }
 
+/// Used to deserialize the [`AzureToken::scp`].
+///
+/// This is a space separated string
 fn deserialize_space_separated_scopes<'de, D>(deserializer: D) -> Result<Vec<String>, D::Error>
 where
     D: Deserializer<'de>,
@@ -53,14 +58,35 @@ where
 }
 
 impl AzureToken {
+    /// Check if the token has scope.
     pub fn has_scope(&self, scope: &str) -> bool {
         self.scp.iter().any(|s| s == scope)
     }
 
+    /// Check if the token has any of scopes.
     pub fn has_any_scope(&self, scopes: &[&str]) -> bool {
         scopes.iter().any(|scope| self.has_scope(scope))
     }
 
+    /// Check if the token has scope.
+    ///
+    /// This will return [`HandlerError::unauthorized()`] if scope is not found.
+    pub fn has_scope_unauthorized(&self, scope: &str) -> Result<(), HandlerError> {
+        self.has_scope(scope)
+            .then_some(())
+            .ok_or(HandlerError::unauthorized())
+    }
+
+    /// Check if the token has any of scopes.
+    ///
+    /// This will return [`HandlerError::unauthorized()`] if all scopes are not found.
+    pub fn has_any_scope_unauthorized(&self, scopes: &[&str]) -> Result<(), HandlerError> {
+        self.has_any_scope(scopes)
+            .then_some(())
+            .ok_or(HandlerError::unauthorized())
+    }
+
+    /// Check if the token has role.
     pub fn has_role(&self, role: &str) -> bool {
         self.roles
             .as_ref()
@@ -68,8 +94,27 @@ impl AzureToken {
             .unwrap_or(false)
     }
 
+    /// Check if the token has any of roles.
     pub fn has_any_role(&self, roles: &[&str]) -> bool {
         roles.iter().any(|role| self.has_role(role))
+    }
+
+    /// Check if the token has role.
+    ///
+    /// This will return [`HandlerError::unauthorized()`] if role is not found.
+    pub fn has_role_unauthorized(&self, role: &str) -> Result<(), HandlerError> {
+        self.has_role(role)
+            .then_some(())
+            .ok_or(HandlerError::unauthorized())
+    }
+
+    /// Check if the token has any of roles.
+    ///
+    /// This will return [`HandlerError::unauthorized()`] if all roles are not found.
+    pub fn has_any_role_unauthorized(&self, roles: &[&str]) -> Result<(), HandlerError> {
+        self.has_any_role(roles)
+            .then_some(())
+            .ok_or(HandlerError::unauthorized())
     }
 }
 
