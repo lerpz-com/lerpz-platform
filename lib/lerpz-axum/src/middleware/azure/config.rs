@@ -1,9 +1,10 @@
+use axum::http::HeaderMap;
 use regex::Regex;
 use reqwest::StatusCode;
 use std::{
     borrow::Cow,
     collections::HashMap,
-    sync::{Arc, OnceLock},
+    sync::{Arc, LazyLock},
     time::{Duration, Instant},
 };
 use tokio::sync::RwLock;
@@ -89,19 +90,7 @@ impl AzureConfig {
             .send()
             .await?;
 
-        static REGEX: OnceLock<Regex> = OnceLock::new();
-        let regex = REGEX.get_or_init(|| Regex::new(r"(?:^|,\s*)max-age=(\d+)").unwrap());
-        let expires_at: u64 = response
-            .headers()
-            .get("cache-control")
-            .and_then(|v| v.to_str().ok())
-            .and_then(|header_value| {
-                regex
-                    .captures(header_value)
-                    .and_then(|caps| caps.get(1))
-                    .and_then(|m| m.as_str().parse().ok())
-            })
-            .unwrap_or(86400);
+        let expires_at = expires_at(response.headers()).unwrap_or(86400);
 
         let jwk_set: JwkSet = if response.status().is_success() {
             response.json().await?
@@ -134,4 +123,19 @@ impl AzureConfig {
 
         Ok(())
     }
+}
+
+static EXPIRES_AT_REGEX: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?:^|,\s*)max-age=(\d+)").unwrap());
+
+fn expires_at(headers: &HeaderMap) -> Option<u64> {
+    headers
+        .get("cache-control")
+        .and_then(|v| v.to_str().ok())
+        .and_then(|header_value| {
+            EXPIRES_AT_REGEX
+                .captures(header_value)
+                .and_then(|caps| caps.get(1))
+                .and_then(|m| m.as_str().parse().ok())
+        })
 }
