@@ -1,0 +1,9 @@
+[package]
+name = "entra-mcp"
+version.workspace = true
+edition.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+authors.workspace = true
+
+[dependencies]
