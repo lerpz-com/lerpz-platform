@@ -1,7 +1,0 @@
-[package]
-name = "lerpz-relay"
-edition = "2024"
-version.workspace = true
-
-[dependencies]
-lerpz-utils = { workspace = true }
