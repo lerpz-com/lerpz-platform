@@ -34,9 +34,21 @@ pub struct AzureToken {
     pub appid: Option<String>,
     pub ver: Option<String>,
 
+    pub acrs: Vec<String>,
+
     pub nonce: Option<String>,
     pub name: Option<String>,
     pub email: Option<String>,
+
+    // Optional claims
+    pub upn: Option<String>,
+    pub ipaddr: Option<String>,
+    pub pwd_exp: Option<i64>,
+    pub pwd_url: Option<String>,
+    pub in_corp: Option<bool>,
+    pub nickname: Option<String>,
+    pub family_name: Option<String>,
+    pub given_name: Option<String>,
 }
 
 /// Used to deserialize the [`AzureToken::scp`].
