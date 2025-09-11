@@ -105,10 +105,9 @@ impl AzureConfig {
         let mut map = HashMap::new();
         for key in jwk_set.keys {
             let decoding_key = DecodingKey::from_jwk(&key)?;
-            let key_id = if let Some(kid) = key.common.key_id {
-                kid
-            } else {
-                continue;
+            let key_id = match key.common.key_id {
+                Some(kid) => kid,
+                None => continue,
             };
             map.insert(key_id, decoding_key);
         }

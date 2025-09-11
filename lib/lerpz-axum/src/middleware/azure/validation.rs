@@ -14,7 +14,7 @@ pub fn get_token_validation(config: &super::AzureConfig) -> Validation {
     validation
 }
 
-/// Azure specific validation.
+/// Azure specific validation of token claims.
 pub fn azure_claims_validation(
     config: &super::AzureConfig,
     claims: &super::AzureAccessToken,
