@@ -1,7 +1,3 @@
 procs:
   frontend:
     shell: "pnpm dev"
-  auth:
-    shell: "cargo run --bin lerpz-auth"
-  relay:
-    shell: "cargo run --bin lerpz-relay"
