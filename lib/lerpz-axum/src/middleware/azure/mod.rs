@@ -14,30 +14,71 @@ mod config;
 mod validation;
 
 /// A token representing a user in the Azure Entra system.
-///
-/// # Note:
 /// 
+/// This can be extracted in any handler by adding it as a parameter.
+/// 
+/// ### Example
+///
+/// ```rust
+/// async fn example_handler(
+///   token: AzureAccessToken,
+/// ) -> HandlerResult<String> {
+///     if !token.has_scope("example/scope") {
+///         Err(HandlerError::unauthorized())
+///     }
+///     
+///     Ok("You have the required scope!".to_string())
+/// }
+/// ```
+///
+/// ### Note:
+///
 /// This does not support multi-tenant applications (yet).
 #[derive(Debug, Deserialize)]
-pub struct AzureToken {
+pub struct AzureAccessToken {
+    /// Issuer of the token.
     pub iss: String,
+    /// Audience for which the token is intended.
     pub aud: String,
+    /// Expiration time of the token (as a Unix timestamp).
     pub exp: usize,
+    /// "not before" time of the token (as a Unix timestamp).
     pub nbf: Option<usize>,
+    /// Issued at time of the token (as a Unix timestamp).
     pub iat: Option<usize>,
+    /// Subject of the JWT (Often the user).
     pub sub: Option<String>,
-    pub tid: Option<String>,
 
+    /// Version of the Microsoft JWT scheme.
+    /// 
+    /// The versions and their JSON scheme can be found in [Microsoft
+    /// Documentation](https://learn.microsoft.com/en-us/entra/identity-platform/security-tokens).
+    /// 
+    /// ### Note:
+    /// 
+    /// Only "v2.0" is supported.
+    pub ver: Option<String>,
+    /// Scopes assigned to the token.
     #[serde(default, deserialize_with = "deserialize_space_separated_scopes")]
     pub scp: Vec<String>,
+    /// Roles assigned to the token.
     pub roles: Option<Vec<String>>,
+    /// Tenant ID of the user.
+    pub tid: Option<String>,
+    /// App ID of the application.
     pub appid: Option<String>,
-    pub ver: Option<String>,
 
-    pub acrs: Vec<String>,
-
+    /// Unique identifier for the user.
+    ///
+    /// This is a optional claim that can be enabled in the app registration.
     pub nonce: Option<String>,
+    /// Preferred username of the user.
+    ///
+    /// This is a optional claim that can be enabled in the app registration.
     pub name: Option<String>,
+    /// Email of the user.
+    ///
+    /// This is a optional claim that can be enabled in the app registration.
     pub email: Option<String>,
 
     // Optional claims
@@ -52,16 +93,12 @@ pub struct AzureToken {
 }
 
 /// Used to deserialize the [`AzureToken::scp`].
-///
-/// This is a space separated string
 fn deserialize_space_separated_scopes<'de, D>(deserializer: D) -> Result<Vec<String>, D::Error>
 where
     D: Deserializer<'de>,
 {
-    let opt_string: Option<String> = Option::deserialize(deserializer)?;
-
-    Ok(opt_string
-        .map(|s| {
+    Ok(Option::deserialize(deserializer)?
+        .map(|s: String| {
             s.split_whitespace()
                 .map(|scope| scope.to_string())
                 .collect()
@@ -69,7 +106,7 @@ where
         .unwrap_or_default())
 }
 
-impl AzureToken {
+impl AzureAccessToken {
     /// Check if the token has scope.
     pub fn has_scope(&self, scope: &str) -> bool {
         self.scp.iter().any(|s| s == scope)
@@ -83,7 +120,7 @@ impl AzureToken {
     /// Check if the token has scope.
     ///
     /// This will return [`HandlerError::unauthorized()`] if scope is not found.
-    pub fn has_scope_unauthorized(&self, scope: &str) -> Result<(), HandlerError> {
+    pub fn has_scope_or_unauthorized(&self, scope: &str) -> Result<(), HandlerError> {
         self.has_scope(scope)
             .then_some(())
             .ok_or(HandlerError::unauthorized())
@@ -92,7 +129,7 @@ impl AzureToken {
     /// Check if the token has any of scopes.
     ///
     /// This will return [`HandlerError::unauthorized()`] if all scopes are not found.
-    pub fn has_any_scope_unauthorized(&self, scopes: &[&str]) -> Result<(), HandlerError> {
+    pub fn has_any_scope_or_unauthorized(&self, scopes: &[&str]) -> Result<(), HandlerError> {
         self.has_any_scope(scopes)
             .then_some(())
             .ok_or(HandlerError::unauthorized())
@@ -114,7 +151,7 @@ impl AzureToken {
     /// Check if the token has role.
     ///
     /// This will return [`HandlerError::unauthorized()`] if role is not found.
-    pub fn has_role_unauthorized(&self, role: &str) -> Result<(), HandlerError> {
+    pub fn has_role_or_unauthorized(&self, role: &str) -> Result<(), HandlerError> {
         self.has_role(role)
             .then_some(())
             .ok_or(HandlerError::unauthorized())
@@ -123,14 +160,14 @@ impl AzureToken {
     /// Check if the token has any of roles.
     ///
     /// This will return [`HandlerError::unauthorized()`] if all roles are not found.
-    pub fn has_any_role_unauthorized(&self, roles: &[&str]) -> Result<(), HandlerError> {
+    pub fn has_any_role_or_unauthorized(&self, roles: &[&str]) -> Result<(), HandlerError> {
         self.has_any_role(roles)
             .then_some(())
             .ok_or(HandlerError::unauthorized())
     }
 }
 
-impl<S> FromRequestParts<S> for AzureToken
+impl<S> FromRequestParts<S> for AzureAccessToken
 where
     AzureConfig: FromRef<S>,
     S: Send + Sync,
@@ -145,7 +182,7 @@ where
             .and_then(|h| h.strip_prefix("Bearer "))
             .ok_or_else(|| HandlerError::unauthorized())?;
 
-        let header = decode_header(token).map_err(|_| HandlerError::unauthorized())?;
+        let header = decode_header(token).map_err(HandlerError::unauthorized_with_error)?;
         let kid = header.kid.ok_or(HandlerError::unauthorized())?;
 
         let config = AzureConfig::from_ref(state);
@@ -155,10 +192,10 @@ where
             .ok_or(HandlerError::unauthorized())?;
 
         let validation = get_token_validation(&config);
-        let token_data = decode::<AzureToken>(token, &decoding_key, &validation)
-            .map_err(|_| HandlerError::unauthorized())?;
+        let token_data = decode::<AzureAccessToken>(token, &decoding_key, &validation)
+            .map_err(HandlerError::unauthorized_with_error)?;
 
-        if !custom_validation(&config, &token_data.claims) {
+        if !azure_claims_validation(&config, &token_data.claims) {
             return Err(HandlerError::unauthorized());
         }
 

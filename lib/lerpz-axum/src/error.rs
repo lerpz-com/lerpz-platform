@@ -135,6 +135,20 @@ where
         )
     }
 
+    /// An generic unauthorized response with an error.
+    /// 
+    /// This is a generic response for someone that tries to access an
+    /// authorized resource without proper authorization.
+    /// 
+    /// The error is logged and a [`Self::log_id`] is generated so that the
+    /// error can be tracked.
+    pub fn unauthorized_with_error<E>(e: E) -> Self
+    where
+        E: Into<anyhow::Error>,
+    {
+        Self::unauthorized().with_error(e)
+    }
+
     /// An generic forbidden response.
     ///
     /// This is a generic response for someone that tries to access a forbidden
@@ -152,14 +166,13 @@ where
         self.kind = kind.into();
         self
     }
-
+    
     /// Fills the [`Self::instance`] field with the path of the request.
-    ///
-    /// This is a convenience function that uses the [`Parts`] of the request to
-    /// fill the `instance` field.
-    pub fn fill_instance(mut self, p: &Parts) -> Self {
-        self.instance = Some(Cow::Owned(p.uri.path().into()));
-        self
+    /// 
+    /// This is a convenience function that uses [`Parts`] of the request to
+    /// fill the [`Self::instance`] field with the URI of the incoming request.
+    pub fn fill_instance(self, p: &Parts) -> Self {
+        self.with_instance(Cow::Owned(p.uri.path().into()))
     }
 
     /// Add a instance to the [`HandlerError`].
