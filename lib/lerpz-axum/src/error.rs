@@ -74,11 +74,11 @@ where
     /// The actual error that occurred.
     ///
     /// There might not be an actual error, in which case this field is
-    /// [`None`].  This should never be exposed to the client for security
+    /// [`None`]. This should never be exposed to the client for security
     /// reasons. This is why we skip Serialization.
     ///
-    /// If this field contains an error, the log_id field should also be
-    /// present, to identify the error in the logs.
+    /// If this field contains an error, the [`Self::log_id`] field should also
+    /// be present to identify the error in the logs.
     #[serde(skip)]
     inner: Option<anyhow::Error>,
 }
@@ -109,7 +109,7 @@ where
     }
 
     /// Create a new [`HandlerError`] with status code, header and message, and
-    /// fill the `instance` field with the path of the request.
+    /// fill the [`Self::instance`] field with the path of the request.
     ///
     /// This is a convenience method to create an error that is specific to a
     /// request, so that the client can see which endpoint the problem occurred
@@ -123,7 +123,7 @@ where
         Self::new(status, title, detail).fill_instance(p)
     }
 
-    /// An generic unauthorized response.
+    /// A generic unauthorized response.
     ///
     /// This is a generic response for someone that tries to access an
     /// authorized resource without proper authorization.
@@ -135,11 +135,11 @@ where
         )
     }
 
-    /// An generic unauthorized response with an error.
-    /// 
+    /// A generic unauthorized response with an error.
+    ///
     /// This is a generic response for someone that tries to access an
     /// authorized resource without proper authorization.
-    /// 
+    ///
     /// The error is logged and a [`Self::log_id`] is generated so that the
     /// error can be tracked.
     pub fn unauthorized_with_error<E>(e: E) -> Self
@@ -149,7 +149,7 @@ where
         Self::unauthorized().with_error(e)
     }
 
-    /// An generic forbidden response.
+    /// A generic forbidden response.
     ///
     /// This is a generic response for someone that tries to access a forbidden
     /// resource, even though they are authorized.
@@ -166,9 +166,9 @@ where
         self.kind = kind.into();
         self
     }
-    
+
     /// Fills the [`Self::instance`] field with the path of the request.
-    /// 
+    ///
     /// This is a convenience function that uses [`Parts`] of the request to
     /// fill the [`Self::instance`] field with the URI of the incoming request.
     pub fn fill_instance(self, p: &Parts) -> Self {
@@ -198,16 +198,15 @@ where
 
     /// Set the [`Self::log_id`] field for the [`HandlerError`].
     ///
-    /// The [`Self::log_id`] field is automatically set when the `inner` field is
-    /// present and the [`Self::log_id`] is [`None`]. Changing this field might make it
-    /// hard or impossible to track the error or in other ways, break how the
-    /// error is logged.
+    /// The [`Self::log_id`] field is automatically set when the `inner` field
+    /// is present and [`Self::log_id`] is [`None`]. Changing this field might
+    /// make it hard or impossible to track the error or in other ways, break
+    /// how the error is logged.
     ///
-    /// # Note
+    /// ### Note
     ///
     /// Make sure you use a globally unique identifier for the [`Self::log_id`].
-    /// This could as an example be a UUID. This also defaults to UUID if it's
-    /// missing when turned into request.
+    /// This will default to a UUID if it's missing when turned into request.
     pub fn with_log_id<U>(mut self, log_id: U) -> Self
     where
         U: Into<String>,
@@ -225,12 +224,8 @@ where
     ///
     /// This automatically logs errors using [`tracing`]. This also sets the
     /// [`Self::log_id`] field so that the error can be tracked.
-    fn into_response(mut self) -> Response {
+    fn into_response(self) -> Response {
         if let Some(error) = self.inner.as_ref() {
-            if self.log_id.is_none() {
-                self.log_id = Some(Uuid::new_v4().into())
-            };
-
             let HandlerError {
                 ref title,
                 ref detail,
@@ -238,12 +233,15 @@ where
                 ..
             } = self;
 
-            let log_id = log_id.as_ref().unwrap(); // `log_id` is guaranteed to be set (above).
+            let log_id = match log_id.as_deref() {
+                Some(id) => id,
+                None => &Uuid::new_v4().to_string(),
+            };
 
             if self.status.is_server_error() {
                 tracing::error!(log_id = %log_id, server_error = %error, "An server error occurred");
             } else {
-                tracing::error!(log_id = %log_id, client_error = %title, message = %detail, "An client error occurred");
+                tracing::info!(log_id = %log_id, client_error = %title, message = %detail, "An client error occurred");
             }
         }
 
@@ -262,7 +260,7 @@ where
     D: Serialize + Send + Sync,
 {
     /// Turns any error into a [`HandlerError`].
-    ///
+    /// 
     /// This assumes that the error is an internal server error. This will
     /// automatically set the error in the [`Self::inner`] field.
     fn from(value: E) -> Self {
