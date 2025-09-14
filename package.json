@@ -3,8 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "portal": "pnpm --filter portal dev",
-    "frontend": "pnpm --filter frontend dev"
+    "dev:portal": "pnpm --filter portal dev"
   },
   "packageManager": "pnpm@10.15.1",
   "devDependencies": {

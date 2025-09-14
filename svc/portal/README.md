@@ -1,57 +1,20 @@
-# SolidStart
+# Next.js frontend
 
-Everything you need to build a Solid project, powered by [`solid-start`](https://start.solidjs.com);
+## Getting Started
 
-## Creating a project
-
-```bash
-# create a new project in the current directory
-npm init solid@latest
-
-# create a new project in my-app
-npm init solid@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+First, run the development server:
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+pnpm dev
 ```
 
-## Env Vars
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Rename the example file and add your Discord OAuth credentials:
+## Learn More
 
-```bash
-# rename example environment file
-cp .env.example .env
-```
+To learn more about Next.js, take a look at the following resources:
 
-Edit `.env` with your values:
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-```dotenv
-DISCORD_ID=your-discord-client-id
-DISCORD_SECRET=your-discord-client-secret
-```
-
-1. Create an application at [https://discord.com/developers/applications](https://discord.com/developers/applications) to obtain your client ID and secret.
-2. In the app's **OAuth2 → Redirects** settings, add:
-
-   ```text
-   http://localhost:3000/api/oauth/discord
-   ```
-
-For more details on the [start-oauth](https://github.com/thomasbuilds/start-oauth) integration, see the repository.
-
-## Building
-
-Solid apps are built with _presets_, which optimise your project for deployment to different environments.
-
-By default, `npm run build` will generate a Node app that you can run with `npm start`. To use a different preset, add it to the `devDependencies` in `package.json` and specify in your `app.config.js`.
-
-## This project was created with the [Solid CLI](https://github.com/solidjs-community/solid-cli)
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!

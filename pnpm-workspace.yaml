@@ -1,3 +1,2 @@
 packages:
-- 'svc/frontend'
-- 'svc/jml'
+- 'svc/portal'
