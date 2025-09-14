@@ -10,6 +10,8 @@
   },
   "packageManager": "pnpm@10.11.0",
   "dependencies": {
+    "@azure/msal-browser": "^4",
+    "@azure/msal-react": "^3",
     "@radix-ui/react-avatar": "^1",
     "@radix-ui/react-checkbox": "^1",
     "@radix-ui/react-collapsible": "^1",
