@@ -1,17 +1,13 @@
 {
   "compilerOptions": {
     // Compatibility
-    "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
     "strict": true,
+    "target": "esnext",
     "allowJs": true,
     "skipLibCheck": true,
     "noEmit": true,
     "jsx": "preserve",
+    "jsxImportSource": "solid-js",
     // Module
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -20,23 +16,26 @@
     "isolatedModules": true,
     "incremental": true,
     // Other
+    "baseUrl": "./",
     "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "@solidjs/start/env"
+    ],
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": [
+      "~/*": [
         "./src/*"
-      ],
-    },
+      ]
+    }
   },
   "include": [
-    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

@@ -10,6 +10,6 @@
     "@postgrestools/postgrestools": "^0.13.0"
   },
   "engines": {
-    "node": "^23.0.0"
+    "node": "^22.0.0"
   }
 }

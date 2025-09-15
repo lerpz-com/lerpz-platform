@@ -12,39 +12,31 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.config({
     extends: [
-      "plugin:@next/next/recommended",
       "plugin:@typescript-eslint/recommended",
-      "plugin:import/recommended",
-      "plugin:react/recommended",
       "plugin:prettier/recommended"
     ],
-    plugins: [
-      "@tanstack/query",
-      "@typescript-eslint",
-      "import",
-      "react",
-      "react-hooks"
-    ],
-    rules: {
-      "react/react-in-jsx-scope": "off"
-    },
+    plugins: ["@tanstack/query", "@typescript-eslint", "prettier"],
     parser: "@typescript-eslint/parser",
     parserOptions: {
       ecmaFeatures: {
         jsx: true
       }
     },
-    settings: {
-      react: {
-        version: "detect"
-      },
-      "import/resolver": {
-        typescript: {
-          project: "./tsconfig.json"
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          args: "all",
+          argsIgnorePattern: "^_",
+          caughtErrors: "all",
+          caughtErrorsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          ignoreRestSiblings: true
         }
-      }
+      ]
     },
-    ignorePatterns: ["node_modules/", ".next/", ".turbo/"]
+    ignorePatterns: ["node_modules/"]
   })
 ]
 

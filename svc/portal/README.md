@@ -1,20 +1,24 @@
-# Next.js frontend
+# SolidStart + AuthJS
 
-## Getting Started
+## Setup a Discord app
 
-First, run the development server:
+In order to run this example, you need to setup i.e. a Discord app in here: https://discord.com/developers/applications/, to get a client secret and client id which should be added to the .env file. Also, in the Discord app settings under OAuth2, set the Return URL to: http://localhost:3000/api/auth/callback/discord
 
-```bash
-pnpm dev
-```
+## AuthJS
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Everything you need to build an [AuthJS](https://authjs.dev/) authenticated Solid project, powered by [`solid-start`](https://start.solidjs.com);
 
-## Learn More
+This will start a production server on port `3000`.
 
-To learn more about Next.js, take a look at the following resources:
+### Enviroment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `DISCORD_ID`=
+- `DISCORD_SECRET`=
+- `AUTH_SECRET`=b198e07a64406260b98f06e21c457b84
+- `AUTH_TRUST_HOST`=true
+- `AUTH_URL`=http://localhost:3000
+- `VITE_AUTH_PATH`=/api/auth
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+[Sponsor Create JD App](https://github.com/sponsors/OrJDev)
+
+## This project was created with the [Solid CLI](https://github.com/solidjs-community/solid-cli)
