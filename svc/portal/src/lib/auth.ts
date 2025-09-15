@@ -7,6 +7,7 @@ export const auth = betterAuth({
       clientSecret: process.env.ENTRA_ID_CLIENT_SECRET as string,
       tenantId: process.env.ENTRA_ID_TENANT_ID as string,
       authority: "https://login.microsoftonline.com",
+      scopes: ["openid", "profile", "email", "User.Read"],
       prompt: "select_account" // Forces account selection
     }
   }

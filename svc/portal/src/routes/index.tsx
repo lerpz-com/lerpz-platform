@@ -1,8 +1,10 @@
-import { signIn } from "~/lib/auth-client"
 import { A } from "@solidjs/router"
-import { type VoidComponent } from "solid-js"
+import { Show, type VoidComponent } from "solid-js"
+import { signIn, signOut, useSession } from "~/lib/auth-client"
 
 const Home: VoidComponent = () => {
+  const session = useSession()
+
   return (
     <main class="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#026d56] to-[#152a2c]">
       <div class="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
@@ -35,6 +37,8 @@ const Home: VoidComponent = () => {
         <button onClick={() => signIn.social({ provider: "microsoft" })}>
           Sign in
         </button>
+        <button onClick={() => signOut()}>Sign out</button>
+        <Show when={session().data}>{session().data?.user.email}</Show>
       </div>
     </main>
   )
