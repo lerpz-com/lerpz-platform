@@ -9,7 +9,7 @@ const config = {
   tabWidth: 2,
   useTabs: false,
   printWidth: 80,
-  jsxSingleQuote: false,
-};
+  jsxSingleQuote: false
+}
 
-export default config;
+export default config
