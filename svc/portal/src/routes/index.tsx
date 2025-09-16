@@ -6,7 +6,7 @@ const Home: VoidComponent = () => {
   const session = useSession()
 
   return (
-    <main class="flex min-h-screen flex-col items-center justify-center">
+    <main class="flex min-h-screen flex-col items-center justify-center gap-2">
       <Button onClick={() => signOut()}>Sign out</Button>
       <Show
         when={session().data}
