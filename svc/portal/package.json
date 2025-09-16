@@ -22,6 +22,7 @@
     "solid-js": "^1",
     "tailwind-merge": "^3",
     "tailwindcss": "^4",
+    "tailwindcss-animate": "^1.0.7",
     "vinxi": "^0",
     "zod": "^4"
   },

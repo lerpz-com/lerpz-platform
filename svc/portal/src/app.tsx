@@ -1,3 +1,4 @@
+import { ColorModeProvider, ColorModeScript } from "@kobalte/core"
 import { MetaProvider, Title } from "@solidjs/meta"
 import { Router } from "@solidjs/router"
 import { FileRoutes } from "@solidjs/start/router"
@@ -10,7 +11,10 @@ export default function App() {
       root={(props) => (
         <MetaProvider>
           <Title>Lerpz portal</Title>
-          <Suspense>{props.children}</Suspense>
+          <Suspense>
+            <ColorModeScript />
+            <ColorModeProvider>{props.children}</ColorModeProvider>
+          </Suspense>
         </MetaProvider>
       )}
     >
