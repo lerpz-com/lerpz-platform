@@ -15,7 +15,7 @@ importers:
   svc/portal:
     dependencies:
       '@corvu/drawer':
-        specifier: ^0.2.4
+        specifier: ^0
         version: 0.2.4(solid-js@1.9.9)
       '@kobalte/core':
         specifier: ^0
@@ -44,6 +44,9 @@ importers:
       clsx:
         specifier: ^2
         version: 2.1.1
+      embla-carousel-solid:
+        specifier: ^8.6.0
+        version: 8.6.0(solid-js@1.9.9)
       solid-js:
         specifier: ^1
         version: 1.9.9
@@ -1855,6 +1858,19 @@ packages:
 
   electron-to-chromium@1.5.218:
     resolution: {integrity: sha512-uwwdN0TUHs8u6iRgN8vKeWZMRll4gBkz+QMqdS7DDe49uiK68/UX92lFb61oiFPrpYZNeZIqa4bA7O6Aiasnzg==}
+
+  embla-carousel-reactive-utils@8.6.0:
+    resolution: {integrity: sha512-fMVUDUEx0/uIEDM0Mz3dHznDhfX+znCCDCeIophYb1QGVM7YThSWX+wz11zlYwWFOr74b4QLGg0hrGPJeG2s4A==}
+    peerDependencies:
+      embla-carousel: 8.6.0
+
+  embla-carousel-solid@8.6.0:
+    resolution: {integrity: sha512-xQQjPZL+CQ4n2KemoeTu0BD9mk8tkVuSMOe/GEnzKM0lAoXY/akSYBNZ4dvJDE7TMeUCAuI6D9742TTLglGq/A==}
+    peerDependencies:
+      solid-js: ^1.0.0
+
+  embla-carousel@8.6.0:
+    resolution: {integrity: sha512-SjWyZBHJPbqxHOzckOfo8lHisEaJWmwd23XppYFYVh10bU66/Pn5tkVkbkCMZVdbUE5eTCI2nD8OyIP4Z+uwkA==}
 
   emoji-regex-xs@1.0.0:
     resolution: {integrity: sha512-LRlerrMYoIDrT6jgpeZ2YYl/L8EulRTt5hQcYjy5AInh7HWXKimpqx68aknBFpGL2+/IcogTcaydJEgaTmOpDg==}
@@ -5762,6 +5778,18 @@ snapshots:
   ee-first@1.1.1: {}
 
   electron-to-chromium@1.5.218: {}
+
+  embla-carousel-reactive-utils@8.6.0(embla-carousel@8.6.0):
+    dependencies:
+      embla-carousel: 8.6.0
+
+  embla-carousel-solid@8.6.0(solid-js@1.9.9):
+    dependencies:
+      embla-carousel: 8.6.0
+      embla-carousel-reactive-utils: 8.6.0(embla-carousel@8.6.0)
+      solid-js: 1.9.9
+
+  embla-carousel@8.6.0: {}
 
   emoji-regex-xs@1.0.0: {}
 
