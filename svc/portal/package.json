@@ -25,7 +25,6 @@
     "solid-js": "^1",
     "tailwind-merge": "^3",
     "tailwindcss": "^4",
-    "tw-animate-css": "^1",
     "vinxi": "^0",
     "zod": "^4"
   },

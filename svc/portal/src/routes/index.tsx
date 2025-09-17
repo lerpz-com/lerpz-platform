@@ -1,24 +1,25 @@
-import { Show, type VoidComponent } from "solid-js"
-import { Button } from "~/component/ui/button"
-import { signIn, signOut, useSession } from "~/lib/auth"
+import { Index, type VoidComponent } from "solid-js"
+import {
+  AccordionRoot,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from "~/component/ui/accordion"
 
 const Home: VoidComponent = () => {
-  const session = useSession()
-
   return (
-    <main class="flex min-h-screen flex-col items-center justify-center gap-2">
-      <Button onClick={() => signOut()}>Sign out</Button>
-      <Show
-        when={session().data}
-        fallback={
-          <Button onClick={() => signIn.social({ provider: "microsoft" })}>
-            Sign in
-          </Button>
-        }
-      >
-        {session().data?.user.email}
-      </Show>
-    </main>
+    <AccordionRoot multiple>
+      <Index each={["React", "Solid", "Vue", "Svelte"]}>
+        {(item) => (
+          <AccordionItem value={item()}>
+            <AccordionTrigger>What is {item()}?</AccordionTrigger>
+            <AccordionContent>
+              {item()} is a JavaScript library for building user interfaces.
+            </AccordionContent>
+          </AccordionItem>
+        )}
+      </Index>
+    </AccordionRoot>
   )
 }
 
