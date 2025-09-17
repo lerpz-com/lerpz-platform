@@ -33,13 +33,13 @@ export const buttonVariants = cva(
   }
 )
 
-type buttonProps = ComponentProps<"button"> &
+type ButtonProps = ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     class?: string
   }
 
-export const Button = (props: buttonProps) => {
-  const [local, rest] = splitProps(props as buttonProps, [
+export const Button = (props: ButtonProps) => {
+  const [local, rest] = splitProps(props as ButtonProps, [
     "class",
     "variant",
     "size"
