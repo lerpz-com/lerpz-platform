@@ -5,6 +5,7 @@ import { FileRoutes } from "@solidjs/start/router"
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query"
 import { SolidQueryDevtools } from "@tanstack/solid-query-devtools"
 import { Suspense } from "solid-js"
+import Wrapper from "~/component/wrapper"
 import "./app.css"
 
 const queryClient = new QueryClient()
@@ -18,7 +19,9 @@ export default function App() {
             <Title>Lerpz portal</Title>
             <Suspense>
               <ColorModeScript />
-              <ColorModeProvider>{props.children}</ColorModeProvider>
+              <ColorModeProvider>
+                <Wrapper>{props.children}</Wrapper>
+              </ColorModeProvider>
             </Suspense>
             <SolidQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
