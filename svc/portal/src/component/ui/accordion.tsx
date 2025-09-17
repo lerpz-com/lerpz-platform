@@ -36,9 +36,10 @@ export const AccordionTrigger = (props: AccordionTriggerProps) => {
   return (
     <Accordion.ItemTrigger
       class={cn(
-        "flex flex-1 items-center justify-between py-4 text-sm font-medium \
-        transition-shadow hover:underline focus-visible:outline-none \
-        focus-visible:ring-[1.5px] focus-visible:ring-ring",
+        "flex flex-1 items-center justify-between w-full py-4 \
+        text-sm font-medium transition-shadow hover:underline \
+        focus-visible:outline-none focus-visible:ring-[1.5px] \
+        focus-visible:ring-ring",
         local.class
       )}
       {...rest}
