@@ -1,6 +1,11 @@
 import { betterAuth } from "better-auth"
 import { env } from "~/lib/env"
 
+import { authClient } from "./client"
+
+export { authClient }
+export const { signIn, signOut, useSession } = authClient
+
 export const auth = betterAuth({
   socialProviders: {
     microsoft: {

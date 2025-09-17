@@ -1,6 +1,6 @@
 import { Show, type VoidComponent } from "solid-js"
 import { Button } from "~/component/ui/button"
-import { signIn, signOut, useSession } from "~/lib/auth-client"
+import { signIn, signOut, useSession } from "~/lib/auth"
 
 const Home: VoidComponent = () => {
   const session = useSession()

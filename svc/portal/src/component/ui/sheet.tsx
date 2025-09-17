@@ -1,4 +1,3 @@
-import { cn } from "~/lib/cn"
 import type {
   DialogContentProps,
   DialogDescriptionProps,
@@ -10,6 +9,7 @@ import type { VariantProps } from "class-variance-authority"
 import { cva } from "class-variance-authority"
 import type { ComponentProps, ParentProps, ValidComponent } from "solid-js"
 import { mergeProps, splitProps } from "solid-js"
+import { cn } from "~/lib/cn"
 
 export const Sheet = DialogPrimitive
 export const SheetTrigger = DialogPrimitive.Trigger

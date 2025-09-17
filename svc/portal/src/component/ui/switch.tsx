@@ -1,9 +1,9 @@
-import { cn } from "~/lib/cn"
 import type { PolymorphicProps } from "@kobalte/core/polymorphic"
 import type { SwitchControlProps, SwitchThumbProps } from "@kobalte/core/switch"
 import { Switch as SwitchPrimitive } from "@kobalte/core/switch"
 import type { ParentProps, ValidComponent, VoidProps } from "solid-js"
 import { splitProps } from "solid-js"
+import { cn } from "~/lib/cn"
 
 export const SwitchLabel = SwitchPrimitive.Label
 export const Switch = SwitchPrimitive

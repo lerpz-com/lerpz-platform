@@ -1,4 +1,4 @@
-import { z, treeifyError } from "zod"
+import { treeifyError, z } from "zod"
 
 export const envSchema = z.object({
   BETTER_AUTH_SECRET: z.string(),
