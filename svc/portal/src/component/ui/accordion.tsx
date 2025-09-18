@@ -22,9 +22,10 @@ export const AccordionItem = (props: AccordionItemProps) => {
 }
 
 type AccordionTriggerProps = ParentProps<
-  AccordionItemTriggerProps & {
-    class?: string
-  }
+  ComponentProps<"button"> &
+    AccordionItemTriggerProps & {
+      class?: string
+    }
 >
 
 export const AccordionTrigger = (props: AccordionTriggerProps) => {
