@@ -1,7 +1,7 @@
 import type {
   AccordionItemContentProps,
   AccordionItemTriggerProps,
-  AccordionItemProps as AccordtionPrimitiveItemProps
+  AccordionItemProps as ArkAccordionItemProps
 } from "@ark-ui/solid"
 import { Accordion, AccordionItemIndicator } from "@ark-ui/solid"
 import { ChevronDownIcon } from "lucide-solid"
@@ -11,7 +11,7 @@ import { cn } from "~/lib/cn"
 export const AccordionRoot = Accordion.Root
 
 type AccordionItemProps = ComponentProps<"div"> &
-  AccordtionPrimitiveItemProps & {
+  ArkAccordionItemProps & {
     class?: string
   }
 
