@@ -1,14 +1,15 @@
-import type {
-  AccordionItemContentProps,
-  AccordionItemTriggerProps,
-  AccordionItemProps as ArkAccordionItemProps
+import {
+  Accordion as ArkAccordion,
+  type AccordionItemContentProps as ArkAccordionItemContentProps,
+  AccordionItemIndicator as ArkAccordionItemIndicator,
+  type AccordionItemProps as ArkAccordionItemProps,
+  type AccordionItemTriggerProps as ArkAccordionItemTriggerProps
 } from "@ark-ui/solid"
-import { Accordion, AccordionItemIndicator } from "@ark-ui/solid"
 import { ChevronDownIcon } from "lucide-solid"
 import { ComponentProps, type ParentProps, splitProps } from "solid-js"
 import { cn } from "~/lib/cn"
 
-export const AccordionRoot = Accordion.Root
+export const AccordionRoot = ArkAccordion.Root
 
 type AccordionItemProps = ComponentProps<"div"> &
   ArkAccordionItemProps & {
@@ -18,12 +19,12 @@ type AccordionItemProps = ComponentProps<"div"> &
 export const AccordionItem = (props: AccordionItemProps) => {
   const [local, rest] = splitProps(props as AccordionItemProps, ["class"])
 
-  return <Accordion.Item class={cn("border-b", local.class)} {...rest} />
+  return <ArkAccordion.Item class={cn("border-b", local.class)} {...rest} />
 }
 
 type AccordionTriggerProps = ParentProps<
   ComponentProps<"button"> &
-    AccordionItemTriggerProps & {
+    ArkAccordionItemTriggerProps & {
       class?: string
     }
 >
@@ -35,7 +36,7 @@ export const AccordionTrigger = (props: AccordionTriggerProps) => {
   ])
 
   return (
-    <Accordion.ItemTrigger
+    <ArkAccordion.ItemTrigger
       class={cn(
         "flex flex-1 items-center justify-between w-full py-4 \
         text-sm font-medium transition-shadow hover:underline \
@@ -46,16 +47,16 @@ export const AccordionTrigger = (props: AccordionTriggerProps) => {
       {...rest}
     >
       {local.children}
-      <AccordionItemIndicator class="[&[data-state=open]>svg]:rotate-180">
+      <ArkAccordionItemIndicator class="[&[data-state=open]>svg]:rotate-180">
         <ChevronDownIcon class="transition-transform duration-200" />
-      </AccordionItemIndicator>
-    </Accordion.ItemTrigger>
+      </ArkAccordionItemIndicator>
+    </ArkAccordion.ItemTrigger>
   )
 }
 
 type AccordionContentProps = ParentProps<
   ComponentProps<"div"> &
-    AccordionItemContentProps & {
+    ArkAccordionItemContentProps & {
       class?: string
     }
 >
@@ -67,7 +68,7 @@ export const AccordionContent = (props: AccordionContentProps) => {
   ])
 
   return (
-    <Accordion.ItemContent
+    <ArkAccordion.ItemContent
       class={cn(
         "overflow-hidden text-sm data-[state=closed]:animate-accordion-up \
         data-[state=open]:animate-accordion-down",
@@ -76,6 +77,6 @@ export const AccordionContent = (props: AccordionContentProps) => {
       {...rest}
     >
       <div class="pb-4 pt-0">{local.children}</div>
-    </Accordion.ItemContent>
+    </ArkAccordion.ItemContent>
   )
 }
