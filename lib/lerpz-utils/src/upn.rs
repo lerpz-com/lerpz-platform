@@ -1,3 +1,25 @@
+//! Utilities for generating User Principal Names (UPNs).
+//!
+//! A UPN is an internet-style login name for user based identities. It is
+//! commonly used in Microsoft environments, but can be used in other contexts
+//! as well. This will often look like a mail address, but does not have to be
+//! one.
+//!
+//! ### Globally unique identifier (GUID)
+//!
+//! Format: `<x><y>.<z><w>@<domain>`
+//!
+//! Where:
+//! - **x** = first 3 letters of the user's first name
+//! - **y** = first 3 letters of the user's last/middle name
+//! - **z** = the user's department
+//! - **w** = the last 2 digits of the year the user was employed
+//! - **domain** = the company's email domain
+//!
+//! Examples:
+//! - Kasper Jønsson, Engineer - 15/11/2020 @ lerpz.com -> kasjon.eng20@lerpz.com
+
+/// Errors that can occur when generating a UPN.
 #[derive(thiserror::Error, Debug)]
 #[non_exhaustive]
 pub enum Error {
@@ -9,6 +31,7 @@ pub enum Error {
     FmtError(#[from] std::fmt::Error),
 }
 
+/// Information about the user to generate a UPN for.
 #[derive(Debug, Clone)]
 pub struct UserInfo {
     forename: String,
@@ -20,25 +43,32 @@ pub struct UserInfo {
 
 /// Generate a UPN based on the provided user information.
 ///
-/// The UPN format is as follow:
-///
-/// ### Globally unique identifier (GUID)
-///
-/// Format: `<x><y>.<z><w>@<domain>`
-///
-/// Where:
-/// - **x** = first 3 letters of the user's first name
-/// - **y** = first 3 letters of the user's last/middle name
-/// - **z** = the user's department
-/// - **w** = the last 2 digits of the year the user was employed
-/// - **domain** = the company's email domain
-///
-/// Examples:
-/// - Kasper Jønsson, Engineer - 15/11/2020 @ lerpz.com -> kasjon.eng20@lerpz.com
+/// This is a shorthand for [`generate_upn_with_iteration`] with iteration set to 0.
 pub fn generate_upn(upn: impl Into<UserInfo>) -> Result<String, Error> {
     generate_upn_with_iteration(upn, 0)
 }
 
+/// Generate a UPN based on the provided user information and iteration number.
+///
+/// The iteration number is used to select which surname to use when the user has
+/// multiple surnames. The iteration will start with the rightmost surname and
+/// move leftwards as the iteration number increases. If the iteration number
+/// exceeds the number of surnames, it will wrap around to the rightmost surname
+/// 
+/// ### Example:
+/// 
+/// ```rust
+/// let user_info = UserInfo {
+///     forename: "Kasper".to_owned(),
+///     surnames: vec!["Jønsson".to_owned()],
+///     department: "Engineering".to_owned(),
+///     hire_date: chrono::NaiveDate::from_ymd_opt(2020, 10, 15).unwrap(),
+///     domain: "lerpz.com".to_owned(),
+/// };
+/// 
+/// let upn = generate_upn_with_iteration(user_info, 0).unwrap();
+/// assert_eq!(upn, "kasjon.eng20@lerpz.com");
+/// ```
 pub fn generate_upn_with_iteration(upn: impl Into<UserInfo>, i: usize) -> Result<String, Error> {
     let upn: UserInfo = upn.into();
     let cap = 13 + upn.domain.len();
