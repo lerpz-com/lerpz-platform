@@ -1,10 +1,15 @@
 import { Index, type VoidComponent } from "solid-js"
 import {
-  AccordionRoot,
   AccordionContent,
   AccordionItem,
+  AccordionRoot,
   AccordionTrigger
 } from "~/component/ui/accordion"
+import {
+  Checkbox,
+  CheckboxControl,
+  CheckboxLabel
+} from "~/component/ui/checkbox"
 
 const Home: VoidComponent = () => {
   return (
@@ -15,6 +20,10 @@ const Home: VoidComponent = () => {
             <AccordionTrigger>What is {item()}?</AccordionTrigger>
             <AccordionContent>
               {item()} is a JavaScript library for building user interfaces.
+              <Checkbox>
+                <CheckboxControl />
+                <CheckboxLabel>Check me</CheckboxLabel>
+              </Checkbox>
             </AccordionContent>
           </AccordionItem>
         )}
