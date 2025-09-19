@@ -1,6 +1,7 @@
 import {
   Accordion as ArkAccordion,
   type AccordionItemContentProps as ArkAccordionItemContentProps,
+  type AccordionItemContextProps as ArkAccordionItemContextProps,
   AccordionItemIndicator as ArkAccordionItemIndicator,
   type AccordionItemProps as ArkAccordionItemProps,
   type AccordionItemTriggerProps as ArkAccordionItemTriggerProps
@@ -19,7 +20,12 @@ type AccordionItemProps = ComponentProps<"div"> &
 export const AccordionItem = (props: AccordionItemProps) => {
   const [local, rest] = splitProps(props as AccordionItemProps, ["class"])
 
-  return <ArkAccordion.Item class={cn("border-b", local.class)} {...rest} />
+  return (
+    <ArkAccordion.Item
+      class={cn("border-b [&[data-disabled]>button]:text-muted", local.class)}
+      {...rest}
+    />
+  )
 }
 
 type AccordionTriggerProps = ParentProps<
@@ -38,16 +44,15 @@ export const AccordionTrigger = (props: AccordionTriggerProps) => {
   return (
     <ArkAccordion.ItemTrigger
       class={cn(
-        "flex flex-1 items-center justify-between w-full py-4 \
-        text-sm font-medium transition-shadow hover:underline \
-        focus-visible:outline-none focus-visible:ring-[1.5px] \
+        "flex flex-1 items-center justify-between w-full py-4 text-md \
+        font-semibold focus-visible:outline-none focus-visible:ring-[1.5px] \
         focus-visible:ring-ring",
         local.class
       )}
       {...rest}
     >
       {local.children}
-      <ArkAccordionItemIndicator class="[&[data-state=open]>svg]:rotate-180">
+      <ArkAccordionItemIndicator class="[&[data-state=open]>svg]:rotate-180 [&[data-disabled]>svg]:text-muted">
         <ChevronDownIcon class="transition-transform duration-200" />
       </ArkAccordionItemIndicator>
     </ArkAccordion.ItemTrigger>
@@ -78,5 +83,23 @@ export const AccordionContent = (props: AccordionContentProps) => {
     >
       <div class="pb-4 pt-0">{local.children}</div>
     </ArkAccordion.ItemContent>
+  )
+}
+
+type AccordionItemContextProps = ParentProps<
+  ArkAccordionItemContextProps & {
+    class?: string
+  }
+>
+
+export const AccordionContext = (props: AccordionItemContextProps) => {
+  const [local, rest] = splitProps(props as AccordionItemContextProps, [
+    "children"
+  ])
+
+  return (
+    <ArkAccordion.ItemContext {...rest}>
+      {local.children}
+    </ArkAccordion.ItemContext>
   )
 }

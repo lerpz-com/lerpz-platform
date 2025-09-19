@@ -15,7 +15,7 @@
     "@solidjs/router": "^0",
     "@solidjs/start": "^1",
     "@tanstack/solid-query": "^5",
-    "@tanstack/solid-query-devtools": "^5.89.0",
+    "@tanstack/solid-query-devtools": "^5",
     "better-auth": "^1",
     "better-sqlite3": "^12",
     "class-variance-authority": "^0",

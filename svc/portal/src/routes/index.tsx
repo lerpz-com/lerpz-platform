@@ -11,7 +11,7 @@ const Home: VoidComponent = () => {
     <AccordionRoot multiple>
       <Index each={["React", "Solid", "Vue", "Svelte"]}>
         {(item) => (
-          <AccordionItem value={item()}>
+          <AccordionItem value={item()} disabled={item() === "Vue"}>
             <AccordionTrigger>What is {item()}?</AccordionTrigger>
             <AccordionContent>
               {item()} is a JavaScript library for building user interfaces.
