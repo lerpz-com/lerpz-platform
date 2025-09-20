@@ -9,7 +9,7 @@ axum = { workspace = true }
 jsonwebtoken = { workspace = true, optional = true }
 reqwest = { workspace = true, optional = true }
 thiserror = { workspace = true }
-tokio = { workspace = true }
+tokio = { workspace = true, features = ["signal"] }
 tracing = { workspace = true }
 regex = { workspace = true, optional = true }
 serde = { workspace = true }
