@@ -39,8 +39,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
         .unwrap_or_else(|err| panic!("can't connect to database: {err}"));
 
-    let manager = RedisConnectionManager::new(CONFIG.REDIS_URL.clone()).unwrap();
-    let redis_pool = bb8::Pool::builder().build(manager).await.unwrap();
+    let manager = RedisConnectionManager::new(CONFIG.REDIS_URL.clone())
+        .unwrap_or_else(|err| panic!("can't connect to redis: {err}"));
+    let redis_pool = bb8::Pool::builder()
+        .build(manager)
+        .await
+        .unwrap_or_else(|err| panic!("can't create redis pool: {err}"));
 
     let state = AppState {
         database: database_pool,

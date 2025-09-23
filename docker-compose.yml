@@ -75,13 +75,13 @@ services:
           aliases:
             - lerpz.local
 
-  lerpz-frontend:
-    container_name: frontend
+  lerpz-portal:
+    container_name: portal
     restart: always
     init: true
     build:
       context: .
-      dockerfile: svc/frontend/Dockerfile
+      dockerfile: svc/portal/Dockerfile
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.lerpz-auth-http.rule=Host(`lerpz.local`)"
@@ -89,7 +89,7 @@ services:
       - "traefik.http.routers.lerpz-auth-https.rule=Host(`lerpz.local`)"
       - "traefik.http.routers.lerpz-auth-https.entrypoints=websecure"
       - "traefik.http.routers.lerpz-auth-https.tls=true"
-    hostname: lerpz-frontend
+    hostname: lerpz-portal
     domainname: lerpz.local
     env_file: svc/auth/.env.docker
     ports:
@@ -103,6 +103,35 @@ services:
       lerpz-network:
         aliases:
           - lerpz.local
+
+  lerpz-portal-api:
+    container_name: auth
+    restart: always
+    init: true
+    build:
+      context: .
+      dockerfile: svc/portal-api/Dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.lerpz-auth-http.rule=Host(`api.lerpz.local`)"
+      - "traefik.http.routers.lerpz-auth-http.entrypoints=web"
+      - "traefik.http.routers.lerpz-auth-https.rule=Host(`api.lerpz.local`)"
+      - "traefik.http.routers.lerpz-auth-https.entrypoints=websecure"
+      - "traefik.http.routers.lerpz-auth-https.tls=true"
+    hostname: lerpz-portal-api
+    domainname: api.lerpz.local
+    env_file: svc/auth/.env.docker
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      dragonfly:
+        condition: service_healthy
+    networks:
+      lerpz-network:
+        aliases:
+          - api.lerpz.local
 
 secrets:
   cert.pem:

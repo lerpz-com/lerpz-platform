@@ -15,7 +15,13 @@ lerpz-utils = { workspace = true }
 bb8 = { workspace = true }
 bb8-redis = { workspace = true }
 redis = { workspace = true }
-sqlx = { workspace = true, features = ["postgres"] }
+sqlx = { workspace = true, features = [
+    "chrono",
+    "macros",
+    "postgres",
+    "runtime-tokio-native-tls",
+    "uuid",
+] }
 # Axum, Tokio and Tower
 axum = { workspace = true }
 tokio = { workspace = true, features = ["full"] }
@@ -30,5 +36,6 @@ anyhow = { workspace = true }
 chrono = { workspace = true }
 cookie = { workspace = true }
 dotenvy = { workspace = true }
+strum = { workspace = true, features = ["derive"] }
 uuid = { workspace = true }
 validator = { workspace = true }
