@@ -7,6 +7,11 @@ export { authClient }
 export const { signIn, signOut, useSession } = authClient
 
 export const auth = betterAuth({
+  account: {
+    accountLinking: {
+      enabled: false
+    }
+  },
   socialProviders: {
     microsoft: {
       clientId: env.ENTRA_ID_CLIENT_ID as string,
