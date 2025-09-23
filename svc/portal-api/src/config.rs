@@ -7,6 +7,7 @@ use lerpz_utils::{
     generate_config,
 };
 
+/// The environment the server is running in.
 #[derive(strum::EnumString, Debug, Clone, Copy, PartialEq, Eq)]
 enum Env {
     #[strum(serialize = "production")]
