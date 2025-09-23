@@ -51,7 +51,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         redis: redis_pool,
     };
 
-    let app = Router::new().with_state(state);
+    let app = Router::new()
+        .nest("/api", api::router(state.clone()))
+        .with_state(state);
 
     let listener = tokio::net::TcpListener::bind(&CONFIG.ADDR).await?;
     tracing::info!("server started listening on {}", CONFIG.ADDR);
