@@ -1,3 +1,5 @@
+"use server"
+
 import { treeifyError, z } from "zod"
 
 export const envSchema = z.object({
