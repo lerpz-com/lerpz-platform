@@ -51,11 +51,11 @@ export const CardDescription: ParentComponent<ComponentProps<"h3">> = (
 export const CardContent = (props: ComponentProps<"div">) => {
   const [local, rest] = splitProps(props, ["class"])
 
-  return <div class={cn("pt-0", local.class)} {...rest} />
+  return <div class={cn("pt-2", local.class)} {...rest} />
 }
 
 export const CardFooter = (props: ComponentProps<"div">) => {
   const [local, rest] = splitProps(props, ["class"])
 
-  return <div class={cn("pt-0", local.class)} {...rest} />
+  return <div class={cn("pt-2", local.class)} {...rest} />
 }

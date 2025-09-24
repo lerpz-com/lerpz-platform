@@ -12,7 +12,7 @@ const Home = () => {
       <CardTitle>title</CardTitle>
       <CardDescription>description</CardDescription>
       <CardContent>content</CardContent>
-      <CardFooter>Fotter</CardFooter>
+      <CardFooter>footer</CardFooter>
     </Card>
   )
 }
