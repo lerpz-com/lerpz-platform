@@ -44,8 +44,10 @@ export const AccordionTrigger = (props: AccordionTriggerProps) => {
   return (
     <ArkAccordion.ItemTrigger
       class={cn(
-        "flex flex-1 items-center justify-between w-full py-4 text-md \
-        font-semibold focus-visible:outline-none focus-visible:ring-[1.5px] \
+        "flex flex-1 items-center justify-between \
+        w-full py-4 text-md font-semibold \
+        focus-visible:outline-none \
+        focus-visible:ring-[1.5px] \
         focus-visible:ring-ring",
         local.class
       )}
@@ -75,7 +77,8 @@ export const AccordionContent = (props: AccordionContentProps) => {
   return (
     <ArkAccordion.ItemContent
       class={cn(
-        "overflow-hidden text-sm data-[state=closed]:animate-accordion-up \
+        "overflow-hidden text-sm \
+        data-[state=closed]:animate-accordion-up \
         data-[state=open]:animate-accordion-down",
         local.class
       )}
