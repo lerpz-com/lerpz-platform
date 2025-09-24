@@ -1,10 +1,6 @@
 import { betterAuth } from "better-auth"
 import { env } from "~/server/env"
 
-import { authClient } from "./client"
-
-export { authClient }
-
 export const auth = betterAuth({
   // plugins: [sso()],
   account: {
@@ -23,11 +19,3 @@ export const auth = betterAuth({
     }
   }
 })
-
-export const signIn = async () => {
-  await authClient.signIn.social({
-    provider: "microsoft"
-  })
-}
-
-export const { signOut, useSession } = authClient
