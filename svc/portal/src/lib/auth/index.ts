@@ -1,12 +1,14 @@
 import { betterAuth } from "better-auth"
 import { env } from "~/lib/env"
 
+import { sso } from "@better-auth/sso"
 import { authClient } from "./client"
 
 export { authClient }
 export const { signIn, signOut, useSession } = authClient
 
 export const auth = betterAuth({
+  plugins: [sso()],
   account: {
     accountLinking: {
       enabled: false
