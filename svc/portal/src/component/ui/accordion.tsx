@@ -7,15 +7,16 @@ import {
   type AccordionItemTriggerProps as ArkAccordionItemTriggerProps
 } from "@ark-ui/solid"
 import { ChevronDownIcon } from "lucide-solid"
-import { ComponentProps, type ParentProps, splitProps } from "solid-js"
+import { ComponentProps, ParentProps, splitProps, VoidProps } from "solid-js"
 import { cn } from "~/lib/cn"
 
 export const AccordionRoot = ArkAccordion.Root
 
-type AccordionItemProps = ComponentProps<"div"> &
+type AccordionItemProps = VoidProps<
   ArkAccordionItemProps & {
     class?: string
   }
+>
 
 export const AccordionItem = (props: AccordionItemProps) => {
   const [local, rest] = splitProps(props as AccordionItemProps, ["class"])
@@ -29,10 +30,9 @@ export const AccordionItem = (props: AccordionItemProps) => {
 }
 
 type AccordionTriggerProps = ParentProps<
-  ComponentProps<"button"> &
-    ArkAccordionItemTriggerProps & {
-      class?: string
-    }
+  ArkAccordionItemTriggerProps & {
+    class?: string
+  }
 >
 
 export const AccordionTrigger = (props: AccordionTriggerProps) => {
