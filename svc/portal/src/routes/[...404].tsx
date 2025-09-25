@@ -1,6 +1,6 @@
 import { HttpStatusCode } from "@solidjs/start"
 
-export function NotFound() {
+export default function NotFound() {
   return (
     <>
       <HttpStatusCode code={404} />

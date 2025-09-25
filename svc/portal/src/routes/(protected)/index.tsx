@@ -1,22 +1,27 @@
+import { AuthContextProvider, useAuth } from "~/component/auth-context"
 import {
   Card,
   CardContent,
   CardDescription,
   CardFooter,
+  CardHeader,
   CardTitle
 } from "~/component/ui/card"
-import { useSession } from "~/lib/auth/client"
 
 const Home = () => {
-  const session = useSession()
+  const { session } = useAuth()
 
   return (
-    <Card>
-      <CardTitle>Signed in user</CardTitle>
-      <CardDescription>This shows the signed in user</CardDescription>
-      <CardContent>{session().data?.user.name || "Unknown User"}</CardContent>
-      <CardFooter>LERPZ.COM</CardFooter>
-    </Card>
+    <AuthContextProvider>
+      <Card>
+        <CardHeader>
+          <CardTitle>Signed in user</CardTitle>
+          <CardDescription>This shows the signed in user</CardDescription>
+        </CardHeader>
+        <CardContent>{session.user.email}</CardContent>
+        <CardFooter>LERPZ.COM</CardFooter>
+      </Card>
+    </AuthContextProvider>
   )
 }
 
