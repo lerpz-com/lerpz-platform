@@ -1,4 +1,5 @@
 import { useAuth } from "~/component/auth-context"
+import { Button } from "~/component/ui/button"
 import {
   Card,
   CardContent,
@@ -7,6 +8,7 @@ import {
   CardHeader,
   CardTitle
 } from "~/component/ui/card"
+import { signOut } from "~/lib/auth/client"
 
 const Home = () => {
   const { session } = useAuth()
@@ -17,7 +19,10 @@ const Home = () => {
         <CardTitle>Signed in user</CardTitle>
         <CardDescription>This shows the signed in user</CardDescription>
       </CardHeader>
-      <CardContent>{session()?.user.email || "Unknown user"}</CardContent>
+      <CardContent>
+        {session()?.user.email || "Unknown user"}
+        <Button onClick={() => signOut()}>Sign Out</Button>
+      </CardContent>
       <CardFooter>LERPZ.COM</CardFooter>
     </Card>
   )

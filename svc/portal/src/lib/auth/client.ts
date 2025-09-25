@@ -1,4 +1,6 @@
+import { revalidate } from "@solidjs/router"
 import { createAuthClient } from "better-auth/solid"
+import { querySession } from "./server"
 
 export const authClient = createAuthClient({
   // plugins: [ssoClient()]
@@ -10,10 +12,9 @@ export const signIn = async () => {
   })
 }
 
-export const {
-  signOut,
-  useSession,
-  getSession,
-  getAccessToken,
-  revokeSession
-} = authClient
+export const signOut = async () => {
+  await authClient.signOut()
+  revalidate(querySession.key)
+}
+
+export const { useSession } = authClient

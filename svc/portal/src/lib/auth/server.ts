@@ -10,7 +10,6 @@ export const querySession = query(async () => {
   const session = await auth.api.getSession({
     headers: event.request.headers
   })
-  console.log("Session:", session)
   if (!session) throw redirect("/login")
 
   return session
