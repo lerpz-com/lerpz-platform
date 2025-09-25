@@ -1,6 +1,6 @@
-import { createAsync, redirect } from "@solidjs/router"
+import { AccessorWithLatest, createAsync } from "@solidjs/router"
 import { createContext, ParentProps, useContext } from "solid-js"
-import { querySession } from "~/lib/auth/client"
+import { querySession } from "~/lib/auth/server"
 
 type AuthenticatedSessionData = {
   user: {
@@ -24,10 +24,13 @@ type AuthenticatedSessionData = {
   }
 }
 
-const AuthContext = createContext<{ session: AuthenticatedSessionData }>()
+const AuthContext = createContext<{
+  session: AccessorWithLatest<AuthenticatedSessionData | null | undefined>
+}>()
 
 export const useAuth = () => {
   const context = useContext(AuthContext)
+  console.log(context)
   if (!context) {
     throw new Error("useAuth must be used within an AuthContextProvider")
   }
@@ -40,7 +43,7 @@ export const AuthContextProvider = (props: ParentProps) => {
   })
 
   return (
-    <AuthContext.Provider value={{ session: session() }}>
+    <AuthContext.Provider value={{ session }}>
       {props.children}
     </AuthContext.Provider>
   )

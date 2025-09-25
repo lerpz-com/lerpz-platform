@@ -1,6 +1,8 @@
-import { ParentProps } from "solid-js"
-import { AuthContextProvider } from "~/component/auth-context"
+import { ParentProps, Show } from "solid-js"
+import { useAuth } from "~/component/auth-context"
 
 export default function ProtectedLayout({ children }: ParentProps) {
-  return <AuthContextProvider>{children}</AuthContextProvider>
+  const { session } = useAuth()
+
+  return <Show when={!!session()}>{children}</Show>
 }
