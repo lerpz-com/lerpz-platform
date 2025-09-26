@@ -155,17 +155,17 @@
   }
 
   [data-kb-theme="dark"] {
-    --background: 204 15.15% 6.47%;
-    --foreground: 210 40% 98%;
+    --background: 212.31 24.53% 10.39%;
+    --foreground: 198 33.33% 94.12%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 210 24.32% 14.51%;
+    --card-foreground: 198 33.33% 94.12%;
 
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 219 78% 35%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary-foreground: 198 33.33% 94.12%;
 
     --secondary: 49 90% 62%;
     --secondary-foreground: 210 40% 98%;
