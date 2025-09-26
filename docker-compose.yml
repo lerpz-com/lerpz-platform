@@ -91,7 +91,7 @@ services:
       - "traefik.http.routers.lerpz-auth-https.tls=true"
     hostname: lerpz-portal
     domainname: lerpz.local
-    env_file: svc/auth/.env.docker
+    env_file: svc/portal/.env.docker
     ports:
       - "3000:3000"
     depends_on:
