@@ -8,7 +8,7 @@ export const Card = (props: ComponentProps<"div">) => {
   return (
     <div
       class={cn(
-        "rounded-xl border bg-card text-card-foreground shadow p-4",
+        "rounded-lg border bg-card text-card-foreground shadow p-4",
         local.class
       )}
       {...rest}
@@ -19,9 +19,7 @@ export const Card = (props: ComponentProps<"div">) => {
 export const CardHeader = (props: ComponentProps<"div">) => {
   const [local, rest] = splitProps(props, ["class"])
 
-  return (
-    <div class={cn("flex flex-col space-y-1.5 p-6", local.class)} {...rest} />
-  )
+  return <div class={cn("flex flex-col space-y-1.5", local.class)} {...rest} />
 }
 
 export const CardTitle: ParentComponent<ComponentProps<"h1">> = (props) => {
@@ -29,10 +27,7 @@ export const CardTitle: ParentComponent<ComponentProps<"h1">> = (props) => {
 
   return (
     <h1
-      class={cn(
-        "text-xl font-semibold leading-none tracking-tight",
-        local.class
-      )}
+      class={cn("text-xl font-semibold leading-none", local.class)}
       {...rest}
     />
   )
