@@ -1,16 +1,31 @@
+import { cva, VariantProps } from "class-variance-authority"
 import type { ComponentProps, ParentComponent } from "solid-js"
 import { splitProps } from "solid-js"
 import { cn } from "~/lib/cn"
 
-export const Card = (props: ComponentProps<"div">) => {
-  const [local, rest] = splitProps(props, ["class"])
+export const cardVariants = cva("rounded-lg border shadow p-6", {
+  variants: {
+    variant: {
+      default: "bg-card text-card-foreground",
+      outline: "bg-background text-card-foreground"
+    }
+  },
+  defaultVariants: {
+    variant: "default"
+  }
+})
+
+type CardProps = ComponentProps<"div"> &
+  VariantProps<typeof cardVariants> & {
+    class?: string
+  }
+
+export const Card = (props: CardProps) => {
+  const [local, rest] = splitProps(props, ["variant", "class"])
 
   return (
     <div
-      class={cn(
-        "rounded-lg border bg-card text-card-foreground shadow p-4",
-        local.class
-      )}
+      class={cn(cardVariants({ variant: local.variant }), local.class)}
       {...rest}
     />
   )
