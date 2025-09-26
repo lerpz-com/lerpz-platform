@@ -1,4 +1,3 @@
-import { useAuth } from "~/component/auth-context"
 import { Button } from "~/component/ui/button"
 import {
   Card,
@@ -11,19 +10,20 @@ import {
 import { signOut } from "~/lib/auth/client"
 
 const Home = () => {
-  const { session } = useAuth()
-
   return (
-    <Card>
+    <Card class="max-w-1/3">
       <CardHeader>
         <CardTitle>Signed in user</CardTitle>
         <CardDescription>This shows the signed in user</CardDescription>
       </CardHeader>
       <CardContent>
-        {session()?.user.email || "Unknown user"}
-        <Button onClick={() => signOut()}>Sign Out</Button>
+        Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. In enim
+        justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Vestibulum
+        fringilla pede sit amet augue.
       </CardContent>
-      <CardFooter>LERPZ.COM</CardFooter>
+      <CardFooter>
+        <Button onClick={() => signOut()}>Sign Out</Button>
+      </CardFooter>
     </Card>
   )
 }
