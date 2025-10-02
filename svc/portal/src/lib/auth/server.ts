@@ -5,12 +5,18 @@ import { auth } from "."
 export const querySession = query(async () => {
   "use server"
   const event = getRequestEvent()
-  if (!event) throw redirect("/login")
+  if (!event) return null
 
   const session = await auth.api.getSession({
     headers: event.request.headers
   })
-  if (!session) throw redirect("/login")
 
-  return session
+  return session ?? null
 }, "session")
+
+export const requireSession = query(async () => {
+  "use server"
+  const session = await querySession()
+  if (!session) throw redirect("/login")
+  return session
+}, "require-session")

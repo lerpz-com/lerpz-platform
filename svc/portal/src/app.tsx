@@ -5,7 +5,7 @@ import { FileRoutes } from "@solidjs/start/router"
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query"
 import { SolidQueryDevtools } from "@tanstack/solid-query-devtools"
 import { Suspense } from "solid-js"
-import { AuthContextProvider } from "~/component/auth-context"
+import { AuthProvider } from "~/component/auth-context"
 import Wrapper from "~/component/wrapper"
 import { querySession } from "~/lib/auth/server"
 import "./app.css"
@@ -21,7 +21,7 @@ export default function App() {
     <Router
       root={(props) => (
         <MetaProvider>
-          <AuthContextProvider>
+          <AuthProvider>
             <QueryClientProvider client={queryClient}>
               <Title>Lerpz portal</Title>
               <Suspense>
@@ -32,7 +32,7 @@ export default function App() {
               </Suspense>
               <SolidQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>
-          </AuthContextProvider>
+          </AuthProvider>
         </MetaProvider>
       )}
     >

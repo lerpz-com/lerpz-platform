@@ -15,7 +15,7 @@ export const useAuth = () => {
   return context
 }
 
-export const AuthContextProvider = (props: ParentProps) => {
+export const AuthProvider = (props: ParentProps) => {
   const session = createAsync(() => querySession(), {
     deferStream: true
   })
