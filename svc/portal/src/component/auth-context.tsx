@@ -1,13 +1,11 @@
 import { AccessorWithLatest, createAsync } from "@solidjs/router"
 import { createContext, ParentProps, useContext } from "solid-js"
-import { auth } from "~/lib/auth"
+import { Session } from "~/lib/auth"
 import { querySession } from "~/lib/auth/server"
 
-type AuthenticatedSessionData = Awaited<ReturnType<typeof auth.api.getSession>>
-
 const AuthContext = createContext<{
-  session: AccessorWithLatest<AuthenticatedSessionData | null | undefined>
-}>()
+  session: AccessorWithLatest<Session | null | undefined>
+}>(undefined)
 
 export const useAuth = () => {
   const context = useContext(AuthContext)
