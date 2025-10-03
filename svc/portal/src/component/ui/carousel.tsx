@@ -182,7 +182,7 @@ export const CarouselPrevious = (
   props: VoidProps<ComponentProps<typeof Button>>
 ) => {
   const merge = mergeProps<VoidProps<ComponentProps<typeof Button>[]>>(
-    { variant: "outline", size: "icon" },
+    { variant: "outline", size: "md" },
     props
   )
   const [local, rest] = splitProps(merge, ["class", "variant", "size"])
@@ -226,7 +226,7 @@ export const CarouselNext = (
   props: VoidProps<ComponentProps<typeof Button>>
 ) => {
   const merge = mergeProps<VoidProps<ComponentProps<typeof Button>[]>>(
-    { variant: "outline", size: "icon" },
+    { variant: "outline", size: "md" },
     props
   )
   const [local, rest] = splitProps(merge, ["class", "variant", "size"])

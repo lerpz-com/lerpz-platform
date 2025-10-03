@@ -1,10 +1,12 @@
+import type {
+  AccordionItemContentProps as ArkAccordionItemContentProps,
+  AccordionItemContextProps as ArkAccordionItemContextProps,
+  AccordionItemProps as ArkAccordionItemProps,
+  AccordionItemTriggerProps as ArkAccordionItemTriggerProps
+} from "@ark-ui/solid"
 import {
   Accordion as ArkAccordion,
-  type AccordionItemContentProps as ArkAccordionItemContentProps,
-  type AccordionItemContextProps as ArkAccordionItemContextProps,
-  AccordionItemIndicator as ArkAccordionItemIndicator,
-  type AccordionItemProps as ArkAccordionItemProps,
-  type AccordionItemTriggerProps as ArkAccordionItemTriggerProps
+  AccordionItemIndicator as ArkAccordionItemIndicator
 } from "@ark-ui/solid"
 import { ChevronDownIcon } from "lucide-solid"
 import { ComponentProps, ParentProps, splitProps, VoidProps } from "solid-js"

@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/solid-query"
 import { SolidQueryDevtools } from "@tanstack/solid-query-devtools"
 import { Suspense } from "solid-js"
 import { AuthProvider } from "~/component/auth-context"
-import Wrapper from "~/component/wrapper"
 import { querySession } from "~/lib/auth/server"
 import "./app.css"
 
@@ -26,9 +25,7 @@ export default function App() {
               <Title>Lerpz portal</Title>
               <Suspense>
                 <ColorModeScript />
-                <ColorModeProvider>
-                  <Wrapper>{props.children}</Wrapper>
-                </ColorModeProvider>
+                <ColorModeProvider>{props.children}</ColorModeProvider>
               </Suspense>
               <SolidQueryDevtools initialIsOpen={false} />
             </QueryClientProvider>

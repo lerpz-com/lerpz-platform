@@ -1,3 +1,4 @@
+import { useAuth } from "~/component/auth-context"
 import { Button } from "~/component/ui/button"
 import {
   Card,
@@ -9,18 +10,16 @@ import {
 } from "~/component/ui/card"
 import { signOut } from "~/lib/auth/client"
 
-export default function Index() {
+export default function Home() {
+  const { session } = useAuth()
+
   return (
-    <Card class="max-w-1/3">
+    <Card>
       <CardHeader>
-        <CardTitle>Signed in user</CardTitle>
+        <CardTitle>Who Am I?</CardTitle>
         <CardDescription>This shows the signed in user</CardDescription>
       </CardHeader>
-      <CardContent>
-        Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. In enim
-        justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Vestibulum
-        fringilla pede sit amet augue.
-      </CardContent>
+      <CardContent>Current email: {session()?.user?.email}</CardContent>
       <CardFooter>
         <Button onClick={() => signOut()}>Sign Out</Button>
       </CardFooter>
