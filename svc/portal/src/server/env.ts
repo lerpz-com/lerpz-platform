@@ -1,6 +1,6 @@
 "use server"
 
-import { treeifyError, z } from "zod"
+import { z } from "zod"
 
 export const envSchema = z.object({
   BETTER_AUTH_SECRET: z.string(),
@@ -11,11 +11,6 @@ export const envSchema = z.object({
   DATABASE_URL: z.string()
 })
 
-const parsed = envSchema.safeParse(process.env)
+const parsed = envSchema.parse(process.env)
 
-if (parsed.error) {
-  console.error("❌ Invalid environment variables:", treeifyError(parsed.error))
-  throw new Error("Invalid environment variables")
-}
-
-export const env = parsed.data
+export const env = parsed
