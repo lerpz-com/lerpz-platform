@@ -13,9 +13,9 @@ interface Problem<D = unknown> {
   type: string
   title: string
   detail: string
-  instance: string | null
-  extension: D
-  log_id: string | null
+  instance: string | null | undefined
+  extension: D | null | undefined
+  log_id: string | null | undefined
 }
 
 export default function NotFound() {
@@ -25,13 +25,13 @@ export default function NotFound() {
     detail: "The requested resource was not found.",
     instance: null,
     extension: {},
-    log_id: null
+    log_id: "8cd9d8ce-5dbc-4a1a-ac58-5ad918edb67d"
   }
 
   return (
-    <>
+    <main class="w-full h-full flex justify-center items-center">
       <HttpStatusCode code={404} />
-      <Card class="max-w-2xl">
+      <Card class="max-w-2xl m-4">
         <CardHeader>
           <CardTitle class="text-center">404 - Not Found</CardTitle>
           <CardDescription class="text-center">
@@ -42,6 +42,7 @@ export default function NotFound() {
               Read more here.
             </A>
           </Show>
+          <p class="text-center text-muted-foreground">{problem.log_id}</p>
         </CardHeader>
         <CardContent>
           <Card variant="outline">
@@ -53,6 +54,6 @@ export default function NotFound() {
           </Card>
         </CardContent>
       </Card>
-    </>
+    </main>
   )
 }
