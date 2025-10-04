@@ -1,5 +1,5 @@
 import { cva, VariantProps } from "class-variance-authority"
-import type { ComponentProps, ParentComponent } from "solid-js"
+import type { ComponentProps } from "solid-js"
 import { splitProps } from "solid-js"
 import { cn } from "~/lib/cn"
 
@@ -7,7 +7,7 @@ export const cardVariants = cva("rounded-lg border shadow p-6", {
   variants: {
     variant: {
       default: "bg-card text-card-foreground",
-      outline: "bg-background text-card-foreground"
+      outline: "bg-background text-foreground"
     }
   },
   defaultVariants: {
@@ -31,40 +31,61 @@ export const Card = (props: CardProps) => {
   )
 }
 
-export const CardHeader = (props: ComponentProps<"div">) => {
+type CardHeaderProps = ComponentProps<"div"> & {
+  class?: string
+}
+
+export const CardHeader = (props: CardHeaderProps) => {
   const [local, rest] = splitProps(props, ["class"])
 
   return <div class={cn("flex flex-col space-y-1.5", local.class)} {...rest} />
 }
 
-export const CardTitle: ParentComponent<ComponentProps<"h1">> = (props) => {
+type CardTitleProps = ComponentProps<"h1"> & {
+  class?: string
+}
+
+export const CardTitle = (props: CardTitleProps) => {
   const [local, rest] = splitProps(props, ["class"])
 
   return (
     <h1
-      class={cn("text-xl font-semibold leading-none", local.class)}
+      class={cn("text-lg font-semibold leading-none", local.class)}
       {...rest}
     />
   )
 }
 
-export const CardDescription: ParentComponent<ComponentProps<"h3">> = (
-  props
-) => {
+export type CardDescriptionProps = ComponentProps<"h3"> & {
+  class?: string
+}
+
+export const CardDescription = (props: CardDescriptionProps) => {
   const [local, rest] = splitProps(props, ["class"])
 
   return (
-    <h3 class={cn("text-md text-muted-foreground", local.class)} {...rest} />
+    <h3
+      class={cn("text-md font-medium text-muted-foreground", local.class)}
+      {...rest}
+    />
   )
 }
 
-export const CardContent = (props: ComponentProps<"div">) => {
+export type CardContentProps = ComponentProps<"div"> & {
+  class?: string
+}
+
+export const CardContent = (props: CardContentProps) => {
   const [local, rest] = splitProps(props, ["class"])
 
   return <div class={cn("pt-2", local.class)} {...rest} />
 }
 
-export const CardFooter = (props: ComponentProps<"div">) => {
+export type CardFooterProps = ComponentProps<"div"> & {
+  class?: string
+}
+
+export const CardFooter = (props: CardFooterProps) => {
   const [local, rest] = splitProps(props, ["class"])
 
   return <div class={cn("pt-2", local.class)} {...rest} />

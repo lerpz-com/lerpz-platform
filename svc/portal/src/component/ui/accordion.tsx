@@ -1,6 +1,6 @@
 import type {
+  AccordionContextProps as ArkAccordionContextProps,
   AccordionItemContentProps as ArkAccordionItemContentProps,
-  AccordionItemContextProps as ArkAccordionItemContextProps,
   AccordionItemProps as ArkAccordionItemProps,
   AccordionItemTriggerProps as ArkAccordionItemTriggerProps
 } from "@ark-ui/solid"
@@ -91,20 +91,14 @@ export const AccordionContent = (props: AccordionContentProps) => {
   )
 }
 
-type AccordionItemContextProps = ParentProps<
-  ArkAccordionItemContextProps & {
+type AccordionContextProps = ParentProps<
+  ArkAccordionContextProps & {
     class?: string
   }
 >
 
-export const AccordionContext = (props: AccordionItemContextProps) => {
-  const [local, rest] = splitProps(props as AccordionItemContextProps, [
-    "children"
-  ])
+export const AccordionContext = (props: AccordionContextProps) => {
+  const [local, rest] = splitProps(props as AccordionContextProps, ["children"])
 
-  return (
-    <ArkAccordion.ItemContext {...rest}>
-      {local.children}
-    </ArkAccordion.ItemContext>
-  )
+  return <ArkAccordion.Context {...rest}>{local.children}</ArkAccordion.Context>
 }
