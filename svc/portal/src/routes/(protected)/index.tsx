@@ -1,3 +1,4 @@
+import { A } from "@solidjs/router"
 import { Button } from "~/component/ui/button"
 import {
   Card,
@@ -11,19 +12,28 @@ import { signOut } from "~/lib/auth/client"
 
 export default function Index() {
   return (
-    <Card class="max-w-1/3">
-      <CardHeader>
-        <CardTitle>Signed in user</CardTitle>
-        <CardDescription>This shows the signed in user</CardDescription>
-      </CardHeader>
-      <CardContent>
-        Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. In enim
-        justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Vestibulum
-        fringilla pede sit amet augue.
-      </CardContent>
-      <CardFooter>
-        <Button onClick={() => signOut()}>Sign Out</Button>
-      </CardFooter>
-    </Card>
+    <main class="w-full h-full flex justify-center items-center">
+      <Card class="max-w-1/3">
+        <CardHeader>
+          <CardTitle>Signed in user</CardTitle>
+          <CardDescription>This shows the signed in user</CardDescription>
+        </CardHeader>
+        <CardContent>
+          Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. In
+          enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.
+          Vestibulum fringilla pede sit amet augue.
+          <div>
+            <A href="/dashboard" class="underline">
+              Go to dashboard
+            </A>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button variant="secondary" onClick={() => signOut()}>
+            Sign Out
+          </Button>
+        </CardFooter>
+      </Card>
+    </main>
   )
 }

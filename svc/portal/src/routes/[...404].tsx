@@ -38,8 +38,8 @@ export default function NotFound() {
             The page you were looking for was not found.
           </CardDescription>
           <Show when={problem.type != "about:blank"}>
-            <A class="text-center" href={problem.type}>
-              Read more here.
+            <A class="text-center underline" href={problem.type}>
+              Read more here
             </A>
           </Show>
           <p class="text-center text-muted-foreground">{problem.log_id}</p>
