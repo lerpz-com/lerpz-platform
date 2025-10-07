@@ -2,5 +2,5 @@ import type { ParentProps } from "solid-js";
 import { AppShell } from "~/component/app-shell";
 
 export default function Dashboard({ children }: ParentProps) {
-  return <AppShell kind="dashboard">{children}</AppShell>;
+  return <AppShell>{children}</AppShell>;
 }

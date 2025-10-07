@@ -1,18 +1,31 @@
-import { ParentProps } from "solid-js";
+import { useLocation } from "@solidjs/router";
+import { Match, type ParentProps, Switch } from "solid-js";
 import { useAuth } from "~/component/auth-context";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import ChatSidebar from "./chat";
+import DashboardSidebar from "./dashboard";
+import VisualSidebar from "./visual";
 
-type AppShellKind = "chat" | "visual" | "dashboard";
+type AppShellProps = ParentProps;
 
-type AppShellProps = ParentProps<{
-  kind: AppShellKind;
-}>;
+export function AppShell({ children }: AppShellProps) {
+  const loc = useLocation();
 
-export function AppShell({ children, kind }: AppShellProps) {
   return (
     <div class="flex h-full w-full">
       <aside class="w-56 border-r">
         <SidebarHeader />
+        <Switch>
+          <Match when={loc.pathname.startsWith("/chat")}>
+            <ChatSidebar />
+          </Match>
+          <Match when={loc.pathname.startsWith("/dashboard")}>
+            <DashboardSidebar />
+          </Match>
+          <Match when={loc.pathname.startsWith("/visuals")}>
+            <VisualSidebar />
+          </Match>
+        </Switch>
       </aside>
       <div class="grow">
         <header class="h-16 w-full border-b">
