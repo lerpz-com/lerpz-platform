@@ -1,3 +1,3 @@
 export default function DashboardSidebar() {
-  return <></>;
+	return <></>;
 }
