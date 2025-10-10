@@ -15,14 +15,12 @@ export const useAuth = () => {
 	return context;
 };
 
-export const AuthProvider = (props: ParentProps) => {
-	const session = createAsync(() => querySession(), {
-		deferStream: true,
-	});
+export const AuthProvider = ({ children }: ParentProps) => {
+  const session = createAsync(() => querySession(), {
+    deferStream: true
+  })
 
-	return (
-		<AuthContext.Provider value={{ session }}>
-			{props.children}
-		</AuthContext.Provider>
-	);
-};
+  return (
+    <AuthContext.Provider value={{ session }}>{children}</AuthContext.Provider>
+  )
+}
