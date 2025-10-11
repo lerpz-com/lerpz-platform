@@ -16,41 +16,39 @@ use crate::error::{HandlerError, HandlerResult};
 pub struct Validated<T>(pub T);
 
 /// Error response for validation errors.
-/// 
+///
 /// This is used to return validation errors in a structured format. The format
 /// is a map of field names to a list of errors for that field.
 #[derive(Serialize, Debug, Clone)]
-pub struct ValidationErrorResponse {
-    pub validation_errors: HashMap<Cow<'static, str>, FieldErrors>,
+pub struct ErrorResponse {
+    pub errors: HashMap<Cow<'static, str>, Errors>,
 }
 
 /// Errors in the individual fields.
 #[derive(Serialize, Debug, Clone)]
-pub struct FieldErrors(Vec<Cow<'static, str>>);
+pub struct Errors(Vec<Cow<'static, str>>);
 
-
-impl From<ValidationErrors> for ValidationErrorResponse {
-    fn from(ValidationErrors(errors): ValidationErrors) -> Self {
-        let mut error_map = HashMap::new();
-
-        for (field, kind) in errors {
-            error_map.insert(field.into(), kind.into());
+impl From<ValidationErrors> for ErrorResponse {
+    fn from(ValidationErrors(errs): ValidationErrors) -> Self {
+        Self {
+            errors: errs.into_iter().map(|(k, v)| (k, v.into())).collect(),
         }
-
-        Self { validation_errors: error_map }
     }
 }
 
-impl From<ValidationErrorsKind> for FieldErrors {
+impl From<ValidationErrorsKind> for Errors {
     fn from(err: ValidationErrorsKind) -> Self {
         match err {
-            ValidationErrorsKind::Field(errors) => FieldErrors(
-                errors
-                    .into_iter()
-                    .map(|e| e.message.unwrap_or_else(|| "Unkown validation error".into()))
+            ValidationErrorsKind::Field(errs) => Errors(
+                errs.into_iter()
+                    .map(|err| {
+                        err.message
+                            .unwrap_or_else(|| "Unkown validation error".into())
+                    })
                     .collect(),
             ),
-            _ => todo!(),
+            ValidationErrorsKind::List(_errs) => todo!(),
+            ValidationErrorsKind::Struct(_errs) => todo!(),
         }
     }
 }
@@ -60,7 +58,7 @@ where
     S: Send + Sync,
     T: DeserializeOwned + Validate,
 {
-    type Rejection = HandlerError<ValidationErrorResponse>;
+    type Rejection = HandlerError<ErrorResponse>;
 
     async fn from_request(r: Request, s: &S) -> Result<Self, Self::Rejection> {
         let json = Json::<T>::from_request(r, s).await.map_err(unparseable)?;
@@ -74,7 +72,7 @@ where
     S: Send + Sync,
     T: DeserializeOwned + Validate,
 {
-    type Rejection = HandlerError<ValidationErrorResponse>;
+    type Rejection = HandlerError<ErrorResponse>;
 
     async fn from_request(r: Request, s: &S) -> Result<Self, Self::Rejection> {
         let form = Form::<T>::from_request(r, s).await.map_err(unparseable)?;
@@ -83,22 +81,22 @@ where
     }
 }
 
-/// Validates the given data.
+/// Validates the given data and returns a handler result.
 #[inline]
-fn validate<T: Validate>(data: T) -> HandlerResult<(), ValidationErrorResponse> {
+fn validate<T: Validate>(data: T) -> HandlerResult<(), ErrorResponse> {
     data.validate().map_err(|err| {
         HandlerError::new(
             StatusCode::BAD_REQUEST,
             "Validation failed",
             "Couldn't validate request body.",
         )
-        .with_extension(ValidationErrorResponse::from(err))
+        .with_extension(ErrorResponse::from(err))
     })
 }
 
-/// Returns a `HandlerError` for unparseable requests.
+/// Returns a `HandlerError` for a unparseable requests.
 #[inline]
-fn unparseable<T: std::error::Error>(_: T) -> HandlerError<ValidationErrorResponse> {
+fn unparseable<T: std::error::Error>(_: T) -> HandlerError<ErrorResponse> {
     HandlerError::new(
         StatusCode::BAD_REQUEST,
         "Unparseable request",
