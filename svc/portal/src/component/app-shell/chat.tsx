@@ -1,3 +1,3 @@
 export default function ChatSidebar() {
-	return <></>;
+  return <div></div>;
 }

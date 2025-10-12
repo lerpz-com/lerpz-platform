@@ -1,0 +1,15 @@
+{
+  "workspace": ["./svc/portal"],
+  "tasks": {
+    "dev:portal": "deno task --cwd=svc/portal dev",
+    "build:portal": "deno task --cwd=svc/portal build",
+    "start:portal": "deno task --cwd=svc/portal start",
+    "fmt": "biome format --write .",
+    "lint": "biome lint --write .",
+    "check": "biome check --write ."
+  },
+  "imports": {
+    "@biomejs/biome": "npm:@biomejs/biome@2.2.5"
+  },
+  "nodeModulesDir": "auto"
+}

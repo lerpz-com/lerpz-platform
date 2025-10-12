@@ -7,9 +7,6 @@
   },
   "packageManager": "pnpm@10.15.1",
   "devDependencies": {
-    "@postgrestools/postgrestools": "^0.13.0"
-  },
-  "engines": {
-    "node": "^22.0.0"
+    "@biomejs/biome": "2.2.5"
   }
 }
