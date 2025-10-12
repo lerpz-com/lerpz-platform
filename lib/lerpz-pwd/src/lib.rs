@@ -68,7 +68,7 @@ pub async fn validate_pwd(pwd_hash: &str, pwd_salt: &str, pwd_ref: &str) -> Resu
 /// validating the password scheme. If you do not use the correct scheme for the
 /// password, this function will error.
 ///
-/// # Note
+/// ### Note
 ///
 /// Make sure you use [`HashParts::from_str`] to get the scheme or be certain
 /// that the scheme given is the same as what was used to create the password
