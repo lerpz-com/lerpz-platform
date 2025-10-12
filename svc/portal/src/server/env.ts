@@ -1,6 +1,7 @@
 "use server";
 
 import { z } from "zod";
+import process from "node:process";
 
 export const envSchema = z.object({
   BETTER_AUTH_SECRET: z.string(),
@@ -11,6 +12,6 @@ export const envSchema = z.object({
   DATABASE_URL: z.string(),
 });
 
-const parsed = envSchema.parse(Deno.env.toObject());
+const parsed = envSchema.parse(process.env);
 
 export const env = parsed;

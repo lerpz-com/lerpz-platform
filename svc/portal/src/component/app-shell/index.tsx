@@ -43,14 +43,14 @@ export function AppShell({ children }: AppShellProps) {
 }
 
 function SidebarHeader() {
-  // const { session } = useAuth();
+  const { session } = useAuth();
 
   return (
     <Card class="m-4 p-4">
       <CardHeader>
         <CardTitle class="text-center">Lerpz</CardTitle>
         <CardDescription class="text-center">
-          {/*{session()?.user?.email}*/}
+          {session()?.user?.email}
         </CardDescription>
       </CardHeader>
     </Card>

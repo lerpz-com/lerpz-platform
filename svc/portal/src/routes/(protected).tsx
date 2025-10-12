@@ -1,4 +1,5 @@
-import { type RouteDefinition, useNavigate } from "@solidjs/router";
+import { useNavigate } from "@solidjs/router";
+import type { RouteDefinition } from "@solidjs/router";
 import { createEffect, type ParentProps, Show } from "solid-js";
 import { useAuth } from "~/component/auth-context.tsx";
 import { requireSession } from "~/lib/auth/server.ts";

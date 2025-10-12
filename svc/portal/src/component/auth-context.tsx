@@ -5,12 +5,9 @@ import { createContext, useContext } from "solid-js";
 import type { Session } from "~/lib/auth/index.ts";
 import { querySession } from "~/lib/auth/server.ts";
 
-const AuthContext = createContext<
-  | {
-      session: AccessorWithLatest<Session | null | undefined>;
-    }
-  | undefined
->(undefined);
+const AuthContext = createContext<{
+  session: AccessorWithLatest<Session | null | undefined>;
+}>();
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

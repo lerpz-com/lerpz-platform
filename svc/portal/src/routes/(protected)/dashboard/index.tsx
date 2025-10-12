@@ -11,7 +11,7 @@ import {
 import { signOut } from "~/lib/auth/client.ts";
 
 export default function Home() {
-  // const { session } = useAuth();
+  const { session } = useAuth();
 
   return (
     <Card>
@@ -19,7 +19,7 @@ export default function Home() {
         <CardTitle>Who Am I?</CardTitle>
         <CardDescription>This shows the signed in user</CardDescription>
       </CardHeader>
-      {/*<CardContent>Current email: {session()?.user?.email}</CardContent>*/}
+      <CardContent>Current email: {session()?.user?.email}</CardContent>
       <CardFooter>
         <Button onClick={() => signOut()}>Sign Out</Button>
       </CardFooter>
